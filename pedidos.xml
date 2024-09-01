@@ -1,3 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pedidos>
+    <pedido>
+        <id>1</id>
+        <idCliente>1</idCliente>
+        <idRestaurante>0</idRestaurante>
+        <estado>preparando</estado>
+        <produtos>
+            <produto>
+                <numero>0</numero>
+                <nome>Sorvete morango</nome>
+                <valor>1.4</valor>
+                <categoria>alimento</categoria>
+            </produto>
+            <produto>
+                <numero>1</numero>
+                <nome>Sorvete chocolate</nome>
+                <valor>1.4</valor>
+                <categoria>alimento</categoria>
+            </produto>
+            <produto>
+                <numero>2</numero>
+                <nome>Refrigerante</nome>
+                <valor>3.4</valor>
+                <categoria>bebida</categoria>
+            </produto>
+        </produtos>
+    </pedido>
+    <pedido>
+        <id>2</id>
+        <idCliente>1</idCliente>
+        <idRestaurante>1</idRestaurante>
+        <estado>aberto</estado>
+        <produtos>
+            <produto>
+                <numero>3</numero>
+                <nome>Pastel de queijo</nome>
+                <valor>5.0</valor>
+                <categoria>alimento</categoria>
+            </produto>
+            <produto>
+                <numero>3</numero>
+                <nome>Pastel de queijo</nome>
+                <valor>5.0</valor>
+                <categoria>alimento</categoria>
+            </produto>
+        </produtos>
+    </pedido>
+    <pedido>
+        <id>3</id>
+        <idCliente>1</idCliente>
+        <idRestaurante>0</idRestaurante>
+        <estado>aberto</estado>
+        <produtos>
+        </produtos>
+    </pedido>
 </pedidos>

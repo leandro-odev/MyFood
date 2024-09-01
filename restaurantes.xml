@@ -15,8 +15,14 @@
             </produto>
             <produto>
                 <numero>1</numero>
+                <nome>Sorvete chocolate</nome>
+                <valor>1.4</valor>
+                <categoria>alimento</categoria>
+            </produto>
+            <produto>
+                <numero>2</numero>
                 <nome>Refrigerante</nome>
-                <valor>3.0</valor>
+                <valor>3.4</valor>
                 <categoria>bebida</categoria>
             </produto>
         </produtos>
@@ -29,20 +35,11 @@
         <idDono>0</idDono>
         <produtos>
             <produto>
-                <numero>2</numero>
-                <nome>Refrigerante de laranja</nome>
-                <valor>4.4</valor>
-                <categoria>bebida</categoria>
+                <numero>3</numero>
+                <nome>Pastel de queijo</nome>
+                <valor>5.0</valor>
+                <categoria>alimento</categoria>
             </produto>
-        </produtos>
-    </restaurante>
-    <restaurante>
-        <id>2</id>
-        <nome>Churrascaria do Roberto</nome>
-        <endereco>Rua Segura N 987</endereco>
-        <tipoCozinha>brasileira</tipoCozinha>
-        <idDono>0</idDono>
-        <produtos>
         </produtos>
     </restaurante>
 </restaurantes>

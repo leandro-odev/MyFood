@@ -8,4 +8,11 @@
         <cpf>544.732.410-68</cpf>
         <endereco>Rua Exemplo N 321</endereco>
     </dono>
+    <cliente>
+        <id>1</id>
+        <nome>Carlos</nome>
+        <email>carlos@ufal.com.br</email>
+        <senha>123senha</senha>
+        <endereco>Rua Exemplo N 123</endereco>
+    </cliente>
 </users>

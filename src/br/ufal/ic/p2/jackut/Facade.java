@@ -16,7 +16,7 @@ public class Facade {
     List<Pedido> pedidos;
 
     public Facade() {
-        zerarSistema();
+        //zerarSistema();
         File usersFile = new File("users.xml");
         File restaurantesFile = new File("restaurantes.xml");
         File pedidosFile = new File("pedidos.xml");
@@ -323,9 +323,12 @@ public class Facade {
     public int criarPedido(int cliente, int empresa) throws DonoCannotCreateOrder, CannotHaveMoreThanOneOrderSameEnterprise {
         if (users.stream().anyMatch(u -> u.id == cliente && u.isDono())) {
             throw new DonoCannotCreateOrder();
-        } else if (pedidos.stream().anyMatch(r -> r.empresa == empresa) && pedidos.stream().anyMatch(r -> r.estado == "aberto")) {
+        } else if (pedidos.stream().anyMatch(p -> p.cliente == cliente && p.empresa == empresa && p.estado.equals("aberto"))) {
             throw new CannotHaveMoreThanOneOrderSameEnterprise();
         }
+
+
+
         Pedido p = new Pedido(cliente, empresa);
         pedidos.add(p);
         return p.numero;
