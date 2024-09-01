@@ -1,0 +1,18 @@
+# User Story 1 - Criação de contas - verificacao de persistencia
+
+id1=login email="carlos@ufal.com.br" senha="123senha"
+id2=login email="carlos2@ufal.com.br" senha="123senha"
+
+expect "Carlos" getAtributoUsuario id=${id1} atributo="nome"
+expect "carlos@ufal.com.br" getAtributoUsuario id=${id1} atributo="email"
+expect "123senha" getAtributoUsuario id=${id1} atributo="senha"
+expect "Rua Exemplo N 123" getAtributoUsuario id=${id1} atributo="endereco"
+
+expect "CarlosDono" getAtributoUsuario id=${id2} atributo="nome"
+expect "carlos2@ufal.com.br" getAtributoUsuario id=${id2} atributo="email"
+expect "123senha" getAtributoUsuario id=${id2} atributo="senha"
+expect "544.732.410-68" getAtributoUsuario id=${id2} atributo="cpf"
+
+
+encerrarSistema
+quit

@@ -1,0 +1,107 @@
+# User Story 3 - Criação de Produtos 
+# Permita que um usuário do tipo dono de restaurante crie produtos para sua empresa. 
+#
+# Os dados gerais para os restaurantes são:
+# id -> Que deve ser do tipo int e único gerado pelo sistema.
+# nome -> Informado na criação do tipo String, o mesmo produto não pode ter o mesmo nome cadastrado no mesmo restaurante. 
+# valor-> Informado na criação do tipo float, pode existir vários produtos com o mesmo valor.
+# categoria-> Informada na criação do tipo String, pode existir vários restaurantes com a mesma categoria..
+#
+###################
+# Os métodos que são utilizados nos testes podem ser vistos a seguir:
+###################
+# zerarSistema
+# descrição: Apaga todos os dados no banco de dados do sistema.
+# retorno: Sem retorno
+#
+# criarProduto(int: empresa, String: nome, float valor, String categoria)
+# descrição: Cria um novo produto para uma determinada empresa.
+# retorno:  Retorna o id do produto
+#
+# editarProduto(int: produto, String: nome, float valor, String categoria)
+# descrição: Modifica os valores de um produto com id informado
+# retorno:  Sem retorno
+#
+# getProduto(String  nome, int empresa, String atributo)
+# descrição:  obtém os dados de um produto pelo id
+# retorno:  retorna uma string com o valor do atributo.
+#
+# listarProdutos(int empresa)
+# descrição:  obtém o nome de todos os produtos de uma empresa.
+# retorno: retorna uma string contendo os nomes de todos os produtos existentes para aquela empresa.
+#
+# encerrarSistema
+# descrição: Finaliza a execução do programa
+# retorno: Sem retorno
+
+
+# Apaga toda a base de dados.
+zerarSistema
+
+criarUsuario nome="RobertoDono" email="roberto@ufal.com.br"  senha="123senha" endereco="Rua Exemplo N 321" cpf="544.732.410-68"
+
+id1=login email="roberto@ufal.com.br" senha="123senha"
+
+eid1=criarEmpresa tipoEmpresa="restaurante"  dono=${id1} nome="Sorveteria do Roberto" endereco="Rua Segura N 987" tipoCozinha="brasileira"
+
+eid2=criarEmpresa tipoEmpresa="restaurante"  dono=${id1} nome="Pastelaria do Roberto" endereco="Rua Segura N 987" tipoCozinha="brasileira"
+
+eid3=criarEmpresa tipoEmpresa="restaurante"  dono=${id1} nome="Churrascaria do Roberto" endereco="Rua Segura N 987" tipoCozinha="brasileira"
+
+
+###################
+# testes de todas as outras combinações importantes para o comando criarProduto
+###################
+
+p1=criarProduto empresa=${eid1} nome="Sorvete morango" valor=1.40  categoria="alimento"
+
+p2=criarProduto empresa=${eid1} nome="Refrigerante" valor=3.00  categoria="bebida"
+
+expectError "Ja existe um produto com esse nome para essa empresa" criarProduto empresa=${eid1} nome="Refrigerante" valor=3.00  categoria="bebida"
+
+p3=criarProduto empresa=${eid2} nome="Refrigerante" valor=3.00  categoria="bebida"
+
+expectError "Nome invalido" criarProduto empresa=${eid2} nome=  valor=3.00  categoria="bebida"
+expectError "Nome invalido" criarProduto empresa=${eid2} nome=""  valor=3.00  categoria="bebida"
+expectError "Valor invalido" criarProduto empresa=${eid2} nome="Refrigerante" valor=-3.00  categoria="bebida"
+expectError "Categoria invalido" criarProduto empresa=${eid2} nome="Refrigerante" valor=3.00  categoria=  
+expectError "Categoria invalido" criarProduto empresa=${eid2} nome="Refrigerante" valor=3.00  categoria=""
+
+
+###################
+# testes de todas as combinações importantes para o comando editarProduto
+###################
+
+expectError "Nome invalido" editarProduto produto=${p3} nome=  valor=3.00  categoria="bebida"
+expectError "Nome invalido" editarProduto produto=${p3} nome=""  valor=3.00  categoria="bebida"
+expectError "Valor invalido" editarProduto produto=${p3} nome="Refrigerante" valor=-3.00  categoria="bebida"
+expectError "Categoria invalido" editarProduto produto=${p3} nome="Refrigerante" valor=3.00  categoria=  
+expectError "Categoria invalido" editarProduto produto=${p3} nome="Refrigerante" valor=3.00  categoria="" 
+
+expectError "Produto nao cadastrado" editarProduto produto=9999 nome="Refrigerante" valor=3.00  categoria="bebida"
+
+editarProduto produto=${p3} nome="Refrigerante de laranja" valor=4.40  categoria="bebida"
+
+###################
+# testes de todas as combinações importantes para o comando getProduto
+###################
+
+expect "4.40" getProduto nome="Refrigerante de laranja" empresa=${eid2} atributo="valor"
+expect "bebida" getProduto nome="Refrigerante de laranja" empresa=${eid2} atributo="categoria"
+expect "Pastelaria do Roberto" getProduto nome="Refrigerante de laranja" empresa=${eid2} atributo="empresa"
+
+expectError "Produto nao encontrado" getProduto nome="Pastel" empresa=${eid2} atributo="valor"
+expectError "Atributo nao existe" getProduto nome="Refrigerante de laranja" empresa=${eid2} atributo="desconto"
+
+###################
+# testes para listar os produtos da empresa.
+###################
+
+expect "{[Refrigerante de laranja]}" listarProdutos empresa=${eid2}
+expect "{[Sorvete morango, Refrigerante]}" listarProdutos empresa=${eid1}
+expect "{[]}" listarProdutos empresa=${eid3}
+
+expectError "Empresa nao encontrada" listarProdutos empresa=9999
+
+encerrarSistema
+quit

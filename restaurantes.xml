@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<restaurantes>
+    <restaurante>
+        <id>0</id>
+        <nome>Sorveteria do Roberto</nome>
+        <endereco>Rua Segura N 987</endereco>
+        <tipoCozinha>brasileira</tipoCozinha>
+        <idDono>0</idDono>
+        <produtos>
+            <produto>
+                <numero>0</numero>
+                <nome>Sorvete morango</nome>
+                <valor>1.4</valor>
+                <categoria>alimento</categoria>
+            </produto>
+            <produto>
+                <numero>1</numero>
+                <nome>Refrigerante</nome>
+                <valor>3.0</valor>
+                <categoria>bebida</categoria>
+            </produto>
+        </produtos>
+    </restaurante>
+    <restaurante>
+        <id>1</id>
+        <nome>Pastelaria do Roberto</nome>
+        <endereco>Rua Segura N 987</endereco>
+        <tipoCozinha>brasileira</tipoCozinha>
+        <idDono>0</idDono>
+        <produtos>
+            <produto>
+                <numero>2</numero>
+                <nome>Refrigerante de laranja</nome>
+                <valor>4.4</valor>
+                <categoria>bebida</categoria>
+            </produto>
+        </produtos>
+    </restaurante>
+    <restaurante>
+        <id>2</id>
+        <nome>Churrascaria do Roberto</nome>
+        <endereco>Rua Segura N 987</endereco>
+        <tipoCozinha>brasileira</tipoCozinha>
+        <idDono>0</idDono>
+        <produtos>
+        </produtos>
+    </restaurante>
+</restaurantes>

@@ -1,0 +1,111 @@
+# User Story 1 - Criação de contas
+# Permita a um usuário criar uma conta no MyFood, O usuário poderá ser de dois tipos, Cliente e Dono de Restaurante.
+#
+# Os dados gerais para os usuários são:
+# id -> Que deve ser do tipo int e único gerado pelo sistema.
+# nome -> Informado na criação do tipo String, pode existir vários usuários com o mesmo nome.
+# email -> Informado na criação do tipo String, deve ser único por usuário.
+# senha -> Informada na criação do tipo String, pode existir vários usuários com a mesma senha.
+#
+# Os usuários do tipo cliente devem além dos dados gerais possuir os seguintes dados:
+# endereco -> o endereço do usuário no tipo String, a qual as entregas são realizadas.
+#
+# Os usuários do tipo Dono de Restaurante devem além dos dados gerais possuir os seguintes dados:
+# endereco -> o endereço do usuário no tipo String, a qual as entregas são realizadas.
+# cpf -> Aceitando uma String que representa o CPF.
+#
+###################
+# Os métodos que são utilizados nos testes podem ser vistos a seguir:
+###################
+# zerarSistema
+# descrição: Apaga todos os dados no banco de dados do sistema.
+# retorno: Sem retorno
+#
+# getAtributoUsuario(int:id, String nome)
+# descrição: Obtém os dados de um usuário.
+# retorno: Uma String com o valor do atributo.
+#
+# criarUsuario(String: nome, String: email, String: senha, String: endereco)
+# descrição: Cria um usuário do tipo cliente.
+# retorno: Sem retorno
+#
+# criarUsuario(String: nome, String: email, String: senha, String: endereco ,String: cpf)
+# descrição:Cria um usuário do tipo dono de restaurante.
+# retorno: Sem retorno
+#
+# login(String: email, String: senha)
+# descrição: Válida se um usuário está devidamente cadastrado e se existe com os dados fornecidos
+# retorno: Retorna o id do usuário.
+#
+# encerrarSistema
+# descrição: Finaliza a execução do programa
+# retorno: Sem retorno
+
+
+# Apaga toda a base de dados.
+zerarSistema
+
+expectError "Usuario nao cadastrado." getAtributoUsuario id=9999 atributo="nome"
+
+criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123"
+
+# Se a senha estiver correta, a sessão é aberta e o teste passa sem erros. 
+# Se existir algum erro, o programa vai lançar uma exceção e o EasyAccept vai acusar erro nessa linha.
+id1=login email="carlos@ufal.com.br" senha="123senha"
+
+###################
+# testes de todas as outras combinações importantes para o comando criarUsuario
+###################
+
+# Cada usuário está associado a um único email.
+expectError "Conta com esse email ja existe" criarUsuario nome="Carlos2" email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123"
+
+# É possível existir mais usuários com o mesmo nome e endereço, desde que o email seja diferente.
+criarUsuario nome="CarlosDono" email="carlos2@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321"  cpf="544.732.410-68"
+
+id2=login email="carlos2@ufal.com.br" senha="123senha"
+
+expect "Carlos" getAtributoUsuario id=${id1} atributo="nome"
+expect "carlos@ufal.com.br" getAtributoUsuario id=${id1} atributo="email"
+expect "Rua Exemplo N 123" getAtributoUsuario id=${id1} atributo="endereco" 
+
+expect "CarlosDono" getAtributoUsuario id=${id2} atributo="nome"
+expect "carlos2@ufal.com.br" getAtributoUsuario id=${id2} atributo="email"
+expect "544.732.410-68" getAtributoUsuario id=${id2} atributo="cpf"
+
+# Deve aceitar apenas se tiver 14 caracteres para CPF
+expectError "CPF invalido" criarUsuario nome="CarlosDono" email="carlos2@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321" cpf="7300.65200.198/0001-61"
+expectError "CPF invalido" criarUsuario nome="CarlosDono" email="carlos2@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321" cpf="544.732.4"
+
+# Validando dados ao criar o usuário.
+expectError "Nome invalido" criarUsuario nome=  email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123"
+expectError "Nome invalido" criarUsuario nome=""  email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123"
+
+expectError "Email invalido" criarUsuario nome="Carlos" email=  senha="123senha" endereco="Rua Exemplo N 123"
+expectError "Email invalido" criarUsuario nome="Carlos" email=""  senha="123senha" endereco="Rua Exemplo N 123"
+
+expectError "Senha invalido" criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha=  endereco="Rua Exemplo N 123"
+expectError "Senha invalido" criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha=""  endereco="Rua Exemplo N 123"
+
+expectError "Endereco invalido" criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha="123senha" endereco=  
+expectError "Endereco invalido" criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha="123senha" endereco=""  
+
+expectError "CPF invalido" criarUsuario nome="CarlosDono" email="carlos2@ufal.com.br" senha="123senha", endereco="Rua Exemplo N 123" cpf=  
+expectError "CPF invalido" criarUsuario nome="CarlosDono" email="carlos2@ufal.com.br" senha="123senha", endereco="Rua Exemplo N 123" cpf=""  
+
+expectError "Endereco invalido" criarUsuario nome="CarlosDono" email="carlos2@ufal.com.br" senha="123senha" endereco="" cpf="544.732.410-68"
+
+
+# Valida se o email esta no formato correto.
+expectError "Email invalido" criarUsuario nome="CarlosDono" email="carlos2" senha="123senha" endereco="Rua Exemplo N 321" cpf="544.732.410-68"
+
+###################
+# testes de todas as outras combinações importantes para o comando login
+###################
+expectError "Login ou senha invalidos" login email="carlos@ufal.com.br" senha="abc"
+expectError "Login ou senha invalidos" login email="abc" senha="abc"
+expectError "Login ou senha invalidos" login email=  senha="abc"
+expectError "Login ou senha invalidos" login email="carlos@ufal.com.br" senha=  
+
+encerrarSistema
+quit

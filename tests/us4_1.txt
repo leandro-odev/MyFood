@@ -1,0 +1,157 @@
+# User Story 4 - Criação de Pedidos
+# Permita que clientes adicionem produtos de uma empresa a seu carrinho e realizem a compra.
+#
+# Os dados gerais para os pedidos são:
+# numero -> Que deve ser do tipo int e único gerado pelo sistema.
+# cliente -> Informado na criação do tipo String,
+# empresa -> Informado na criação do tipo String,
+# estado -> tipo String, gerado pelo sistema dependendo do estado do pedido.
+# produtos -> Uma lista contendo os produtos de uma empresa que o cliente deseja. O mesmo produto pode ser adicionado mais de uma vez.
+# valor-> retorna o somatório do valor de todos os pedidos.
+#
+###################
+# Os métodos que são utilizados nos testes podem ser vistos a seguir:
+###################
+# zerarSistema
+# descrição: Apaga todos os dados no banco de dados do sistema.
+# retorno: Sem retorno
+#
+# criarPedido(int: cliente, int: empresa)
+# descrição: Cria um novo pedido de um cliente para uma empresa.
+# retorno:  Retorna o número do pedido
+#
+# getNumeroPedido(int: cliente, int: empresa, int indice)
+# descrição: Retorna o pedido de um cliente na empresa, ordenado de forma ao mais antigo vir primeiro no indice
+# retorno:  Retorna o número do produto
+#
+# adicionarProduto(int: numero, int produto)
+# descrição: Adciona um produto da empresa ao pedido
+# retorno:  Sem retorno
+#
+# getPedidos(int  numero, String atributo)
+# descrição:  obtém os dados de um pedido pelo id
+# retorno:  retorna uma string com o valor do atributo.
+#
+# fecharPedido(int numero)
+# descrição:  muda o estado do pedido para fechado
+# retorno:  Sem retorno
+#
+# removerProduto(int  pedido, String produto)
+# descrição:  Remove um produto adicionado com esse nome, mantém outros caso com o mesmo nome.
+# retorno: Sem retorno
+#
+# encerrarSistema
+# descrição: Finaliza a execução do programa
+# retorno: Sem retorno
+
+
+# Apaga toda a base de dados.
+zerarSistema
+
+criarUsuario nome="RobertoDono" email="roberto@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321" cpf="544.732.410-68"
+id1=login email="roberto@ufal.com.br" senha="123senha"
+
+e1=criarEmpresa tipoEmpresa="restaurante"  dono=${id1} nome="Sorveteria do Roberto" endereco="Rua Segura N 987" tipoCozinha="brasileira"
+
+e2=criarEmpresa tipoEmpresa="restaurante"  dono=${id1} nome="Pastelaria do Roberto" endereco="Rua Segura N 987" tipoCozinha="brasileira"
+
+p1=criarProduto empresa=${e1} nome="Sorvete morango" valor=1.40  categoria="alimento"
+p2=criarProduto empresa=${e1} nome="Sorvete chocolate" valor=1.40  categoria="alimento"
+p3=criarProduto empresa=${e1} nome="Refrigerante" valor=3.40  categoria="bebida"
+
+p4=criarProduto empresa=${e2} nome="Pastel de queijo" valor=5.00  categoria="alimento"
+
+criarUsuario nome="Carlos" email="carlos@ufal.com.br"  senha="123senha" endereco="Rua Exemplo N 123"
+
+id2=login email="carlos@ufal.com.br" senha="123senha"
+
+
+###################
+# testes de todas as outras combinações importantes para o comando criarPedido
+###################
+expectError "Dono de empresa nao pode fazer um pedido" criarPedido cliente=${id1} empresa=${e1}
+
+expectError "Nao existe pedido em aberto" adicionarProduto numero=9999 produto=${e1}
+
+pe1=criarPedido cliente=${id2} empresa=${e1}
+
+# Ao criar um pedido o campo estado deve iniciar com o valor "aberto" e não e possivel abrir um novo
+# pedido entre o mesmo cliente e a empresa até que o estado mude para "preparando"
+expectError "Nao e permitido ter dois pedidos em aberto para a mesma empresa" criarPedido cliente=${id2} empresa=${e1}
+
+pe2=criarPedido cliente=${id2} empresa=${e2}
+
+###################
+# testes de todas as combinações importantes para o comando adicionarProduto
+###################
+
+ adicionarProduto numero=${pe1} produto=${p1}
+ adicionarProduto numero=${pe1} produto=${p2}
+ adicionarProduto numero=${pe1} produto=${p3}
+
+expectError "O produto nao pertence a essa empresa" adicionarProduto pedido=${pe2} produto=${p1}
+
+# O mesmo produto é adicionado várias vezes ao pedido.
+adicionarProduto numero=${pe2} produto=${p4}
+adicionarProduto numero=${pe2} produto=${p4}
+adicionarProduto numero=${pe2} produto=${p4}
+
+###################
+# testes de todas as combinações importantes para o comando getPedidos
+###################
+
+expectError "Atributo invalido" getPedidos pedido=${pe1} atributo=
+expectError "Atributo invalido" getPedidos pedido=${pe1} atributo=""
+expectError "Atributo nao existe" getPedidos pedido=${pe1} atributo="local"
+
+expect "Carlos"  getPedidos pedido=${pe1} atributo="cliente"
+expect "Sorveteria do Roberto"  getPedidos pedido=${pe1} atributo="empresa"
+expect "aberto"  getPedidos pedido=${pe1} atributo="estado"
+expect "{[Sorvete morango, Sorvete chocolate, Refrigerante]}" getPedidos pedido=${pe1} atributo="produtos"
+expect "6.20"  getPedidos pedido=${pe1} atributo="valor"
+
+expect "Carlos"  getPedidos pedido=${pe2} atributo="cliente"
+expect "Pastelaria do Roberto"  getPedidos pedido=${pe2} atributo="empresa"
+expect "aberto"  getPedidos pedido=${pe2} atributo="estado"
+expect "{[Pastel de queijo, Pastel de queijo, Pastel de queijo]}" getPedidos pedido=${pe2} atributo="produtos"
+expect "15.00"  getPedidos pedido=${pe2} atributo="valor"
+
+###################
+# testes de todas as combinações importantes para o comando fecharPedido
+###################
+
+expectError "Pedido nao encontrado" fecharPedido numero=9999
+fecharPedido numero=${pe1}
+
+expect "preparando"  getPedidos pedido=${pe1} atributo="estado"
+
+expectError "Nao e possivel adcionar produtos a um pedido fechado"  adicionarProduto numero=${pe1} produto=${p1}
+
+# Abre um novo pedido agora que o anterior está fechado.
+pe3=criarPedido cliente=${id2} empresa=${e1}
+
+###################
+# testes de todas as combinações importantes para o comando removerProduto
+###################
+
+expectError "Produto invalido" removerProduto pedido=${pe2} produto=
+expectError "Produto invalido" removerProduto pedido=${pe2} produto=""
+
+expectError "Produto nao encontrado" removerProduto pedido=${pe2} produto="Sorvete"
+expectError "Nao e possivel remover produtos de um pedido fechado" removerProduto pedido=${pe1} produto="Sorvete"
+
+removerProduto pedido=${pe2} produto="Pastel de queijo"
+
+expect "{[Pastel de queijo, Pastel de queijo]}" getPedidos pedido=${pe2} atributo="produtos"
+expect "10.00"  getPedidos pedido=${pe2} atributo="valor"
+
+###################
+# testes de todas as combinações importantes para o comando removerProduto
+###################
+
+expect ${pe1} getNumeroPedido cliente=${id2} empresa=${e1} indice=0
+expect ${pe2} getNumeroPedido cliente=${id2} empresa=${e2} indice=0
+expect ${pe3} getNumeroPedido cliente=${id2} empresa=${e1} indice=1
+
+encerrarSistema
+quit

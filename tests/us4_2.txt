@@ -1,0 +1,23 @@
+# User Story 4 - Criação de Pedidos  - verificacao de persistencia
+
+id1=login email="roberto@ufal.com.br" senha="123senha"
+id2=login email="carlos@ufal.com.br" senha="123senha"
+
+e1=getIdEmpresa idDono=${id1} nome="Sorveteria do Roberto" indice=0
+e2=getIdEmpresa idDono=${id1} nome="Pastelaria do Roberto" indice=0
+
+pe1=getNumeroPedido cliente=${id2} empresa=${e1} indice=0
+pe2=getNumeroPedido cliente=${id2} empresa=${e2} indice=0
+expect ${pe2} getNumeroPedido cliente=${id2} empresa=${e2} indice=0
+
+expect "Carlos"  getPedidos pedido=${pe1} atributo="cliente"
+expect "Sorveteria do Roberto"  getPedidos pedido=${pe1} atributo="empresa"
+expect "preparando"  getPedidos pedido=${pe1} atributo="estado"
+expect "{[Sorvete morango, Sorvete chocolate, Refrigerante]}" getPedidos pedido=${pe1} atributo="produtos"
+expect "6.20"  getPedidos pedido=${pe1} atributo="valor"
+
+expect "Carlos"  getPedidos pedido=${pe2} atributo="cliente"
+expect "Pastelaria do Roberto"  getPedidos pedido=${pe2} atributo="empresa"
+expect "aberto"  getPedidos pedido=${pe2} atributo="estado"
+expect "{[Pastel de queijo, Pastel de queijo]}" getPedidos pedido=${pe2} atributo="produtos"
+expect "10.00"  getPedidos pedido=${pe2} atributo="valor"
