@@ -162,11 +162,6 @@ public class Facade {
                 throw new NameAndAddresAlreadyExist();
             }
 
-//            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && !r.endereco.equals(endereco) && r.id == dono) ) {
-//                throw new NameAlreadyExist();
-//            }
-
-
             Restaurante novoRestaurante = new Restaurante(nome, endereco, tipoCozinha, dono);
             restaurantes.add(novoRestaurante);
             return novoRestaurante.id;
