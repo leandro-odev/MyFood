@@ -8,7 +8,7 @@ O sistema foi desenvolvido para gerenciar um conjunto de funcionalidades relacio
 
 **Tecnologias e Frameworks Utilizados:**
 - **XML**: Utilizado para armazenar dados sobre usuários, restaurantes e pedidos.
-- **Bibliotecas Padrão do Java**: Fornecem as funcionalidades essenciais necessárias para manipulação de arquivos, coleções e exceções.
+- **Bibliotecas Padrão do Java**: Fornecem as funcionalidades essenciais necessárias para manipulação de arquivos e exceções.
 
 ## 2. Principais Componentes e Suas Interações
 
