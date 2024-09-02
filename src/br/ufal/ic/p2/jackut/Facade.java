@@ -16,7 +16,6 @@ public class Facade {
     List<Pedido> pedidos;
 
     public Facade() {
-        zerarSistema();
         File usersFile = new File("users.xml");
         File restaurantesFile = new File("restaurantes.xml");
         File pedidosFile = new File("pedidos.xml");
@@ -50,6 +49,9 @@ public class Facade {
         File usersFile = new File("users.xml");
         File restaurantesFile = new File("restaurantes.xml");
         File pedidosFile = new File("pedidos.xml");
+        users.clear();
+        restaurantes.clear();
+        pedidos.clear();
         usersFile.delete();
         restaurantesFile.delete();
         pedidosFile.delete();
@@ -152,11 +154,18 @@ public class Facade {
 
         if (tipoEmpresa.equalsIgnoreCase("restaurante")) {
 
-            if ( restaurantes.stream().anyMatch(r -> r.nome.equals(nome)) && !restaurantes.stream().anyMatch(r -> r.id == dono) ){
+            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
                 throw new NameAlreadyExist();
-            } else if ( restaurantes.stream().anyMatch(r -> r.nome.equals(nome)) && restaurantes.stream().anyMatch(r -> r.id == dono) && restaurantes.stream().anyMatch(r -> r.endereco.equals(endereco)) ) {
-                throw new  NameAndAddresAlreadyExist();
             }
+
+            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono) ) {
+                throw new NameAndAddresAlreadyExist();
+            }
+
+//            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && !r.endereco.equals(endereco) && r.id == dono) ) {
+//                throw new NameAlreadyExist();
+//            }
+
 
             Restaurante novoRestaurante = new Restaurante(nome, endereco, tipoCozinha, dono);
             restaurantes.add(novoRestaurante);
