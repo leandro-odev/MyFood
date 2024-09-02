@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.jackut.Exceptions.products;
+package br.ufal.ic.p2.jackut.Exceptions.Products;
 
 public class InvalidPrice extends Exception {
     public InvalidPrice() {

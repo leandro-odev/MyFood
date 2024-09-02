@@ -8,7 +8,8 @@ import java.util.NoSuchElementException;
 import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
-import br.ufal.ic.p2.jackut.Exceptions.products.*;
+import br.ufal.ic.p2.jackut.Exceptions.Products.*;
+
 
 public class Facade {
     List<User> users;
@@ -413,11 +414,8 @@ public class Facade {
     }
 
     public void fecharPedido(int numero) throws OrderNotFound {
-        if (pedidos.stream().noneMatch(p -> p.numero == numero)) {
-            throw new OrderNotFound();
-        }
-        Pedido p = getPedido(numero);
-        p.estado = "preparando";
+        Pedido pedido = pedidos.stream().filter(p -> p.numero == numero).findFirst().orElseThrow(OrderNotFound::new);
+        pedido.estado = "preparando";
     }
 
     public void removerPedido(int numero) {
