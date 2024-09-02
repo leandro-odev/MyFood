@@ -1,6 +1,5 @@
 # MY FOOD
-# Leandro Wanderley Quintela Tenório Cavalcante
-# Caio Agra Lemos
+**Leandro Wanderley Quintela Tenório Cavalcante, e Caio Agra Lemos**
 
 ## 1. Descrição Geral do Design Arquitetural do Sistema
 
