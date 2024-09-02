@@ -161,7 +161,7 @@ public class XMLUtils {
                     restaurante.produtos = new ArrayList<>(); // Inicializar a lista de produtos
                 } else if (line.startsWith("<id>")) {
                     restaurante.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<nome>") && produto == null) {  // Verifica se é nome do restaurante
+                } else if (line.startsWith("<nome>") && produto == null) {  // Verifica se ï¿½ nome do restaurante
                     restaurante.nome = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<endereco>")) {
                     restaurante.endereco = line.replaceAll("<.*?>", "");
@@ -173,7 +173,7 @@ public class XMLUtils {
                     produto = new Produto(null, 0, null);
                 } else if (line.startsWith("<numero>")) {
                     produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<nome>") && produto != null) {  // Verifica se é nome do produto
+                } else if (line.startsWith("<nome>") && produto != null) {  // Verifica se ï¿½ nome do produto
                     produto.nome = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<valor>")) {
                     produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
@@ -181,7 +181,7 @@ public class XMLUtils {
                     produto.categoria = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("</produto>")) {
                     restaurante.produtos.add(produto);
-                    produto = null;  // Reseta o produto após adicioná-lo
+                    produto = null;  // Reseta o produto apï¿½s adicionï¿½-lo
                 } else if (line.startsWith("</restaurante>")) {
                     restaurantes.add(restaurante);
                 }
@@ -205,6 +205,8 @@ public class XMLUtils {
                     pedido = new Pedido(0, 0);
                 } else if (line.startsWith("<id>")) {
                     pedido.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (line.startsWith("<estado>")) {
+                    pedido.estado = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<idCliente>")) {
                     pedido.cliente = Integer.parseInt(line.replaceAll("<.*?>", ""));
                 } else if (line.startsWith("<idRestaurante>")) {

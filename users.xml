@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <users>
     <dono>
-        <id>1</id>
+        <id>2</id>
         <nome>RobertoDono</nome>
         <email>roberto@ufal.com.br</email>
         <senha>123senha</senha>
@@ -9,7 +9,7 @@
         <endereco>Rua Exemplo N 321</endereco>
     </dono>
     <cliente>
-        <id>2</id>
+        <id>3</id>
         <nome>Carlos</nome>
         <email>carlos@ufal.com.br</email>
         <senha>123senha</senha>

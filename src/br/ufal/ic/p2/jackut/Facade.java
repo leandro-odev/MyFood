@@ -415,7 +415,10 @@ public class Facade {
 
     public void fecharPedido(int numero) throws OrderNotFound {
         Pedido pedido = pedidos.stream().filter(p -> p.numero == numero).findFirst().orElseThrow(OrderNotFound::new);
+        pedidos.remove(pedido);
         pedido.estado = "preparando";
+        pedidos.add(pedido);
+        System.out.println(pedido);
     }
 
     public void removerPedido(int numero) {
