@@ -147,47 +147,6 @@ public class XMLUtils {
         return users;
     }
 
-//    public static List<Restaurante> lerRestaurantes(String fileName) {
-//        List<Restaurante> restaurantes = new ArrayList<>();
-//        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-//            String line;
-//            Restaurante restaurante = null;
-//            Produto produto = null;
-//            while ((line = reader.readLine()) != null) {
-//                line = line.trim();
-//
-//                if (line.startsWith("<restaurante>")) {
-//                    restaurante = new Restaurante(null, null, null, 0);
-//                } else if (line.startsWith("<id>")) {
-//                    restaurante.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
-//                } else if (line.startsWith("<nome>")) {
-//                    restaurante.nome = line.replaceAll("<.*?>", "");
-//                } else if (line.startsWith("<endereco>")) {
-//                    restaurante.endereco = line.replaceAll("<.*?>", "");
-//                } else if (line.startsWith("<tipoCozinha>")) {
-//                    restaurante.tipoCozinha = line.replaceAll("<.*?>", "");
-//                } else if (line.startsWith("<idDono>")) {
-//                    restaurante.idDono = Integer.parseInt(line.replaceAll("<.*?>", ""));
-//                } else if (line.startsWith("<produto>")) {
-//                    produto = new Produto(null, 0, null);
-//                } else if (line.startsWith("<numero>")) {
-//                    produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
-//                } else if (line.startsWith("<valor>")) {
-//                    produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
-//                } else if (line.startsWith("<categoria>")) {
-//                    produto.categoria = line.replaceAll("<.*?>", "");
-//                } else if (line.startsWith("</produto>")) {
-//                    restaurante.produtos.add(produto);
-//                } else if (line.startsWith("</restaurante>")) {
-//                    restaurantes.add(restaurante);
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return restaurantes;
-//    }
-
     public static List<Restaurante> lerRestaurantes(String fileName) {
         List<Restaurante> restaurantes = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {

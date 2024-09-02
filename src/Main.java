@@ -6,7 +6,7 @@ public class Main {
 //        System.out.println("Running tests...");
 
         String[] args2 = {"br.ufal.ic.p2.jackut.Facade",
-                "tests/us4_2.txt",
+                "tests/us4_1.txt",
         };
         EasyAccept.main(args2);
     }

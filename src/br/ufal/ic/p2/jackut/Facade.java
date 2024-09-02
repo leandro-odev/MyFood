@@ -16,7 +16,7 @@ public class Facade {
     List<Pedido> pedidos;
 
     public Facade() {
-        //zerarSistema();
+        zerarSistema();
         File usersFile = new File("users.xml");
         File restaurantesFile = new File("restaurantes.xml");
         File pedidosFile = new File("pedidos.xml");
