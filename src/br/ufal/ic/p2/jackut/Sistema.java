@@ -97,7 +97,7 @@ public class Sistema {
         if (user == null) {
             throw new UserNotRegistered();
         }
-        if (user instanceof Dono && atributo.equals("cpf")) {
+        if (user.isDono() && atributo.equals("cpf")) {
             return ((Dono) user).cpf;
         }
         return switch (atributo) {
@@ -159,7 +159,7 @@ public class Sistema {
     }
 
     public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String tipoCozinha) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
-        if(users.stream().noneMatch(u -> u.id == dono && u instanceof Dono)) {
+        if(users.stream().noneMatch(u -> u.id == dono && u.isDono())) {
             throw new UserCantCreate();
         }
 
