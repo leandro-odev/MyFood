@@ -1,10 +1,5 @@
 package br.ufal.ic.p2.jackut;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
