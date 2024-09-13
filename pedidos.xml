@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pedidos>
     <pedido>
-        <id>5</id>
-        <idCliente>3</idCliente>
-        <idRestaurante>3</idRestaurante>
+        <id>2</id>
+        <idCliente>2</idCliente>
+        <idRestaurante>4</idRestaurante>
         <estado>aberto</estado>
         <produtos>
             <produto>
-                <numero>12</numero>
+                <numero>6</numero>
                 <nome>Pastel de queijo</nome>
                 <valor>5.0</valor>
                 <categoria>alimento</categoria>
             </produto>
             <produto>
-                <numero>12</numero>
+                <numero>6</numero>
                 <nome>Pastel de queijo</nome>
                 <valor>5.0</valor>
                 <categoria>alimento</categoria>
@@ -21,25 +21,25 @@
         </produtos>
     </pedido>
     <pedido>
-        <id>4</id>
-        <idCliente>3</idCliente>
-        <idRestaurante>2</idRestaurante>
+        <id>1</id>
+        <idCliente>2</idCliente>
+        <idRestaurante>3</idRestaurante>
         <estado>preparando</estado>
         <produtos>
             <produto>
-                <numero>9</numero>
+                <numero>3</numero>
                 <nome>Sorvete morango</nome>
                 <valor>1.4</valor>
                 <categoria>alimento</categoria>
             </produto>
             <produto>
-                <numero>10</numero>
+                <numero>4</numero>
                 <nome>Sorvete chocolate</nome>
                 <valor>1.4</valor>
                 <categoria>alimento</categoria>
             </produto>
             <produto>
-                <numero>11</numero>
+                <numero>5</numero>
                 <nome>Refrigerante</nome>
                 <valor>3.4</valor>
                 <categoria>bebida</categoria>
@@ -47,9 +47,9 @@
         </produtos>
     </pedido>
     <pedido>
-        <id>6</id>
-        <idCliente>3</idCliente>
-        <idRestaurante>2</idRestaurante>
+        <id>3</id>
+        <idCliente>2</idCliente>
+        <idRestaurante>3</idRestaurante>
         <estado>aberto</estado>
         <produtos>
         </produtos>

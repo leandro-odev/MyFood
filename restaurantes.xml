@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <restaurantes>
     <restaurante>
-        <id>2</id>
+        <id>3</id>
         <nome>Sorveteria do Roberto</nome>
         <endereco>Rua Segura N 987</endereco>
         <tipoCozinha>brasileira</tipoCozinha>
-        <idDono>2</idDono>
+        <idDono>1</idDono>
         <produtos>
             <produto>
-                <numero>9</numero>
+                <numero>3</numero>
                 <nome>Sorvete morango</nome>
                 <valor>1.4</valor>
                 <categoria>alimento</categoria>
             </produto>
             <produto>
-                <numero>10</numero>
+                <numero>4</numero>
                 <nome>Sorvete chocolate</nome>
                 <valor>1.4</valor>
                 <categoria>alimento</categoria>
             </produto>
             <produto>
-                <numero>11</numero>
+                <numero>5</numero>
                 <nome>Refrigerante</nome>
                 <valor>3.4</valor>
                 <categoria>bebida</categoria>
@@ -28,14 +28,14 @@
         </produtos>
     </restaurante>
     <restaurante>
-        <id>3</id>
+        <id>4</id>
         <nome>Pastelaria do Roberto</nome>
         <endereco>Rua Segura N 987</endereco>
         <tipoCozinha>brasileira</tipoCozinha>
-        <idDono>2</idDono>
+        <idDono>1</idDono>
         <produtos>
             <produto>
-                <numero>12</numero>
+                <numero>6</numero>
                 <nome>Pastel de queijo</nome>
                 <valor>5.0</valor>
                 <categoria>alimento</categoria>
