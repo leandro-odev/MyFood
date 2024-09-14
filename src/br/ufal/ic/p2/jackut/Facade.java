@@ -39,11 +39,11 @@ public class Facade {
         return sistema.getAtributoUsuario(id, atributo);
     }
 
-    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist {
+    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist, InvalidName {
         sistema.criarUsuario(nome, email, senha, endereco);
     }
 
-    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist, InvalidName {
         sistema.criarUsuario(nome, email, senha, endereco, cpf);
     }
 
@@ -61,7 +61,7 @@ public class Facade {
         return sistema.getEmpresasDoUsuario(idDono);
     }
 
-    public int getIdEmpresa(int idDono, String nome, int indice) throws EnterpriseNameNotRegistered {
+    public int getIdEmpresa(int idDono, String nome, int indice) throws EnterpriseNameNotRegistered, InvalidName {
         return sistema.getIdEmpresa(idDono, nome, indice);
     }
 
