@@ -1,10 +1,10 @@
 package br.ufal.ic.p2.jackut;
 
-import br.ufal.ic.p2.jackut.Exceptions.EmailAlreadyExist;
+import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
+import br.ufal.ic.p2.jackut.Exceptions.Invalid.*;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
 import br.ufal.ic.p2.jackut.Exceptions.Products.*;
-import br.ufal.ic.p2.jackut.Exceptions.UserNotRegistered;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -111,10 +111,10 @@ public class Sistema {
         };
     }
 
-    //Cliente
-    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist {
+    //Verificar dados do Cliente
+    private void verifyData(String nome, String email, String senha, String endereco) throws InvalidName {
         if (nome == null || nome.isEmpty()) {
-            throw new Error("Nome invalido");
+            throw new InvalidName();
         } else if (email == null || email.isEmpty() || !email.contains("@")) {
             throw new Error("Email invalido");
         } else if (senha == null || senha.isEmpty()) {
@@ -122,6 +122,19 @@ public class Sistema {
         } else if (endereco == null || endereco.isEmpty()) {
             throw new Error("Endereco invalido");
         }
+    }
+
+    //Verificar dados do Dono
+    private void verifyData(String nome, String email, String senha, String endereco, String cpf) throws InvalidName {
+        verifyData(nome, email, senha, endereco);
+        if (cpf == null || cpf.contains("/") || cpf.length() != 14) {
+            throw new Error("CPF invalido");
+        }
+    }
+
+    //Cliente
+    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist, InvalidName {
+        verifyData(nome, email, senha, endereco);
 
         if (users.stream().anyMatch(u -> u.email.equals(email))) {
             throw new EmailAlreadyExist();
@@ -131,18 +144,8 @@ public class Sistema {
     }
 
     //Dono
-    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist {
-        if (nome == null || nome.isEmpty()) {
-            throw new Error("Nome invalido");
-        } else if (email == null || email.isEmpty() || !email.contains("@")) {
-            throw new Error("Email invalido");
-        } else if (senha == null || senha.isEmpty()) {
-            throw new Error("Senha invalido");
-        } else if (endereco == null || endereco.isEmpty()) {
-            throw new Error("Endereco invalido");
-        } else if (cpf == null || cpf.isEmpty() || cpf.contains("/") || cpf.length() != 14) {
-            throw new Error("CPF invalido");
-        }
+    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist, InvalidName {
+        verifyData(nome, email, senha, endereco, cpf);
 
         if (users.stream().anyMatch(u -> u.email.equals(email))) {
             throw new EmailAlreadyExist();
@@ -204,15 +207,15 @@ public class Sistema {
         }
     }
 
-    public int getIdEmpresa (int idDono, String nome, int indice) throws EnterpriseNameNotRegistered {
+    public int getIdEmpresa (int idDono, String nome, int indice) throws EnterpriseNameNotRegistered, InvalidName {
         if (nome == null || nome.isEmpty()) {
-            throw new Error("Nome invalido");
+            throw new InvalidName();
         } else if (indice < 0 || indice >= users.size()) {
             throw new Error("Indice invalido");
         }
         List<Restaurante> empresasComMesmoNome = restaurantes.stream().filter(r -> r.nome.equals(nome)).toList();
 
-        if (empresasComMesmoNome.size() == 0) {
+        if (empresasComMesmoNome.isEmpty()) {
             throw new EnterpriseNameNotRegistered();
         }
         if (indice >= empresasComMesmoNome.size()) {

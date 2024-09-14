@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.jackut.Exceptions.Enterprise;
+package br.ufal.ic.p2.jackut.Exceptions.Invalid;
 
 public class InvalidAttribute extends Exception {
     public InvalidAttribute() {

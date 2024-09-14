@@ -1,4 +1,4 @@
-package br.ufal.ic.p2.jackut.Exceptions.Products;
+package br.ufal.ic.p2.jackut.Exceptions.Invalid;
 
 public class InvalidName extends Exception {
     public InvalidName() {

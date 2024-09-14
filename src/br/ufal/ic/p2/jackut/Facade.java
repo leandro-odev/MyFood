@@ -2,6 +2,10 @@ package br.ufal.ic.p2.jackut;
 
 import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
+import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidAttribute;
+import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidName;
+import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidPrice;
+import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidProduct;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
 import br.ufal.ic.p2.jackut.Exceptions.Products.*;
 
