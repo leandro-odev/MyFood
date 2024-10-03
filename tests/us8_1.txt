@@ -1,0 +1,232 @@
+# User Story 8 - Sistema de entregas.
+# Permita a um usuário receber seus produtos, e que os entregadores possam saber os pedidos existentes e iniciar o processo dce entrega.
+#
+# Os dados das entregas são:
+# id -> Que deve ser do tipo int e único gerado pelo sistema.
+# cliente -> Nome do cliente no formato String, obtido do pedido.
+# empresa -> Nome da empresa no formato String, obtido do pedido.
+# pedido -> Recebe o numero do pedido a qual possui os itens a serem entregues, do tipo int.
+# entregador -> Recebe id do int do entregador que vai realizar a entrega do pedido.
+# destino -> Recebe uma String com o endereço de entrega, caso null utiliza como padrão o endereço do cliente.
+# produtos -> Lista com o nome de todos os produtos, obtido do perido.
+#
+#
+###################
+# Os métodos que são utilizados nos testes podem ser vistos a seguir:
+###################
+# zerarSistema
+# descrição: Apaga todos os dados no banco de dados do sistema.
+# retorno: Sem retorno
+#
+# liberarPedido(int:numero)
+# descrição: Um pedido depois de preparado pela empresa e liberado para a entrega. mudando o estado do pedido para "pronto".
+# retorno: Sem retorno
+#
+# obterPedido(int:entregador)
+# descrição: Retorna o pedido mais antigo que esteja pronto, e que pertenca a uma empresa a qual o entregador trabalha. Pedidos de Farmacia sempre tem prioridade.
+# retorno: Retorna o id de um pedido pronto para entrega.
+#
+# criarEntrega(int pedido, int entregador, String destino)
+# descrição: Cria um objeto de entrega, e muda o estado do pedido para "entregando".
+# retorno: Retorna o id do objeto de entrega.
+#
+# getEntrega(int id, String atributo)
+# descrição:  obtém os dados de uma entrega pelo id
+# retorno:  Retorna uma string com o valor do atributo.
+#
+# getIdEntrega(int pedido)
+# descrição: retorna o id da entrega a qual pertece o pedido informado pelo id
+# retorno:   Retorna o id da do objeto de entrega.
+#
+# entregar(int entrega)
+# descrição: Muda o estado do pedido para entregue, o entregador tambem fica livre para poder pegar um novo pedido.
+# retorno: Sem retorno
+#
+# encerrarSistema
+# descrição: Finaliza a execução do programa
+# retorno: Sem retorno
+
+
+
+# Apaga toda a base de dados.
+zerarSistema
+
+criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123"
+id1=login email="carlos@ufal.com.br" senha="123senha"
+
+criarUsuario nome="Lucas" email="lucas@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321"  cpf="544.732.410-68"
+id2=login email="lucas@ufal.com.br" senha="123senha"
+
+criarUsuario nome="Rodrigo" email="rodrigo@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123" veiculo="moto" placa="BRA 1234"
+id3=login email="rodrigo@ufal.com.br" senha="123senha"
+
+criarUsuario nome="Joana" email="joana@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123" veiculo="carro" placa="BRA 8574"
+id4=login email="joana@ufal.com.br" senha="123senha"
+
+# criando as empresas para os testes.
+eid1=criarEmpresa tipoEmpresa="restaurante"  dono=${id2} nome="Pastelaria" endereco="Rua Segura N 987" tipoCozinha="brasileira"
+eid2=criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado" endereco="Rua Segura N 123" abre="07:30", fecha="21:00" tipoMercado="supermercado"
+eid3=criarEmpresa tipoEmpresa="farmacia" dono=${id2} nome="Farmacia" endereco="Rua Segura N 123" aberto24Horas=true
+
+# criando os produtos.
+p1=criarProduto empresa=${eid1} nome="Pastel" valor=1.40  categoria="alimento"
+p2=criarProduto empresa=${eid1} nome="Refrigerante" valor=3.00  categoria="bebida"
+
+p3=criarProduto empresa=${eid2} nome="Refrigerante" valor=2.40  categoria="bebida"
+p4=criarProduto empresa=${eid2} nome="Sabão" valor=1.25  categoria="limpeza"
+
+p5=criarProduto empresa=${eid3} nome="Paracetamol " valor=2.40  categoria="medicamento"
+p6=criarProduto empresa=${eid3} nome="Agua Oxigenada" valor=5.00  categoria="higiene"
+
+###################
+# testes de todas as combinações importantes para o comando liberarPedido.
+###################
+
+pe1=criarPedido cliente=${id1} empresa=${eid1}
+
+adicionarProduto numero=${pe1} produto=${p1}
+adicionarProduto numero=${pe1} produto=${p2}
+
+expect "aberto"  getPedidos pedido=${pe1} atributo="estado"
+expect "{[Pastel, Refrigerante]}" getPedidos pedido=${pe1} atributo="produtos"
+
+fecharPedido numero=${pe1}
+expect "preparando"  getPedidos pedido=${pe1} atributo="estado"
+
+# liberando pedido.
+liberarPedido numero=${pe1}
+expect "pronto" getPedidos pedido=${pe1} atributo="estado"
+
+expectError "Pedido ja liberado" liberarPedido numero=${pe1}
+
+pe2=criarPedido cliente=${id1} empresa=${eid1}
+
+adicionarProduto numero=${pe1} produto=${p1}
+adicionarProduto numero=${pe1} produto=${p2}
+
+# Caso o estado não seja pronto.
+expectError "Nao e possivel liberar um produto que nao esta sendo preparado" liberarPedido numero=${pe2}
+
+
+###################
+# testes de todas as combinações importantes para o comando obterPedido.
+###################
+
+expectError "usuario nao e entregador." obterPedido entregador=${id1}
+expectError "Entregador nao estar em nenhuma empresa." obterPedido entregador=${id3}
+
+# O mesmo pedido aparece para todos os entregadores que estão vinculados a empresa que tem o pedido pronto, 
+cadastrarEntregador empresa=${eid1} entregador=${id3}
+
+expect ${pe1} obterPedido entregador=${id3}
+
+cadastrarEntregador empresa=${eid1} entregador=${id4}
+expect ${pe1} obterPedido entregador=${id4}
+
+# Um novo pedido fica para depois, pedidos mais velhos inicialmente tem preferencia.
+pe2=criarPedido cliente=${id1} empresa=${eid2}
+adicionarProduto numero=${pe2} produto=${p3}
+adicionarProduto numero=${pe2} produto=${p4}
+liberarPedido numero=${pe2}
+
+cadastrarEntregador empresa=${eid1} entregador=${id3}
+cadastrarEntregador empresa=${eid1} entregador=${id4}
+
+expect ${pe1} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id4}
+
+# Pedido de farmacia tem prioridade, primero são listados todos os de farmacias para depois outros.
+pe3=criarPedido cliente=${id1} empresa=${eid3}
+adicionarProduto numero=${pe3} produto=${p5}
+adicionarProduto numero=${pe3} produto=${p6}
+liberarPedido numero=${pe3}
+
+expect ${pe1} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id4}
+liberarPedido numero=${pe2}
+
+expect ${pe1} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id4}
+
+cadastrarEntregador empresa=${eid1} entregador=${id3}
+
+expect ${pe3} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id4}
+
+###################
+# testes de todas as combinações importantes para o comando criarEntrega.
+###################
+
+expectError "Nao e um entregador valido" criarEntrega pedido=${pe1} entregador=${id1} destino="Rua Segura N 987"
+expectError "Nao e um entregador valido" criarEntrega pedido=${pe1} entregador=${id2} destino="Rua Segura N 987"
+
+pe4=criarPedido cliente=${id1} empresa=${eid3}
+adicionarProduto numero=${pe3} produto=${p5}
+
+expectError "Pedido nao esta pronto para entrega" criarEntrega pedido=${pe4} entregador=${id1} destino="Rua Segura N 987"
+
+epe1=obterPedido entregador=${id3}
+en1=criarEntrega pedido=${epe1} entregador=${id3} destino=
+
+expect "entregando"  getPedidos pedido=${pe3} atributo="estado"
+
+expect ${pe1} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id4}
+
+epe2=obterPedido entregador=${id3}
+expectError "Entregador ainda em entrega" criarEntrega pedido=${epe2} entregador=${id3} destino=
+
+en2=criarEntrega pedido=${epe2} entregador=${id4} destino="Rua Exemplo N 85"
+expect "entregando"  getPedidos pedido=${pe1} atributo="estado"
+
+expect ${pe2} obterPedido entregador=${id3}
+expect ${pe2} obterPedido entregador=${id4}
+
+###################
+# testes de todas as combinações importantes para o comando getEntrega.
+###################
+
+expectError "Atributo invalido" getEntrega id=${en1} atributo=
+expectError "Atributo invalido" getEntrega id=${en1} atributo=""
+expectError "Atributo nao existe" getEntrega id=${en1} atributo="local"
+
+expect "Carlos"  getEntrega id=${en1} atributo="cliente"
+expect "Farmacia"  getEntrega id=${en1} atributo="empresa"
+expect pe3  getEntrega id=${en1} atributo="pedido"
+expect "Rodrigo"  getEntrega id=${en1} atributo="entregador"
+expect "Rua Exemplo N 123"  getEntrega id=${en1} atributo="destino"
+expect "{[Paracetamol, Agua Oxigenada]}"  getEntrega id=${en1} atributo="produtos"
+
+expect "Carlos"  getEntrega id=${en2} atributo="cliente"
+expect "Pastelaria"  getEntrega id=${en2} atributo="empresa"
+expect pe1  getEntrega id=${en2} atributo="pedido"
+expect "Joana"  getEntrega id=${en2} atributo="entregador"
+expect "Rua Exemplo N 85"  getEntrega id=${en2} atributo="destino"
+expect "{[Pastel, Refrigerante]}"  getEntrega id=${en2} atributo="produtos"
+
+
+###################
+# testes de todas as combinações importantes para o comando getIdEntrega.
+###################
+
+expect ${en2} getIdEntrega pedido=${pe1}
+expect ${en1} getIdEntrega pedido=${pe3}
+expectError "Nao existe entrega com esse id" getIdEntrega pedido=${pe2}
+
+###################
+# testes de todas as combinações importantes para o comando entregar.
+###################
+
+expectError "Nao existe nada para ser entrgue com esse id" entregar entrega=9999
+
+entregar entrega=${en1}
+expect "entregue"  getPedidos pedido=${pe3} atributo="estado"
+
+epe3=obterPedido entregador=${id3}
+en3=criarEntrega pedido=${epe3} entregador=${id3} destino=
+
+expectError "Nao existe pedido para entrega" obterPedido entregador=${id3}
+expectError "Nao existe pedido para entrega" obterPedido entregador=${id4}
+
+encerrarSistema
+quit

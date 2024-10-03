@@ -1,0 +1,37 @@
+# User Story 7 - Sistema de entregas - verificacao de persistencia
+
+id1=login email="carlos@ufal.com.br" senha="123senha"
+id2=login email="lucas@ufal.com.br" senha="123senha"
+id3=login email="rodrigo@ufal.com.br" senha="123senha"
+id4=login email="joana@ufal.com.br" senha="123senha"
+
+eid1=getIdEmpresa idDono=${id2} nome="Pastelaria" indice=0
+eid2=getIdEmpresa idDono=${id2} nome="Mercado" indice=0
+eid3=getIdEmpresa idDono=${id2} nome="Farmacia" indice=0
+
+pe1=getNumeroPedido cliente=${id1} empresa=${eid1} indice=0
+pe2=getNumeroPedido cliente=${id1} empresa=${eid2} indice=0
+pe3=getNumeroPedido cliente=${id1} empresa=${eid3} indice=0
+
+
+expect "Carlos"  getEntrega id=${en1} atributo="cliente"
+expect "Farmacia"  getEntrega id=${en1} atributo="empresa"
+expect pe3  getEntrega id=${en1} atributo="pedido"
+expect "Rodrigo"  getEntrega id=${en1} atributo="entregador"
+expect "Rua Exemplo N 123"  getEntrega id=${en1} atributo="destino"
+expect "{[Paracetamol, Agua Oxigenada]}"  getEntrega id=${en1} atributo="produtos"
+
+expect "Carlos"  getEntrega id=${en2} atributo="cliente"
+expect "Pastelaria"  getEntrega id=${en2} atributo="empresa"
+expect pe1  getEntrega id=${en2} atributo="pedido"
+expect "Joana"  getEntrega id=${en2} atributo="entregador"
+expect "Rua Exemplo N 85"  getEntrega id=${en2} atributo="destino"
+expect "{[Pastel, Refrigerante]}"  getEntrega id=${en2} atributo="produtos"
+
+
+expect "entregando" getPedidos pedido=${pe1} atributo="estado"
+expect "entregando" getPedidos pedido=${pe2} atributo="estado"
+expect "entregue" getPedidos pedido=${pe3} atributo="estado"
+
+expectError "Nao existe pedido para entrega" obterPedido entregador=${id3}
+expectError "Nao existe pedido para entrega" obterPedido entregador=${id4}

@@ -1,0 +1,22 @@
+# User Story 7 - Criação de Entregador - verificacao de persistencia
+
+id1=login email="rodrigo@ufal.com.br" senha="123senha"
+id2=login email="carlos@ufal.com.br" senha="123senha"
+id3=login email="carlos2@ufal.com.br" senha="123senha"
+
+eid1=getIdEmpresa idDono=${id2} nome="Pastelaria" indice=0
+eid2=getIdEmpresa idDono=${id2} nome="Mercado" indice=0
+eid3=getIdEmpresa idDono=${id2} nome="Farmacia" indice=0
+
+expect "Rodrigo" getAtributoUsuario id=${id1} atributo="nome"
+expect "rodrigo@ufal.com.br" getAtributoUsuario id=${id1} atributo="email"
+expect "Rua Exemplo N 123" getAtributoUsuario id=${id1} atributo="endereco"
+expect "moto" getAtributoUsuario id=${id1} atributo="veiculo" 
+expect "BRA 1234" getAtributoUsuario id=${id1} atributo="placa" 
+
+expect "{[rodrigo@ufal.com.br, carlos2@ufal.com.br]}" getEntregadores empresa=${eid1}
+expect "{[rodrigo@ufal.com.br]}" getEntregadores empresa=${eid2}
+expect "{[]}" getEntregadores empresa=${eid3}
+
+expect "{[[Pastelaria, Rua Segura N 987], [Mercado, Rua Segura N 123], ["Farmacia", "Rua Segura N 123"]]}" getEmpresas entregador=${id1}
+expect "{[[Pastelaria, Rua Segura N 987]]}" getEmpresas entregador=${id3}

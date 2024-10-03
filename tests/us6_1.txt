@@ -1,0 +1,205 @@
+# User Story 6 - Criação de Farmacia
+# Permita que um usuário do tipo dono de empresa crie seu restaurante, mercado ou farmacia no MyFood.
+# Todos os metodos que antes funcionava apenas para restaurante ainda devem funcionar para farmacia.
+#
+# Os dados gerais para as farmacias são:
+# id -> Que deve ser do tipo int e único gerado pelo sistema.
+# nome -> Informado na criação do tipo String, não pode existir vários mercados com o mesmo nome com donos diferentes.
+# endereco-> Informado na criação do tipo String, pode existir vários restaurantes com o mesmo endereço.
+# aberto24Horas -> Boolean que aemazena se a farmacia e aberta 24h por dia. caso True, abre e fecha pode ser null.
+# numeroFuncionarios -> Numero inteiro representando a quantidade de funcionarios.
+#
+###################
+# Os métodos que são utilizados nos testes podem ser vistos a seguir:
+###################
+# zerarSistema
+# descrição: Apaga todos os dados no banco de dados do sistema.
+# retorno: Sem retorno
+#
+# criarEmpresa(String: tipoEmpresa, int dono, String: nome, Boolean: aberto24Horas, int numeroFuncionarios)
+# descrição: Cria uma nova empresa, do tipo fornecido, Restaurante, Mercado e Farmacia agora são criados.
+# retorno:   Retorna o id da empresa
+#
+# getIdEmpresa (int idDono, String nome, int indice)
+# descrição: Verifica uma empresa a qual esteja na lista do dono.
+# retorno:   Retorna o id da empresa com indice informado.
+#
+# getAtributoEmpresa (int empresa, String atributo)
+# descrição: Obtém os dados dos atributos da empresa
+# retorno:  Retorna uma string com o valor do atributo.
+#
+# adicionarProduto(int: numero, int produto)
+# descrição: Adciona um produto da empresa ao pedido
+# retorno:  Sem retorno
+#
+# getPedidos(int  numero, String atributo)
+# descrição:  obtém os dados de um pedido pelo id
+# retorno: Retorna uma string com o valor do atributo.
+#
+# encerrarSistema
+# descrição: Finaliza a execução do programa
+# retorno: Sem retorno
+
+
+# Apaga toda a base de dados.
+zerarSistema
+
+criarUsuario nome="Lucas" email="lucas@ufal.com.br"  senha="123senha" endereco="Rua Exemplo N 321"
+
+criarUsuario nome="CarlosDono" email="carlos@ufal.com.br"  senha="123senha" endereco="Rua Exemplo N 321" cpf="544.732.410-68"
+
+criarUsuario nome="RobertoDono" email="roberto@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321" cpf="544.732.410-68"
+
+id1=login email="lucas@ufal.com.br" senha="123senha"
+id2=login email="carlos@ufal.com.br" senha="123senha"
+id3=login email="roberto@ufal.com.br" senha="123senha"
+
+###################
+# testes de todas as outras combinações importantes para o comando criarEmpresa para mercado
+###################
+
+eid1=criarEmpresa tipoEmpresa="farmacia" dono=${id2} nome="Farmacia 24 horas do Carlos" endereco="Rua Segura N 123" aberto24Horas=true numeroFuncionarios=2
+
+eid2=criarEmpresa tipoEmpresa="farmacia" dono=${id2} nome="Farmacia do Carlos" endereco="Rua Segura N 123" aberto24Horas=false numeroFuncionarios=2
+
+# Um dono diferente não pode cadastrar uma empresa com o mesmo nome de uma existente, o dono de um restaurante pode cadastrar uma nova empresa desde que seja em endereço diferente.
+
+expectError "Empresa com esse nome ja existe" criarEmpresa tipoEmpresa="farmacia" dono=${id3} nome="Farmacia do Carlos" endereco="Rua Segura N 987" aberto24Horas=false numeroFuncionarios=2
+
+expectError "Proibido cadastrar duas empresas com o mesmo nome e local" criarEmpresa tipoEmpresa="farmacia"  dono=${id2} nome="Farmacia do Carlos" endereco="Rua Segura N 123"  aberto24Horas=false numeroFuncionarios=2
+
+eid3=criarEmpresa tipoEmpresa="farmacia"  dono=${id2} nome="Farmacia 24 horas do Carlos" endereco="Rua Otima N 852" aberto24Horas=true numeroFuncionarios=2
+
+expectError "Tipo de empresa invalido" criarEmpresa tipoEmpresa=  dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" aberto24Horas=false numeroFuncionarios=2
+expectError "Nome invalido" criarEmpresa tipoEmpresa="farmacia"  dono=${id2} nome= endereco="Rua Otima N 852" aberto24Horas=false numeroFuncionarios=2
+expectError "Endereco da empresa invalido" criarEmpresa tipoEmpresa="farmacia"  dono=${id2} nome="Mercado do Carlos" endereco= aberto24Horas=false numeroFuncionarios=2
+
+# Apenas usuários do tipo dono de mercado podem criar uma empresa.
+expectError "Usuario nao pode criar uma empresa" criarEmpresa tipoEmpresa="farmacia"  dono=${id1} nome="Mercado do  Lucas" endereco="Rua Amigavel N 22" aberto24Horas=false numeroFuncionarios=2
+
+# Obtendo donos
+expectError "Usuario nao pode criar uma empresa" getEmpresasDoUsuario idDono=${id1}
+expect "{[[Farmacia 24 horas do Carlos, Rua Segura N 123], [Farmacia do Carlos, Rua Segura N 123], [Farmacia 24 horas do Carlos, Rua Otima N 852]]}" getEmpresasDoUsuario idDono=${id2}
+expect "{[]}" getEmpresasDoUsuario idDono=${id3}
+
+# Obtendo os dados das farmacias. 
+eid4=criarEmpresa tipoEmpresa="farmacia" dono=${id3} nome="Farmacia do Roberto" endereco="Rua Segura N 123" aberto24Horas=false numeroFuncionarios=2
+
+expect "Farmacia do Roberto" getAtributoEmpresa empresa=${eid4} atributo="nome"
+expect "Rua Segura N 123" getAtributoEmpresa empresa=${eid4} atributo="endereco"
+expect "false" getAtributoEmpresa empresa=${eid4} atributo="aberto24Horas"
+expect "true" getAtributoEmpresa empresa=${eid1} atributo="aberto24Horas"
+expect "RobertoDono" getAtributoEmpresa empresa=${eid4} atributo="dono"
+expect "2" getAtributoEmpresa empresa=${eid4} atributo="numeroFuncionarios"
+expectError "Atributo invalido" getAtributoEmpresa empresa=${eid4} atributo="vizinhos"
+expectError "Atributo invalido" getAtributoEmpresa empresa=${eid4} atributo=""
+expectError "Empresa nao cadastrada" getAtributoEmpresa empresa=9999 atributo="nome"
+expectError "Empresa nao cadastrada" getAtributoEmpresa empresa=9999 atributo=""
+expectError "Atributo invalido" getAtributoEmpresa empresa=${eid4} atributo=
+
+
+# Obtendo o index de uma empresa. 
+
+expect ${eid1} getIdEmpresa idDono=${id2} nome="Farmacia 24 horas do Carlos" indice=0
+expect ${eid3} getIdEmpresa idDono=${id2} nome="Farmacia 24 horas do Carlos" indice=1
+expect ${eid2} getIdEmpresa idDono=${id2} nome="Farmacia do Carlos" indice=0
+expectError "Indice maior que o esperado" getIdEmpresa idDono=${id2} nome="Farmacia 24 horas do Carlos" indice=2
+expectError "Nao existe empresa com esse nome" getIdEmpresa idDono=${id2} nome="Nova farmacia do Carlos" indice=0
+
+expectError "Nome invalido" getIdEmpresa idDono=${id2} nome=  indice=2
+expectError "Nome invalido" getIdEmpresa idDono=${id2} nome="" indice=2
+expectError "Indice invalido" getIdEmpresa idDono=${id2} nome="Farmacia do Carlos" indice=-1
+
+# Criando produtos 
+p1=criarProduto empresa=${eid1} nome="Paracetamol" valor=2.40  categoria="medicamento"
+p2=criarProduto empresa=${eid1} nome="Agua Oxigenada" valor=5.00  categoria="higiene"
+p3=criarProduto empresa=${eid1} nome="Band-Aid" valor=1.50  categoria="curativos"
+p4=criarProduto empresa=${eid2} nome="Soro Fisiologico" valor=2.00  categoria="higiene"
+
+###################
+# testes de todas as outras combinações importantes para o comando criarPedido
+###################
+expectError "Dono de empresa nao pode fazer um pedido" criarPedido cliente=${id2} empresa=${eid1}
+
+expectError "Nao existe pedido em aberto" adicionarProduto numero=9999 produto=${p1}
+
+pe1=criarPedido cliente=${id1} empresa=${eid1}
+expectError "Nao e permitido ter dois pedidos em aberto para a mesma empresa" criarPedido cliente=${id1} empresa=${eid1}
+
+pe2=criarPedido cliente=${id1} empresa=${eid2}
+
+###################
+# testes de todas as combinações importantes para o comando adicionarProduto
+###################
+
+ adicionarProduto numero=${pe1} produto=${p1}
+ adicionarProduto numero=${pe1} produto=${p2}
+ adicionarProduto numero=${pe1} produto=${p3}
+
+expectError "O produto nao pertence a essa empresa" adicionarProduto pedido=${pe2} produto=${p1}
+
+# O mesmo produto é adicionado várias vezes ao pedido.
+adicionarProduto numero=${pe2} produto=${p4}
+adicionarProduto numero=${pe2} produto=${p4}
+adicionarProduto numero=${pe2} produto=${p4}
+
+###################
+# testes de todas as combinações importantes para o comando getPedidos
+###################
+
+expectError "Atributo invalido" getPedidos pedido=${pe1} atributo=
+expectError "Atributo invalido" getPedidos pedido=${pe1} atributo=""
+expectError "Atributo nao existe" getPedidos pedido=${pe1} atributo="local"
+
+expect "Lucas"  getPedidos pedido=${pe1} atributo="cliente"
+expect "Farmacia 24 horas do Carlos"  getPedidos pedido=${pe1} atributo="empresa"
+expect "aberto"  getPedidos pedido=${pe1} atributo="estado"
+expect "{[Paracetamol, Agua Oxigenada, Band-Aid]}" getPedidos pedido=${pe1} atributo="produtos"
+expect "8.90"  getPedidos pedido=${pe1} atributo="valor"
+
+expect "Lucas"  getPedidos pedido=${pe2} atributo="cliente"
+expect "Farmacia do Carlos"  getPedidos pedido=${pe2} atributo="empresa"
+expect "aberto"  getPedidos pedido=${pe2} atributo="estado"
+expect "{[Soro Fisiologico, Soro Fisiologico, Soro Fisiologico]}" getPedidos pedido=${pe2} atributo="produtos"
+expect "6.00"  getPedidos pedido=${pe2} atributo="valor"
+
+###################
+# testes de todas as combinações importantes para o comando fecharPedido
+###################
+
+expectError "Pedido nao encontrado" fecharPedido numero=9999
+fecharPedido numero=${pe1}
+
+expect "preparando"  getPedidos pedido=${pe1} atributo="estado"
+
+expectError "Nao e possivel adcionar produtos a um pedido fechado"  adicionarProduto numero=${pe1} produto=${p1}
+
+# Abre um novo pedido agora que o anterior está fechado.
+pe3=criarPedido cliente=${id1} empresa=${eid1}
+
+###################
+# testes de todas as combinações importantes para o comando removerProduto
+###################
+
+expectError "Produto invalido" removerProduto pedido=${pe2} produto=
+expectError "Produto invalido" removerProduto pedido=${pe2} produto=""
+
+expectError "Produto nao encontrado" removerProduto pedido=${pe2} produto="Sorvete"
+expectError "Nao e possivel remover produtos de um pedido fechado" removerProduto pedido=${pe1} produto="Refrigerante"
+
+removerProduto pedido=${pe2} produto="Soro Fisiologico"
+
+expect "{[Soro Fisiologico, Soro Fisiologico]}" getPedidos pedido=${pe2} atributo="produtos"
+expect "4.00"  getPedidos pedido=${pe2} atributo="valor"
+
+###################
+# testes de todas as combinações importantes para o comando removerProduto
+###################
+
+expect ${pe1} getNumeroPedido cliente=${id1} empresa=${eid1} indice=0
+expect ${pe2} getNumeroPedido cliente=${id1} empresa=${eid2} indice=0
+expect ${pe3} getNumeroPedido cliente=${id1} empresa=${eid1} indice=1
+
+
+encerrarSistema
+quit
