@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <users>
     <cliente>
-        <id>2</id>
-        <nome>Carlos</nome>
-        <email>carlos@ufal.com.br</email>
+        <id>3</id>
+        <nome>Lucas</nome>
+        <email>lucas@ufal.com.br</email>
         <senha>123senha</senha>
-        <endereco>Rua Exemplo N 123</endereco>
+        <endereco>Rua Exemplo N 321</endereco>
     </cliente>
     <dono>
-        <id>3</id>
+        <id>4</id>
         <nome>CarlosDono</nome>
-        <email>carlos2@ufal.com.br</email>
+        <email>carlos@ufal.com.br</email>
+        <senha>123senha</senha>
+        <cpf>544.732.410-68</cpf>
+        <endereco>Rua Exemplo N 321</endereco>
+    </dono>
+    <dono>
+        <id>5</id>
+        <nome>RobertoDono</nome>
+        <email>roberto@ufal.com.br</email>
         <senha>123senha</senha>
         <cpf>544.732.410-68</cpf>
         <endereco>Rua Exemplo N 321</endereco>

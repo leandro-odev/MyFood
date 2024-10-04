@@ -17,12 +17,14 @@ public class Sistema {
 
     List<User> users;
     List<Restaurante> restaurantes;
+    List<Mercado> mercados;
     List<Pedido> pedidos;
 
     private Sistema() {
         File usersFile = new File("users.xml");
         File restaurantesFile = new File("restaurantes.xml");
         File pedidosFile = new File("pedidos.xml");
+        File mercadosFile = new File("mercados.xml");
 
         if (usersFile.exists()) {
             users = XMLUtils.lerUsuarios("users.xml");
@@ -41,6 +43,12 @@ public class Sistema {
         } else {
             pedidos = new ArrayList<>();
         }
+
+        if (mercadosFile.exists()) {
+            mercados = XMLUtils.lerMercados("mercados.xml");
+        } else {
+            mercados = new ArrayList<>();
+        }
     }
 
     static Sistema getInstance() {
@@ -54,6 +62,7 @@ public class Sistema {
         XMLUtils.salvarUsuarios(users, "users.xml");
         XMLUtils.salvarPedidos(pedidos, "pedidos.xml");
         XMLUtils.salvarRestaurantes(restaurantes, "restaurantes.xml");
+        XMLUtils.salvarMercados(mercados, "mercados.xml");
     }
 
     public void zerarSistema() {
@@ -161,12 +170,13 @@ public class Sistema {
         return users.stream().filter(u -> u.email.equals(email) && u.senha.equals(senha)).findFirst().get().id;
     }
 
+    //Restaurante
     public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String tipoCozinha) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
         if(users.stream().noneMatch(u -> u.id == dono && u.isDono())) {
             throw new UserCantCreate();
         }
 
-        if (tipoEmpresa.equalsIgnoreCase("restaurante")) {
+        if (tipoEmpresa.equals("restaurante")) {
 
             if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
                 throw new NameAlreadyExist();
@@ -181,6 +191,25 @@ public class Sistema {
             return novoRestaurante.id;
         } else {
             throw new Error("Empresa não é um restaurante");
+        }
+    }
+
+    //Mercado
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
+        if (tipoEmpresa.equals("mercado")) {
+            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
+                throw new NameAlreadyExist();
+            }
+
+            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono) ) {
+                throw new NameAndAddresAlreadyExist();
+            }
+
+            Mercado novoMercado = new Mercado(nome, endereco, abre, fecha, tipoMercado);
+            mercados.add(novoMercado);
+            return novoMercado.id;
+        } else {
+            throw new Error("Empresa não é um mercado");
         }
     }
 

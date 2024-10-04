@@ -107,6 +107,29 @@ public class XMLUtils {
         }
     }
 
+    public static void salvarMercados(List<Mercado> mercados, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            writer.write("<mercados>\n");
+
+            for (Mercado mercado : mercados) {
+                writer.write("    <mercado>\n");
+                writer.write("        <id>" + mercado.id + "</id>\n");
+                writer.write("        <nome>" + mercado.nome + "</nome>\n");
+                writer.write("        <endereco>" + mercado.endereco + "</endereco>\n");
+                writer.write("        <abre>" + mercado.abre + "</abre>\n");
+                writer.write("        <fecha>" + mercado.fecha + "</fecha>\n");
+                writer.write("        <tipoMercado>" + mercado.tipoMercado + "</tipoMercado>\n");
+                writer.write("    </mercado>\n");
+            }
+
+            writer.write("</mercados>\n");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<User> lerUsuarios(String fileName) {
         List<User> users = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -231,5 +254,37 @@ public class XMLUtils {
             e.printStackTrace();
         }
         return pedidos;
+    }
+
+    public static List<Mercado> lerMercados(String fileName) {
+        List<Mercado> mercados = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            Mercado mercado = null;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+
+                if (line.startsWith("<mercado>")) {
+                    mercado = new Mercado(null, null, null, null, null);
+                } else if (line.startsWith("<id>")) {
+                    mercado.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (line.startsWith("<nome>")) {
+                    mercado.nome = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("<endereco>")) {
+                    mercado.endereco = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("<abre>")) {
+                    mercado.abre = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("<fecha>")) {
+                    mercado.fecha = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("<tipoMercado>")) {
+                    mercado.tipoMercado = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("</mercado>")) {
+                    mercados.add(mercado);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return mercados;
     }
 }
