@@ -194,25 +194,6 @@ public class Sistema {
         }
     }
 
-    //Mercado
-    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
-        if (tipoEmpresa.equals("mercado")) {
-            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
-                throw new NameAlreadyExist();
-            }
-
-            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono) ) {
-                throw new NameAndAddresAlreadyExist();
-            }
-
-            Mercado novoMercado = new Mercado(nome, endereco, abre, fecha, tipoMercado);
-            mercados.add(novoMercado);
-            return novoMercado.id;
-        } else {
-            throw new Error("Empresa não é um mercado");
-        }
-    }
-
     public String getEmpresasDoUsuario(int idDono) throws UserCantCreate {
 
         if (!users.stream().anyMatch(r -> r.id == idDono && r.isDono())) {
@@ -485,5 +466,52 @@ public class Sistema {
         Pedido p = getPedido(pedido);
         p.produtos.stream().filter(prod -> prod.nome.equals(produto)).findFirst().ifPresent(p.produtos::remove);
     }
+
+    //Mercado
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
+        if (tipoEmpresa.equals("mercado")) {
+            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
+                throw new NameAlreadyExist();
+            }
+
+            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono) ) {
+                throw new NameAndAddresAlreadyExist();
+            }
+
+            Mercado novoMercado = new Mercado(nome, endereco, abre, fecha, tipoMercado);
+            mercados.add(novoMercado);
+            return novoMercado.id;
+        } else {
+            throw new Error("Empresa não é um mercado");
+        }
+    }
+
+    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered {
+        if (mercados.stream().noneMatch(m -> m.id == mercado)) {
+            throw new EnterpriseNotRegistered();
+        }
+
+        Mercado m = mercados.stream().filter(n -> n.id == mercado).findFirst().get();
+        m.abre = abre;
+        m.fecha = fecha;
+    }
+
+    // Entregador
+
+//    public int criarUsuario(String nome, String email, String senha, String endereco, String veiculo, placa endereco) {
+//        verifyData(nome, email, senha, endereco);
+//
+//        if (users.stream().anyMatch(u -> u.email.equals(email))) {
+//            throw new EmailAlreadyExist();
+//        }
+//        User newUser = new Entregador(nome, email, senha, endereco, veiculo);
+//        users.add(newUser);
+//        return newUser.id;
+//    }
+//
+//    public void cadastrarEntregador(int empresa, int entregador) {
+//        Restaurante r = restaurantes.stream().filter(n -> n.id == empresa).findFirst().get();
+//        r.entregadores.add(entregador);
+//    }
 
 }

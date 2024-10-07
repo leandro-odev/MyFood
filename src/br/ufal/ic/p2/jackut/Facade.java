@@ -53,6 +53,7 @@ public class Facade {
         return sistema.login(email, senha);
     }
 
+    // Restaurante
     public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String tipoCozinha) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
         return sistema.criarEmpresa(tipoEmpresa, dono, nome, endereco, tipoCozinha);
     }
@@ -112,4 +113,18 @@ public class Facade {
     public void removerProduto(int pedido, String produto) throws OrderNotFound, InvalidProduct, ProductNotFound, CannotRemoveProductOrderClosed {
         sistema.removerProduto(pedido, produto);
     }
+
+    // Mercado
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
+        return sistema.criarEmpresa(tipoEmpresa, dono, nome, endereco, abre, fecha, tipoMercado);
+    }
+
+    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered {
+        sistema.alterarFuncionamento(mercado, abre, fecha);
+    }
+
+    public void cadastrarEntregador(int empresa, int entregador) {
+        sistema.cadastrarEntregador(empresa, entregador);
+    }
+
 }
