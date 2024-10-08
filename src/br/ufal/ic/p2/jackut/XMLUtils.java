@@ -121,6 +121,7 @@ public class XMLUtils {
                 writer.write("        <abre>" + mercado.abre + "</abre>\n");
                 writer.write("        <fecha>" + mercado.fecha + "</fecha>\n");
                 writer.write("        <tipoMercado>" + mercado.tipoMercado + "</tipoMercado>\n");
+
                 writer.write("    </mercado>\n");
             }
 
@@ -263,6 +264,7 @@ public class XMLUtils {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             Mercado mercado = null;
+            Produto produto = null;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
@@ -280,7 +282,20 @@ public class XMLUtils {
                     mercado.fecha = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<tipoMercado>")) {
                     mercado.tipoMercado = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("</mercado>")) {
+                } else if (line.startsWith("<produto>")) {
+                    produto = new Produto(null, 0, null);
+                } else if (line.startsWith("<numero>")) {
+                    produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (line.startsWith("<nome>") && produto != null) {  // Verifica se � nome do produto
+                    produto.nome = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("<valor>")) {
+                    produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
+                } else if (line.startsWith("<categoria>")) {
+                    produto.categoria = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("</produto>")) {
+                    mercado.produtos.add(produto);
+                    produto = null;  // Reseta o produto ap�s adicion�-lo
+                }  else if (line.startsWith("</mercado>")) {
                     mercados.add(mercado);
                 }
             }

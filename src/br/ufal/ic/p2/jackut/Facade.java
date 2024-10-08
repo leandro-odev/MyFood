@@ -72,7 +72,7 @@ public class Facade {
         return sistema.getAtributoEmpresa(empresa, atributo);
     }
 
-    public int criarProduto(int empresa, String nome, float valor, String categoria) throws ProductNameAtEnterprise, InvalidName, InvalidPrice, WrongCategory {
+    public int criarProduto(int empresa, String nome, float valor, String categoria) throws ProductNameAtEnterprise, InvalidName, InvalidPrice, WrongCategory, EnterpriseNotRegistered {
         return sistema.criarProduto(empresa, nome, valor, categoria);
     }
 

@@ -1,5 +1,7 @@
 package br.ufal.ic.p2.jackut;
 
+import java.util.List;
+
 public class Mercado {
 
     private static int contador = 0;
@@ -10,6 +12,7 @@ public class Mercado {
     public String abre; // Hora em HH:MM.
     public String fecha; // Hora em HH:MM.
     public String tipoMercado; // supermercado, minimercado ou atacadista.
+    List<Produto> produtos;
 
     public Mercado(int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) {
         this.id = contador++;
