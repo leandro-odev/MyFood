@@ -1,207 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mercados>
     <mercado>
-        <id>0</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Segura N 123</endereco>
-        <abre>07:30</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>supermercado</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>1</id>
-        <nome>Conveniencias do Carlos</nome>
-        <endereco>Rua Segura N 123</endereco>
-        <abre>05:25</abre>
-        <fecha>22:00</fecha>
-        <tipoMercado>minimercado</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>2</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Segura N 987</endereco>
-        <abre>07:30</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>supermercado</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>3</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Segura N 123</endereco>
-        <abre>07:30</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>supermercado</tipoMercado>
-    </mercado>
-    <mercado>
         <id>4</id>
+        <dono>4</dono>
         <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>0730</abre>
+        <endereco>Rua Segura N 123</endereco>
+        <abre>07:30</abre>
         <fecha>21:00</fecha>
-        <tipoMercado>atacadista</tipoMercado>
+        <tipoMercado>supermercado</tipoMercado>
     </mercado>
     <mercado>
         <id>5</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>12:54</abre>
-        <fecha>2322</fecha>
-        <tipoMercado>atacadista</tipoMercado>
+        <dono>4</dono>
+        <nome>Conveniencias do Carlos</nome>
+        <endereco>Rua Segura N 123</endereco>
+        <abre>06:30</abre>
+        <fecha>23:59</fecha>
+        <tipoMercado>minimercado</tipoMercado>
     </mercado>
     <mercado>
         <id>6</id>
+        <dono>4</dono>
         <nome>Mercado do Carlos</nome>
         <endereco>Rua Otima N 852</endereco>
-        <abre>120:54</abre>
-        <fecha>23:22</fecha>
+        <abre>07:30</abre>
+        <fecha>21:00</fecha>
         <tipoMercado>atacadista</tipoMercado>
     </mercado>
     <mercado>
         <id>7</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>12:540</abre>
-        <fecha>23:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>8</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>12:54</abre>
-        <fecha>003:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>9</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>12:54</abre>
-        <fecha>03:220</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>10</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>2:54</abre>
-        <fecha>03:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>11</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>02:54</abre>
-        <fecha>03:2</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>12</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>:30</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>13</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>02:5</abre>
-        <fecha>03:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>14</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre></abre>
-        <fecha>25:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>15</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>20:52</abre>
-        <fecha></fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>16</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>20:52</abre>
-        <fecha>03:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>17</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>20:52</abre>
-        <fecha>25:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>18</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>07:30</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>19</id>
-        <nome>null</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>20:52</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>20</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>null</endereco>
-        <abre>20:52</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>21</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>null</abre>
-        <fecha>23:22</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>22</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>20:52</abre>
-        <fecha>null</fecha>
-        <tipoMercado>atacadista</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>23</id>
-        <nome>Mercado do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
-        <abre>20:52</abre>
-        <fecha>23:22</fecha>
-        <tipoMercado>null</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>24</id>
-        <nome>Mercado do  Lucas</nome>
-        <endereco>Rua Amigavel N 22</endereco>
-        <abre>07:30</abre>
-        <fecha>21:00</fecha>
-        <tipoMercado>supermercado</tipoMercado>
-    </mercado>
-    <mercado>
-        <id>25</id>
+        <dono>5</dono>
         <nome>Mercado do Roberto</nome>
         <endereco>Rua Segura N 123</endereco>
         <abre>05:25</abre>

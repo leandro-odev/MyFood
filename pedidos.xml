@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pedidos>
     <pedido>
-        <id>2</id>
+        <id>5</id>
         <idCliente>3</idCliente>
-        <idRestaurante>1</idRestaurante>
+        <idRestaurante>5</idRestaurante>
         <estado>aberto</estado>
         <produtos>
         </produtos>
     </pedido>
     <pedido>
-        <id>1</id>
+        <id>4</id>
         <idCliente>3</idCliente>
-        <idRestaurante>0</idRestaurante>
+        <idRestaurante>4</idRestaurante>
         <estado>preparando</estado>
         <produtos>
         </produtos>
     </pedido>
     <pedido>
-        <id>3</id>
+        <id>6</id>
         <idCliente>3</idCliente>
-        <idRestaurante>0</idRestaurante>
+        <idRestaurante>4</idRestaurante>
         <estado>aberto</estado>
         <produtos>
         </produtos>

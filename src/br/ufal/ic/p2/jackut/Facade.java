@@ -9,6 +9,8 @@ import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidProduct;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
 import br.ufal.ic.p2.jackut.Exceptions.Products.*;
 
+import java.util.List;
+
 
 public class Facade {
 
@@ -123,8 +125,20 @@ public class Facade {
         sistema.alterarFuncionamento(mercado, abre, fecha);
     }
 
-    public void cadastrarEntregador(int empresa, int entregador) {
-        sistema.cadastrarEntregador(empresa, entregador);
+    // Farmácia
+
+//    public int criarEmpresa(String tipoEmpresa, int dono, String nome, boolean aberto24Horas, int numeroFuncionarios) throws NameAlreadyExist, UserCantCreate {
+//        return sistema.criarEmpresa(tipoEmpresa, dono, nome, aberto24Horas, numeroFuncionarios);
+//    }
+
+    // Entregador
+
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName {
+        sistema.criarUsuario(nome, email, senha, endereco, veiculo, placa);
+    }
+
+    public List<Entregador> getEntregadores(int empresa) {
+        return sistema.getEntregadores(empresa);
     }
 
 }

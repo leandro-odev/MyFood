@@ -115,6 +115,7 @@ public class XMLUtils {
             for (Mercado mercado : mercados) {
                 writer.write("    <mercado>\n");
                 writer.write("        <id>" + mercado.id + "</id>\n");
+                writer.write("        <dono>" + mercado.dono + "</dono>\n");
                 writer.write("        <nome>" + mercado.nome + "</nome>\n");
                 writer.write("        <endereco>" + mercado.endereco + "</endereco>\n");
                 writer.write("        <abre>" + mercado.abre + "</abre>\n");
@@ -128,6 +129,7 @@ public class XMLUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public static List<User> lerUsuarios(String fileName) {
@@ -265,7 +267,7 @@ public class XMLUtils {
                 line = line.trim();
 
                 if (line.startsWith("<mercado>")) {
-                    mercado = new Mercado(null, null, null, null, null);
+                    mercado = new Mercado(0, null, null, null, null, null);
                 } else if (line.startsWith("<id>")) {
                     mercado.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
                 } else if (line.startsWith("<nome>")) {

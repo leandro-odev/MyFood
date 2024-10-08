@@ -69,12 +69,15 @@ public class Sistema {
         File usersFile = new File("users.xml");
         File restaurantesFile = new File("restaurantes.xml");
         File pedidosFile = new File("pedidos.xml");
+        File mercadosFile = new File("mercados.xml");
         users.clear();
         restaurantes.clear();
         pedidos.clear();
+        mercados.clear();
         usersFile.delete();
         restaurantesFile.delete();
         pedidosFile.delete();
+        mercadosFile.delete();
     }
 
     public User getUser(int id) throws UserNotRegistered {
@@ -470,15 +473,41 @@ public class Sistema {
     //Mercado
     public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
         if (tipoEmpresa.equals("mercado")) {
-            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
+            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.dono != dono)) {
                 throw new NameAlreadyExist();
             }
 
-            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono) ) {
+            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.dono == dono)) {
                 throw new NameAndAddresAlreadyExist();
             }
 
-            Mercado novoMercado = new Mercado(nome, endereco, abre, fecha, tipoMercado);
+            // Verifica se o formato do horário é válido antes de qualquer verificação lógica
+            if (!isValidTime(abre) || !isValidTime(fecha)) {
+                throw new Error("Formato de hora invalido");
+            }
+
+            // Verifica se os horários são válidos
+            if (isInvalidOpeningHour(abre, fecha)) {
+                throw new Error("Horarios invalidos");
+            }
+
+            if (users.stream().noneMatch(u -> u.id == dono && u.isDono())) {
+                throw new UserCantCreate();
+            }
+
+            if (nome == null || nome.isEmpty()) {
+                throw new Error("Nome invalido");
+            }
+
+            if (endereco == null || endereco.isEmpty()) {
+                throw new Error("Endereco invalido");
+            }
+
+            if (tipoMercado == null || tipoMercado.isEmpty()) {
+                throw new Error("Tipo de mercado invalido");
+            }
+
+            Mercado novoMercado = new Mercado(dono, nome, endereco, abre, fecha, tipoMercado);
             mercados.add(novoMercado);
             return novoMercado.id;
         } else {
@@ -496,22 +525,57 @@ public class Sistema {
         m.fecha = fecha;
     }
 
-    // Entregador
 
-//    public int criarUsuario(String nome, String email, String senha, String endereco, String veiculo, placa endereco) {
-//        verifyData(nome, email, senha, endereco);
-//
-//        if (users.stream().anyMatch(u -> u.email.equals(email))) {
-//            throw new EmailAlreadyExist();
-//        }
-//        User newUser = new Entregador(nome, email, senha, endereco, veiculo);
-//        users.add(newUser);
-//        return newUser.id;
-//    }
-//
-//    public void cadastrarEntregador(int empresa, int entregador) {
-//        Restaurante r = restaurantes.stream().filter(n -> n.id == empresa).findFirst().get();
-//        r.entregadores.add(entregador);
-//    }
+    // Farmácia
+
+
+    // Entregador
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName {
+        verifyData(nome, email, senha, endereco);
+
+        if (users.stream().anyMatch(u -> u.email.equals(email))) {
+            throw new EmailAlreadyExist();
+        }
+        User newUser = new Entregador(nome, email, senha, endereco, veiculo, placa);
+        users.add(newUser);
+    }
+
+    public List<Entregador> getEntregadores(int empresa) {
+        return users.stream().filter(u -> u instanceof Entregador).map(u -> (Entregador) u).toList();
+    }
+
+
+    public static boolean isValidTime(String time) {
+        return time.length() == 5 && time.charAt(2) == ':';
+    }
+
+    public static boolean isInvalidOpeningHour(String abre, String fecha) {
+        // Verifica se o formato está correto antes de fazer qualquer verificação lógica
+        if (!isValidTime(abre) || !isValidTime(fecha)) {
+            throw new Error("Formato de hora invalido");
+        }
+
+        String[] abreParts = abre.split(":");
+        String[] fechaParts = fecha.split(":");
+
+        int abreHoras = Integer.parseInt(abreParts[0]);
+        int abreMinutos = Integer.parseInt(abreParts[1]);
+        int fechaHoras = Integer.parseInt(fechaParts[0]);
+        int fechaMinutos = Integer.parseInt(fechaParts[1]);
+
+        // Verifica se as horas e minutos estão dentro do intervalo válido
+        if (abreHoras < 0 || abreHoras > 23 || abreMinutos < 0 || abreMinutos > 59 ||
+                fechaHoras < 0 || fechaHoras > 23 || fechaMinutos < 0 || fechaMinutos > 59) {
+            return true; // Horas ou minutos fora dos limites, lança "Horarios invalidos"
+        }
+
+        // Verifica se o horário de abertura é depois do fechamento
+        if (abreHoras > fechaHoras || (abreHoras == fechaHoras && abreMinutos >= fechaMinutos)) {
+            return true; // Horário de abertura é posterior ou igual ao de fechamento
+        }
+
+        return false; // Horários são válidos
+    }
+
 
 }
