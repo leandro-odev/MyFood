@@ -1,6 +1,6 @@
 # User Story 6 - Criação de Farmacia - verificacao de persistencia
 
-id1=login email="carlos@ufal.com.br" senha="123senha"
+id1=login email="lucas@ufal.com.br" senha="123senha"
 id2=login email="carlos@ufal.com.br" senha="123senha"
 id3=login email="roberto@ufal.com.br" senha="123senha"
 
@@ -12,19 +12,19 @@ eid4=getIdEmpresa idDono=${id3} nome="Farmacia do Roberto" indice=0
 pe1=getNumeroPedido cliente=${id1} empresa=${eid1} indice=0
 pe2=getNumeroPedido cliente=${id1} empresa=${eid2} indice=0
 
-expect "{[[Farmacia 24 horas do Carlos, Rua Segura N 123], [Farmacia do Carlos, Rua Segura N 123], [Nova farmacia do Carlos, Rua Otima N 852]]}" getEmpresasDoUsuario idDono=${id2}
-expect "{[Farmacia do Roberto, Rua Segura N 123]}" getEmpresasDoUsuario idDono=${id3}
+expect "{[[Farmacia 24 horas do Carlos, Rua Segura N 123], [Farmacia do Carlos, Rua Segura N 123], [Farmacia 24 horas do Carlos, Rua Otima N 852]]}" getEmpresasDoUsuario idDono=${id2}
+expect "{[[Farmacia do Roberto, Rua Segura N 123]]}" getEmpresasDoUsuario idDono=${id3}
 
 expect "Farmacia do Roberto" getAtributoEmpresa empresa=${eid4} atributo="nome"
 expect "Rua Segura N 123" getAtributoEmpresa empresa=${eid4} atributo="endereco"
-expect false getAtributoEmpresa empresa=${eid4} atributo="aberto24Horas"
-expect true getAtributoEmpresa empresa=${eid1} atributo="aberto24Horas"
+expect "false" getAtributoEmpresa empresa=${eid4} atributo="aberto24Horas"
+expect "true" getAtributoEmpresa empresa=${eid1} atributo="aberto24Horas"
 expect "RobertoDono" getAtributoEmpresa empresa=${eid4} atributo="dono"
 expect "2" getAtributoEmpresa empresa=${eid4} atributo="numeroFuncionarios"
 
 expect "Lucas" getPedidos pedido=${pe1} atributo="cliente"
 expect "Farmacia 24 horas do Carlos"  getPedidos pedido=${pe1} atributo="empresa"
-expect "preperando" getPedidos pedido=${pe1} atributo="estado"
+expect "preparando" getPedidos pedido=${pe1} atributo="estado"
 expect "{[Paracetamol, Agua Oxigenada, Band-Aid]}" getPedidos pedido=${pe1} atributo="produtos"
 expect "8.90"  getPedidos pedido=${pe1} atributo="valor"
 

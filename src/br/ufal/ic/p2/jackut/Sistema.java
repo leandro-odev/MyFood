@@ -319,8 +319,6 @@ public class Sistema {
             throw new InvalidAttribute();
     }
 
-
-
     public int criarProduto(int empresa, String nome, float valor, String categoria) throws ProductNameAtEnterprise, InvalidName, InvalidPrice, WrongCategory, EnterpriseNotRegistered {
         if (nome == null || nome.equals("")) {
             throw new InvalidName();
@@ -559,7 +557,7 @@ public class Sistema {
         if (tipoEmpresa.equals("mercado")) {
 
             if (abre == null || fecha == null || abre.isEmpty() || fecha.isEmpty()) {
-                throw new Error("Horario invalido");
+                throw new Error("Horario invalido"); // Se uma das horas estiver vazia, deve ser considerado "Horario invalido"
             }
 
             if (!isValidTime(abre) || !isValidTime(fecha)) {
@@ -567,7 +565,7 @@ public class Sistema {
             }
 
             if (isInvalidOpeningHour(abre, fecha)) {
-                throw new Error("Horarios invalidos");
+                throw new Error("Horario invalido");
             }
 
             if (users.stream().noneMatch(u -> u.id == dono && u.isDono())) {
@@ -628,14 +626,26 @@ public class Sistema {
 
 
     public static boolean isValidTime(String time) {
-        return time.length() == 5 && time.charAt(2) == ':';
+        if (time.length() != 5 || time.charAt(2) != ':') {
+            return false;
+        }
+
+        try {
+            String[] parts = time.split(":");
+            int horas = Integer.parseInt(parts[0]);
+            int minutos = Integer.parseInt(parts[1]);
+
+            if (horas < 0 || horas > 23 || minutos < 0 || minutos > 59) {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return true;
     }
 
     public static boolean isInvalidOpeningHour(String abre, String fecha) {
-        // Verifica se o formato está correto antes de fazer qualquer verificação lógica
-        if (!isValidTime(abre) || !isValidTime(fecha)) {
-            throw new Error("Formato de hora invalido");
-        }
 
         String[] abreParts = abre.split(":");
         String[] fechaParts = fecha.split(":");
@@ -645,18 +655,11 @@ public class Sistema {
         int fechaHoras = Integer.parseInt(fechaParts[0]);
         int fechaMinutos = Integer.parseInt(fechaParts[1]);
 
-        // Verifica se as horas e minutos estão dentro do intervalo válido
-        if (abreHoras < 0 || abreHoras > 23 || abreMinutos < 0 || abreMinutos > 59 ||
-                fechaHoras < 0 || fechaHoras > 23 || fechaMinutos < 0 || fechaMinutos > 59) {
-            return true; // Horas ou minutos fora dos limites, lança "Horarios invalidos"
-        }
-
-        // Verifica se o horário de abertura é depois do fechamento
         if (abreHoras > fechaHoras || (abreHoras == fechaHoras && abreMinutos >= fechaMinutos)) {
-            return true; // Horário de abertura é posterior ou igual ao de fechamento
+            return true;
         }
 
-        return false; // Horários são válidos
+        return false;
     }
 
 

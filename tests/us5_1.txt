@@ -85,8 +85,8 @@ expectError "Formato de hora invalido" criarEmpresa tipoEmpresa="mercado" dono=$
 expectError "Formato de hora invalido" criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="02:5" fecha="03:22" tipoMercado="atacadista"
 expectError "Formato de hora invalido" criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="" fecha="25:22" tipoMercado="atacadista"
 expectError "Formato de hora invalido" criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="20:52" fecha="" tipoMercado="atacadista"
-expectError "Horarios invalidos" criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="20:52" fecha="03:22" tipoMercado="atacadista"
-expectError "Horarios invalidos" criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="20:52" fecha="25:22" tipoMercado="atacadista"
+expectError "Horario invalido" criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="20:52" fecha="03:22" tipoMercado="atacadista"
+expectError "Horario invalido" criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="20:52" fecha="25:22" tipoMercado="atacadista"
 
 eid3=criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="07:30" fecha="21:00" tipoMercado="atacadista"
 
@@ -235,10 +235,10 @@ expectError "Formato de hora invalido" alterarFuncionamento mercado=${eid4} abre
 expectError "Formato de hora invalido" alterarFuncionamento mercado=${eid4} abre="02:54" fecha="3:22"
 expectError "Formato de hora invalido" alterarFuncionamento mercado=${eid4} abre="02:54" fecha="03:2"
 expectError "Formato de hora invalido" alterarFuncionamento mercado=${eid4} abre="02:5" fecha="03:22"
-expectError "Horarios invalidos" alterarFuncionamento mercado=${eid4} abre="20:52" fecha="03:22"
-expectError "Horarios invalidos" alterarFuncionamento mercado=${eid4} abre="20:52" fecha="25:22"
-expectError "Horarios invalidos" alterarFuncionamento mercado=${eid4} abre= fecha="23:22"
-expectError "Horarios invalidos" alterarFuncionamento mercado=${eid4} abre="20:52" fecha=
+expectError "Horario invalido" alterarFuncionamento mercado=${eid4} abre="20:52" fecha="03:22"
+expectError "Horario invalido" alterarFuncionamento mercado=${eid4} abre="20:52" fecha="25:22"
+expectError "Horario invalido" alterarFuncionamento mercado=${eid4} abre= fecha="23:22"
+expectError "Horario invalido" alterarFuncionamento mercado=${eid4} abre="20:52" fecha=
 
 # Apernas mercados tem o horario de antendimento.
 eid5=criarEmpresa tipoEmpresa="restaurante" dono=${id2} nome="Pastelaria do Carlos" endereco="Rua Segura N 987" tipoCozinha="brasileira"

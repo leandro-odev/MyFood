@@ -16,9 +16,6 @@ pe2=getNumeroPedido cliente=${id1} empresa=${eid2} indice=0
 expect "{[[Mercado do Carlos, Rua Segura N 123], [Conveniencias do Carlos, Rua Segura N 123], [Mercado do Carlos, Rua Otima N 852], [Pastelaria do Carlos, Rua Segura N 987]]}" getEmpresasDoUsuario idDono=${id2}
 expect "{[[Mercado do Roberto, Rua Segura N 123]]}" getEmpresasDoUsuario idDono=${id3}
 
-eid3=criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado do Carlos" endereco="Rua Otima N 852" abre="07:30" fecha="21:00" tipoMercado="atacadista"
-
-
 expect "Mercado do Carlos" getAtributoEmpresa empresa=${eid3} atributo="nome"
 expect "Rua Otima N 852" getAtributoEmpresa empresa=${eid3} atributo="endereco"
 expect "07:30" getAtributoEmpresa empresa=${eid3} atributo="abre"

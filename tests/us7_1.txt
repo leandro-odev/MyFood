@@ -76,9 +76,9 @@ eid3=criarEmpresa tipoEmpresa="farmacia" dono=${id2} nome="Farmacia" endereco="R
 expectError "Conta com esse email ja existe" criarUsuario nome="Rodrigo2" email="rodrigo@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123"
 
 # É possível existir mais usuários com o mesmo nome e endereço, desde que o email seja diferente.
-criarUsuario nome="Rodrigo" email="rodrigo2@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321"
+criarUsuario nome="Rodrigo" email="rodrigo2@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321" veiculo="moto" placa="BRA 1234"
 
-id3=login email="carlos2@ufal.com.br" senha="123senha"
+id3=login email="rodrigo2@ufal.com.br" senha="123senha"
 
 expect "Rodrigo" getAtributoUsuario id=${id1} atributo="nome"
 expect "rodrigo@ufal.com.br" getAtributoUsuario id=${id1} atributo="email"
@@ -113,8 +113,7 @@ expectError "Email invalido" criarUsuario nome="CarlosDono" email="carlos2" senh
 ###################
 
 cadastrarEntregador empresa=${eid1} entregador=${id1}
-cadastrarEntregador empresa=${eid2} entregador=${id1} 
-cadastrarEntregador empresa=${eid2} entregador=${id1} 
+cadastrarEntregador empresa=${eid2} entregador=${id1}
 
 cadastrarEntregador empresa=${eid1} entregador=${id3}
 
@@ -124,7 +123,7 @@ expectError "Usuario nao e um entregador" cadastrarEntregador empresa=${eid1} en
 # Listando entregadores vinculados a uma empresa.
 ###################
 
-expect "{[rodrigo@ufal.com.br, carlos2@ufal.com.br]}" getEntregadores empresa=${eid1}
+expect "{[rodrigo@ufal.com.br, rodrigo2@ufal.com.br]}" getEntregadores empresa=${eid1}
 expect "{[rodrigo@ufal.com.br]}" getEntregadores empresa=${eid2}
 expect "{[]}" getEntregadores empresa=${eid3}
 
@@ -132,7 +131,7 @@ expect "{[]}" getEntregadores empresa=${eid3}
 # Listando empresas vinculados a quais o entregador trabalha.
 ###################
 
-expect "{[[Pastelaria, Rua Segura N 987], [Mercado, Rua Segura N 123], [Farmacia, Rua Segura N 123]]}" getEmpresas entregador=${id1}
+expect "{[[Pastelaria, Rua Segura N 987], [Mercado, Rua Segura N 123]]}" getEmpresas entregador=${id1}
 expect "{[[Pastelaria, Rua Segura N 987]]}" getEmpresas entregador=${id3}
 
 expectError "Usuario nao e um entregador" getEmpresas entregador=${id2}

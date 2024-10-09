@@ -1,5 +1,6 @@
 package br.ufal.ic.p2.jackut;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Mercado {
@@ -22,6 +23,7 @@ public class Mercado {
         this.abre = abre;
         this.fecha = fecha;
         this.tipoMercado = tipoMercado;
+        this.produtos = new ArrayList<Produto>();
     }
 
 }

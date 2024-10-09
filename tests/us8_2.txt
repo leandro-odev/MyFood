@@ -16,14 +16,14 @@ pe3=getNumeroPedido cliente=${id1} empresa=${eid3} indice=0
 
 expect "Carlos"  getEntrega id=${en1} atributo="cliente"
 expect "Farmacia"  getEntrega id=${en1} atributo="empresa"
-expect pe3  getEntrega id=${en1} atributo="pedido"
+expect ${pe3}  getEntrega id=${en1} atributo="pedido"
 expect "Rodrigo"  getEntrega id=${en1} atributo="entregador"
 expect "Rua Exemplo N 123"  getEntrega id=${en1} atributo="destino"
 expect "{[Paracetamol, Agua Oxigenada]}"  getEntrega id=${en1} atributo="produtos"
 
 expect "Carlos"  getEntrega id=${en2} atributo="cliente"
 expect "Pastelaria"  getEntrega id=${en2} atributo="empresa"
-expect pe1  getEntrega id=${en2} atributo="pedido"
+expect ${pe1}  getEntrega id=${en2} atributo="pedido"
 expect "Joana"  getEntrega id=${en2} atributo="entregador"
 expect "Rua Exemplo N 85"  getEntrega id=${en2} atributo="destino"
 expect "{[Pastel, Refrigerante]}"  getEntrega id=${en2} atributo="produtos"
