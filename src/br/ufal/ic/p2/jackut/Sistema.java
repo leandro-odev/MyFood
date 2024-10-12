@@ -14,9 +14,7 @@ import java.io.File;
 import java.util.*;
 
 public class Sistema {
-
     private static Sistema instance;
-
     List<User> users;
     // A ideia é trocar essas duas lists por uma só, que seja de Enterprises
     List<Restaurante> restaurantes;
@@ -616,11 +614,15 @@ public class Sistema {
 
 
     // Entregador
-    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist {
         verifyData(nome, email, senha, endereco);
 
         if (users.stream().anyMatch(u -> u.email.equals(email))) {
             throw new EmailAlreadyExist();
+        }
+
+        if (users.stream().anyMatch(u ->((Entregador) u).placa.equals(placa))) {
+            throw new PlacaAlreadyExist();
         }
         User newUser = new Entregador(nome, email, senha, endereco, veiculo, placa);
         users.add(newUser);
@@ -667,6 +669,4 @@ public class Sistema {
 
         return false;
     }
-
-
 }

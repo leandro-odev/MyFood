@@ -135,7 +135,7 @@ public class Facade {
 
     // Entregador
 
-    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist {
         sistema.criarUsuario(nome, email, senha, endereco, veiculo, placa);
     }
 

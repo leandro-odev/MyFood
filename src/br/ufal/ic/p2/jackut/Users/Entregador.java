@@ -15,6 +15,8 @@ public class Entregador extends User {
         super(nome, email, senha, endereco);
         this.veiculo = veiculo;
         this.placa = placa;
+        this.empresas = new ArrayList<Integer>();
+        this.ocupado = false;
     }
 
     @Override

@@ -1,4 +1,4 @@
-# User Story 7 - Sistema de entregas - verificacao de persistencia
+# User Story 8 - Sistema de entregas - verificacao de persistencia
 
 id1=login email="carlos@ufal.com.br" senha="123senha"
 id2=login email="lucas@ufal.com.br" senha="123senha"
