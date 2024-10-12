@@ -8,6 +8,8 @@ import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidPrice;
 import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidProduct;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
 import br.ufal.ic.p2.jackut.Exceptions.Products.*;
+import br.ufal.ic.p2.jackut.Users.Entregador;
+import br.ufal.ic.p2.jackut.Users.User;
 
 import java.util.List;
 

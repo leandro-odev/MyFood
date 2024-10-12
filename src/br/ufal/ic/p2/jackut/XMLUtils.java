@@ -1,5 +1,9 @@
 package br.ufal.ic.p2.jackut;
 
+import br.ufal.ic.p2.jackut.Users.Cliente;
+import br.ufal.ic.p2.jackut.Users.Dono;
+import br.ufal.ic.p2.jackut.Users.User;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +119,7 @@ public class XMLUtils {
             for (Mercado mercado : mercados) {
                 writer.write("    <mercado>\n");
                 writer.write("        <id>" + mercado.id + "</id>\n");
-                writer.write("        <dono>" + mercado.dono + "</dono>\n");
+                writer.write("        <dono>" + mercado.idDono + "</dono>\n");
                 writer.write("        <nome>" + mercado.nome + "</nome>\n");
                 writer.write("        <endereco>" + mercado.endereco + "</endereco>\n");
                 writer.write("        <abre>" + mercado.abre + "</abre>\n");

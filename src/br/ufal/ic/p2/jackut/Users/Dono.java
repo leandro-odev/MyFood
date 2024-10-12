@@ -1,4 +1,6 @@
-package br.ufal.ic.p2.jackut;
+package br.ufal.ic.p2.jackut.Users;
+
+import br.ufal.ic.p2.jackut.Users.User;
 
 public class Dono extends User {
     public String cpf;
@@ -8,7 +10,7 @@ public class Dono extends User {
     }
 
     @Override
-    public boolean isDono() {
-        return true;
+    public String isWhatType() {
+        return "Dono";
     }
 }

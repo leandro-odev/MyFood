@@ -5,6 +5,10 @@ import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
 import br.ufal.ic.p2.jackut.Exceptions.Invalid.*;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
 import br.ufal.ic.p2.jackut.Exceptions.Products.*;
+import br.ufal.ic.p2.jackut.Users.Cliente;
+import br.ufal.ic.p2.jackut.Users.Dono;
+import br.ufal.ic.p2.jackut.Users.Entregador;
+import br.ufal.ic.p2.jackut.Users.User;
 
 import java.io.File;
 import java.util.*;
@@ -14,8 +18,10 @@ public class Sistema {
     private static Sistema instance;
 
     List<User> users;
+    // A ideia é trocar essas duas lists por uma só, que seja de Enterprises
     List<Restaurante> restaurantes;
     List<Mercado> mercados;
+    List<Enterprise> empresas;
     List<Pedido> pedidos;
 
     private Sistema() {
@@ -107,7 +113,7 @@ public class Sistema {
         if (user == null) {
             throw new UserNotRegistered();
         }
-        if (user.isDono() && atributo.equals("cpf")) {
+        if ((user.isWhatType() == "Dono") && atributo.equals("cpf")) {
             return ((Dono) user).cpf;
         }
         return switch (atributo) {
@@ -173,7 +179,7 @@ public class Sistema {
 
     //Restaurante
     public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String tipoCozinha) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
-        if(users.stream().noneMatch(u -> u.id == dono && u.isDono())) {
+        if(users.stream().noneMatch(u -> u.id == dono && (u.isWhatType() == "Dono"))) {
             throw new UserCantCreate();
         }
 
@@ -197,7 +203,7 @@ public class Sistema {
 
     public String getEmpresasDoUsuario(int idDono) throws UserCantCreate {
 
-        if (!users.stream().anyMatch(r -> r.id == idDono && r.isDono())) {
+        if (!users.stream().anyMatch(r -> r.id == idDono && (r.isWhatType() == "Dono"))) {
             throw new UserCantCreate();
         }
 
@@ -210,7 +216,7 @@ public class Sistema {
 
         if (stringRestaurantes.length() == 2) {
             for (Mercado  mercado: mercados) {
-                if (mercado.dono == idDono) {
+                if (mercado.idDono == idDono) {
                     stringRestaurantes.append("[").append(mercado.nome).append(", ").append(mercado.endereco).append("], ");
                 }
             }
@@ -241,7 +247,7 @@ public class Sistema {
             throw new Error("Indice maior que o esperado");
         }
 
-        List<Mercado> mercadosComMesmoNome = mercados.stream().filter(m -> m.nome.equals(nome) && m.dono == idDono).toList();
+        List<Mercado> mercadosComMesmoNome = mercados.stream().filter(m -> m.nome.equals(nome) && m.idDono == idDono).toList();
 
         if (indice >= 0 && indice < mercadosComMesmoNome.size() && mercadosComMesmoNome.size() != 0) {
             return mercadosComMesmoNome.get(indice).id;
@@ -312,7 +318,7 @@ public class Sistema {
                 case "fecha":
                     return mercado.fecha;
                 case "dono":
-                    String nomeDono = users.stream().filter(r -> r.id == mercado.dono).map(r -> r.nome).findFirst().orElse("Dono não encontrado");
+                    String nomeDono = users.stream().filter(r -> r.id == mercado.idDono).map(r -> r.nome).findFirst().orElse("Dono não encontrado");
                     return nomeDono;
             }
 
@@ -425,7 +431,7 @@ public class Sistema {
     }
 
     public int criarPedido(int cliente, int empresa) throws DonoCannotCreateOrder, CannotHaveMoreThanOneOrderSameEnterprise {
-        if (users.stream().anyMatch(u -> u.id == cliente && u.isDono())) {
+        if (users.stream().anyMatch(u -> u.id == cliente && (u.isWhatType() == "Dono"))) {
             throw new DonoCannotCreateOrder();
         } else if (pedidos.stream().anyMatch(p -> p.cliente == cliente && p.empresa == empresa && p.estado.equals("aberto"))) {
             throw new CannotHaveMoreThanOneOrderSameEnterprise();
@@ -568,7 +574,7 @@ public class Sistema {
                 throw new Error("Horario invalido");
             }
 
-            if (users.stream().noneMatch(u -> u.id == dono && u.isDono())) {
+            if (users.stream().noneMatch(u -> u.id == dono && (u.isWhatType() == "Dono"))) {
                 throw new UserCantCreate();
             }
 
@@ -580,11 +586,11 @@ public class Sistema {
                 throw new Error("Tipo de mercado invalido");
             }
 
-            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.dono != dono)) {
+            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono)) {
                 throw new NameAlreadyExist();
             }
 
-            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.dono == dono)) {
+            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono)) {
                 throw new NameAndAddresAlreadyExist();
             }
 
@@ -621,7 +627,7 @@ public class Sistema {
     }
 
     public List<Entregador> getEntregadores(int empresa) {
-        return users.stream().anyMatch(u -> u.id == empresa && u.isDono()) ? users.stream().filter(u -> u instanceof Entregador).map(u -> (Entregador) u).toList() : new ArrayList<>();
+        return users.stream().anyMatch(u -> u.id == empresa && (u.isWhatType() == "Dono")) ? users.stream().filter(u -> u instanceof Entregador).map(u -> (Entregador) u).toList() : new ArrayList<>();
     }
 
 

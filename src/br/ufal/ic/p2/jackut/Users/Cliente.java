@@ -1,4 +1,6 @@
-package br.ufal.ic.p2.jackut;
+package br.ufal.ic.p2.jackut.Users;
+
+import br.ufal.ic.p2.jackut.Users.User;
 
 public class Cliente extends User {
     public Cliente(String nome, String email, String senha, String endereco) {
@@ -6,7 +8,7 @@ public class Cliente extends User {
     }
 
     @Override
-    public boolean isDono() {
-        return false;
+    public String isWhatType() {
+        return "Cliente";
     }
 }

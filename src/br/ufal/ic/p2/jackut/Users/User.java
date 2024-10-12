@@ -1,4 +1,6 @@
-package br.ufal.ic.p2.jackut;
+package br.ufal.ic.p2.jackut.Users;
+
+import java.sql.Struct;
 
 public class User {
     private static int contador = 0;
@@ -16,8 +18,8 @@ public class User {
         this.endereco = endereco;
     }
 
-    public boolean isDono() {
-        return false;
+    public String isWhatType() {
+        return "User";
     }
 }
 

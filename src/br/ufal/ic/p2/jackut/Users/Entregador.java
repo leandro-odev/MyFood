@@ -1,4 +1,6 @@
-package br.ufal.ic.p2.jackut;
+package br.ufal.ic.p2.jackut.Users;
+
+import br.ufal.ic.p2.jackut.Users.User;
 
 import java.util.ArrayList;
 
@@ -15,5 +17,9 @@ public class Entregador extends User {
         this.placa = placa;
     }
 
+    @Override
+    public String isWhatType() {
+        return "Entregador";
+    }
 
 }
