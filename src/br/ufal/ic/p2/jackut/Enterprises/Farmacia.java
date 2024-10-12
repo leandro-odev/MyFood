@@ -9,4 +9,7 @@ public class Farmacia extends Enterprise {
         this.aberto24horas = aberto24horas;
         this.numeroFuncionarios = numeroFuncionarios;
     }
+
+    @Override
+    public String isWhatType() { return "Farmacia"; }
 }

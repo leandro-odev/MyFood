@@ -19,7 +19,6 @@ import java.util.*;
 public class Sistema {
     private static Sistema instance;
     List<User> users;
-    // A ideia é trocar essas duas lists por uma só, que seja de Enterprises
     List<Enterprise> empresas;
     List<Pedido> pedidos;
 

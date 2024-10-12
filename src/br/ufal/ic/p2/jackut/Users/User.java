@@ -21,9 +21,6 @@ public class User {
     public String isWhatType() {
         return "User";
     }
-    public void alterarCampoEspecifico(String campo) {
-
-    };
 
 }
 
