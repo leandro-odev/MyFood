@@ -1,5 +1,8 @@
 package br.ufal.ic.p2.jackut;
 
+import br.ufal.ic.p2.jackut.Enterprises.Enterprise;
+import br.ufal.ic.p2.jackut.Enterprises.Mercado;
+import br.ufal.ic.p2.jackut.Enterprises.Restaurante;
 import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
 import br.ufal.ic.p2.jackut.Exceptions.Invalid.*;
@@ -17,16 +20,13 @@ public class Sistema {
     private static Sistema instance;
     List<User> users;
     // A ideia é trocar essas duas lists por uma só, que seja de Enterprises
-    List<Restaurante> restaurantes;
-    List<Mercado> mercados;
     List<Enterprise> empresas;
     List<Pedido> pedidos;
 
     private Sistema() {
         File usersFile = new File("users.xml");
-        File restaurantesFile = new File("restaurantes.xml");
+        File empresasFile = new File("empresas.xml");
         File pedidosFile = new File("pedidos.xml");
-        File mercadosFile = new File("mercados.xml");
 
         if (usersFile.exists()) {
             users = XMLUtils.lerUsuarios("users.xml");
@@ -34,22 +34,16 @@ public class Sistema {
             users = new ArrayList<>();
         }
 
-        if (restaurantesFile.exists()) {
-            restaurantes = XMLUtils.lerRestaurantes("restaurantes.xml");
+        if (empresasFile.exists()) {
+            empresas = XMLUtils.lerEmpresas("empresas.xml");
         } else {
-            restaurantes = new ArrayList<>();
+            empresas = new ArrayList<>();
         }
 
         if (pedidosFile.exists()) {
             pedidos = XMLUtils.lerPedidos("pedidos.xml");
         } else {
             pedidos = new ArrayList<>();
-        }
-
-        if (mercadosFile.exists()) {
-            mercados = XMLUtils.lerMercados("mercados.xml");
-        } else {
-            mercados = new ArrayList<>();
         }
     }
 
@@ -63,23 +57,19 @@ public class Sistema {
     public void encerrarSistema() {
         XMLUtils.salvarUsuarios(users, "users.xml");
         XMLUtils.salvarPedidos(pedidos, "pedidos.xml");
-        XMLUtils.salvarRestaurantes(restaurantes, "restaurantes.xml");
-        XMLUtils.salvarMercados(mercados, "mercados.xml");
+        XMLUtils.salvarEmpresas(empresas, "empresas.xml");
     }
 
     public void zerarSistema() {
         File usersFile = new File("users.xml");
-        File restaurantesFile = new File("restaurantes.xml");
+        File empresasFile = new File("empresas.xml");
         File pedidosFile = new File("pedidos.xml");
-        File mercadosFile = new File("mercados.xml");
         users.clear();
-        restaurantes.clear();
+        empresas.clear();
         pedidos.clear();
-        mercados.clear();
         usersFile.delete();
-        restaurantesFile.delete();
+        empresasFile.delete();
         pedidosFile.delete();
-        mercadosFile.delete();
     }
 
     public User getUser(int id) throws UserNotRegistered {
@@ -90,11 +80,16 @@ public class Sistema {
         }
     }
 
-    public Restaurante getRestaurante(int id) {
+    public Restaurante getRestaurante(int id) throws RestauranteNotFound {
         try {
-            return restaurantes.stream().filter(r -> r.id == id).findFirst().get();
+            Enterprise empresa = empresas.stream().filter(r -> r.id == id).findFirst().get();
+            if (empresa instanceof Restaurante) {
+                return (Restaurante) empresa;
+            } else {
+                throw new RestauranteNotFound();
+            }
         } catch (Error e) {
-            throw new Error("Não foi possivel encontrar restaurante");
+            throw new RestauranteNotFound();
         }
     }
 
@@ -183,16 +178,16 @@ public class Sistema {
 
         if (tipoEmpresa.equals("restaurante")) {
 
-            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
+            if (empresas.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono) ) {
                 throw new NameAlreadyExist();
             }
 
-            if (restaurantes.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono) ) {
+            if (empresas.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono) ) {
                 throw new NameAndAddresAlreadyExist();
             }
 
             Restaurante novoRestaurante = new Restaurante(nome, endereco, tipoCozinha, dono);
-            restaurantes.add(novoRestaurante);
+            empresas.add(novoRestaurante);
             return novoRestaurante.id;
         } else {
             throw new Error("Empresa não é um restaurante");
@@ -200,22 +195,21 @@ public class Sistema {
     }
 
     public String getEmpresasDoUsuario(int idDono) throws UserCantCreate {
-
         if (!users.stream().anyMatch(r -> r.id == idDono && (r.isWhatType() == "Dono"))) {
             throw new UserCantCreate();
         }
 
         StringBuilder stringRestaurantes = new StringBuilder("{[");
-        for (Restaurante restaurante : restaurantes) {
-            if (restaurante.idDono == idDono) {
-                stringRestaurantes.append("[").append(restaurante.nome).append(", ").append(restaurante.endereco).append("], ");
+        for (Enterprise empresa : empresas) {
+            if (empresa.idDono == idDono) {
+                stringRestaurantes.append("[").append(empresa.nome).append(", ").append(empresa.endereco).append("], ");
             }
         }
 
         if (stringRestaurantes.length() == 2) {
-            for (Mercado  mercado: mercados) {
-                if (mercado.idDono == idDono) {
-                    stringRestaurantes.append("[").append(mercado.nome).append(", ").append(mercado.endereco).append("], ");
+            for (Enterprise empresa : empresas) {
+                if (empresa.idDono == idDono) {
+                    stringRestaurantes.append("[").append(empresa.nome).append(", ").append(empresa.endereco).append("], ");
                 }
             }
         }
@@ -237,7 +231,7 @@ public class Sistema {
             throw new Error("Indice invalido");
         }
 
-        List<Restaurante> restaurantesComMesmoNome = restaurantes.stream().filter(r -> r.nome.equals(nome)).toList();
+        List<Restaurante> restaurantesComMesmoNome = empresas.stream().filter(r -> r.nome.equals(nome)).toList();
 
         if (indice < restaurantesComMesmoNome.size() && restaurantesComMesmoNome.size() != 0) {
             return restaurantesComMesmoNome.get(indice).id;
@@ -258,9 +252,9 @@ public class Sistema {
 
     public String getAtributoEmpresa (int empresa, String atributo) throws InvalidAttribute, EnterpriseNotRegistered {
 
-        Optional<Restaurante> restauranteOpt = restaurantes.stream().filter(r -> r.id == empresa).findFirst();
-        if (restauranteOpt.isPresent()) {
-            Restaurante restaurante = restauranteOpt.get();
+        Optional<Enterprise> empresaOpt = empresas.stream().filter(r -> r.id == empresa).findFirst();
+        if (empresaOpt.isPresent()) {
+            Enterprise emp = empresaOpt.get();
             return getAtributoRestaurante(restaurante, atributo);
         }
 
@@ -364,12 +358,12 @@ public class Sistema {
             throw new InvalidPrice();
         } else if (categoria == null || categoria.equals("")) {
             throw new WrongCategory();
-        } else if (produto < 0 || produto >= restaurantes.size() || restaurantes.stream().noneMatch(r -> r.produtos.stream().anyMatch(p -> p.numero == produto))) {
+        } else if (produto < 0 || produto >= empresas.size() || empresas.stream().noneMatch(r -> r.produtos.stream().anyMatch(p -> p.numero == produto))) {
             throw new ProductNotRegistered();
         }
 
-        for (Restaurante restaurante : restaurantes) {
-            for (Produto p : restaurante.produtos) {
+        for (Enterprise empresa: empresas) {
+            for (Produto p : empresa.produtos) {
                 if (p.numero == produto) {
                     p.nome = nome;
                     p.valor = valor;
@@ -409,7 +403,7 @@ public class Sistema {
 
     public String listarProdutos(int empresa) throws EnterpriseNotFound {
 
-        if (restaurantes.stream().noneMatch(r -> r.id == empresa)) {
+        if (empresas.stream().noneMatch(r -> r.id == empresa)) {
             throw new EnterpriseNotFound();
         }
 
@@ -508,7 +502,7 @@ public class Sistema {
                 return valor;
             case "empresa":
                 int idEmpresa = p.empresa;
-                String nomeEmpresa = restaurantes.stream().filter(r -> r.id == idEmpresa).map(r -> r.nome).findFirst().orElse("Empresa não encontrada");
+                String nomeEmpresa = empresas.stream().filter(r -> r.id == idEmpresa).map(r -> r.nome).findFirst().orElse("Empresa não encontrada");
                 return nomeEmpresa;
             default:
                 throw new AtributeDontExist();
@@ -601,7 +595,7 @@ public class Sistema {
     }
 
     public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered {
-        if (mercados.stream().noneMatch(m -> m.id == mercado)) {
+        if (empresas.stream().noneMatch(m -> m.id == mercado)) {
             throw new EnterpriseNotRegistered();
         }
 

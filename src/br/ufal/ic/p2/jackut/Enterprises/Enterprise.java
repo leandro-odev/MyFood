@@ -1,4 +1,6 @@
-package br.ufal.ic.p2.jackut;
+package br.ufal.ic.p2.jackut.Enterprises;
+
+import br.ufal.ic.p2.jackut.Produto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ public class Enterprise {
     public int idDono;
     public String nome;
     public String endereco;
-    List<Produto> produtos;
+    public List<Produto> produtos;
 
     public Enterprise(int idDono, String nome, String endereco) {
         this.id = contador++;

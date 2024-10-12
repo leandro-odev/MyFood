@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Entregador extends User {
     public String veiculo;
     public String placa;
-    public ArrayList<Integer> empresas;
+    public int[] empresas;
     public Boolean ocupado;
 
     public Entregador(String nome, String email, String senha, String endereco, String veiculo, String placa) {
@@ -24,4 +24,8 @@ public class Entregador extends User {
         return "Entregador";
     }
 
+    @Override
+    public void alterarCampoEspecifico(String campo) {
+
+    };
 }

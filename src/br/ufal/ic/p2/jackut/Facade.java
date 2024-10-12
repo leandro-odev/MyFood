@@ -1,5 +1,6 @@
 package br.ufal.ic.p2.jackut;
 
+import br.ufal.ic.p2.jackut.Enterprises.Restaurante;
 import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
 import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidAttribute;
@@ -31,7 +32,7 @@ public class Facade {
         return sistema.getUser(id);
     }
 
-    public Restaurante getRestaurante(int id) {
+    public Restaurante getRestaurante(int id) throws RestauranteNotFound {
         return sistema.getRestaurante(id);
     }
 

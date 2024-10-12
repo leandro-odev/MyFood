@@ -11,4 +11,5 @@ public class Cliente extends User {
     public String isWhatType() {
         return "Cliente";
     }
+    public Cliente getCliente() { return this; }
 }

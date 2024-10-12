@@ -1,11 +1,6 @@
-package br.ufal.ic.p2.jackut;
-
-import java.util.ArrayList;
-import java.util.List;
+package br.ufal.ic.p2.jackut.Enterprises;
 
 public class Restaurante extends Enterprise {
-    private static int contador = 0;
-
     public String tipoCozinha;
 
     public Restaurante(String nome, String endereco, String tipoCozinha, int idDono) {

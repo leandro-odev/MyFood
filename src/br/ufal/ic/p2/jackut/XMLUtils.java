@@ -1,7 +1,12 @@
 package br.ufal.ic.p2.jackut;
 
+import br.ufal.ic.p2.jackut.Enterprises.Enterprise;
+import br.ufal.ic.p2.jackut.Enterprises.Farmacia;
+import br.ufal.ic.p2.jackut.Enterprises.Mercado;
+import br.ufal.ic.p2.jackut.Enterprises.Restaurante;
 import br.ufal.ic.p2.jackut.Users.Cliente;
 import br.ufal.ic.p2.jackut.Users.Dono;
+import br.ufal.ic.p2.jackut.Users.Entregador;
 import br.ufal.ic.p2.jackut.Users.User;
 
 import java.io.*;
@@ -34,6 +39,23 @@ public class XMLUtils {
                     writer.write("        <cpf>" + dono.cpf + "</cpf>\n");
                     writer.write("        <endereco>" + dono.endereco + "</endereco>\n");
                     writer.write("    </dono>\n");
+                } else if (user instanceof Entregador) {
+                    Entregador entregador = (Entregador) user;
+                    writer.write("    <entregador>\n");
+                    writer.write("        <id>" + entregador.id + "</id>\n");
+                    writer.write("        <nome>" + entregador.nome + "</nome>\n");
+                    writer.write("        <email>" + entregador.email + "</email>\n");
+                    writer.write("        <senha>" + entregador.senha + "</senha>\n");
+                    writer.write("        <endereco>" + entregador.endereco + "</endereco>\n");
+                    writer.write("        <veiculo>" + entregador.veiculo + "</veiculo>\n");
+                    writer.write("        <placa>" + entregador.placa + "</placa>\n");
+                    writer.write("        <empresas>\n");
+                    for (int empresa : entregador.empresas) {
+                        writer.write("            <empresa>" + empresa + "</empresa>\n");
+                    }
+                    writer.write("        </empresas>\n");
+                    writer.write("        <ocupado>" + entregador.ocupado + "</ocupado>\n");
+                    writer.write("    </entregador>\n");
                 }
             }
 
@@ -44,34 +66,78 @@ public class XMLUtils {
         }
     }
 
-    public static void salvarRestaurantes(List<Restaurante> restaurantes, String fileName) {
+    public static void salvarEmpresas(List<Enterprise> empresas, String fileName) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writer.write("<restaurantes>\n");
+            writer.write("<empresas>\n");
 
-            for (Restaurante restaurante : restaurantes) {
-                writer.write("    <restaurante>\n");
-                writer.write("        <id>" + restaurante.id + "</id>\n");
-                writer.write("        <nome>" + restaurante.nome + "</nome>\n");
-                writer.write("        <endereco>" + restaurante.endereco + "</endereco>\n");
-                writer.write("        <tipoCozinha>" + restaurante.tipoCozinha + "</tipoCozinha>\n");
-                writer.write("        <idDono>" + restaurante.idDono + "</idDono>\n");
+            for (Enterprise empresa : empresas) {
+                if (empresa instanceof Mercado) {
+                    Mercado mercado = (Mercado) empresa;
+                    writer.write("    <mercado>\n");
+                    writer.write("        <id>" + mercado.id + "</id>\n");
+                    writer.write("        <idDono>" + mercado.idDono + "</idDono>\n");
+                    writer.write("        <nome>" + mercado.nome + "</nome>\n");
+                    writer.write("        <endereco>" + mercado.endereco + "</endereco>\n");
+                    writer.write("        <produtos>\n");
+                    for (Produto produto : mercado.produtos) {
+                        writer.write("            <produto>\n");
+                        writer.write("                <numero>" + produto.numero + "</numero>\n");
+                        writer.write("                <nome>" + produto.nome + "</nome>\n");
+                        writer.write("                <valor>" + produto.valor + "</valor>\n");
+                        writer.write("                <categoria>" + produto.categoria + "</categoria>\n");
+                        writer.write("            </produto>\n");
+                    }
+                    writer.write("        </produtos>\n");
+                    writer.write("        <abre>" + mercado.abre + "</abre>\n");
+                    writer.write("        <fecha>" + mercado.fecha + "</fecha>\n");
+                    writer.write("        <tipoMercado>" + mercado.tipoMercado + "</tipoMercado>\n");
+                    writer.write("    </mercado>\n");
+                } else if (empresa instanceof Farmacia) {
+                    Farmacia farmacia = (Farmacia) empresa;
+                    writer.write("    <farmacia>\n");
+                    writer.write("        <id>" + farmacia.id + "</id>\n");
+                    writer.write("        <idDono>" + farmacia.idDono + "</idDono>\n");
+                    writer.write("        <nome>" + farmacia.nome + "</nome>\n");
+                    writer.write("        <endereco>" + farmacia.endereco + "</endereco>\n");
+                    writer.write("        <produtos>\n");
+                    for (Produto produto : farmacia.produtos) {
+                        writer.write("            <produto>\n");
+                        writer.write("                <numero>" + produto.numero + "</numero>\n");
+                        writer.write("                <nome>" + produto.nome + "</nome>\n");
+                        writer.write("                <valor>" + produto.valor + "</valor>\n");
+                        writer.write("                <categoria>" + produto.categoria + "</categoria>\n");
+                        writer.write("            </produto>\n");
+                    }
+                    writer.write("        </produtos>\n");
+                    writer.write("        <aberto24horas>" + farmacia.aberto24horas + "</aberto24horas>\n");
+                    writer.write("        <numeroFuncionarios>" + farmacia.numeroFuncionarios + "</numeroFuncionarios>\n");
+                    writer.write("    </farmacia>\n");
+                } else if (empresa instanceof Restaurante) {
+                    Restaurante restaurante = (Restaurante) empresa;
+                    writer.write("    <restaurante>\n");
+                    writer.write("        <id>" + restaurante.id + "</id>\n");
+                    writer.write("        <nome>" + restaurante.nome + "</nome>\n");
+                    writer.write("        <endereco>" + restaurante.endereco + "</endereco>\n");
+                    writer.write("        <tipoCozinha>" + restaurante.tipoCozinha + "</tipoCozinha>\n");
+                    writer.write("        <idDono>" + restaurante.idDono + "</idDono>\n");
 
-                writer.write("        <produtos>\n");
-                for (Produto produto : restaurante.produtos) {
-                    writer.write("            <produto>\n");
-                    writer.write("                <numero>" + produto.numero + "</numero>\n");
-                    writer.write("                <nome>" + produto.nome + "</nome>\n");
-                    writer.write("                <valor>" + produto.valor + "</valor>\n");
-                    writer.write("                <categoria>" + produto.categoria + "</categoria>\n");
-                    writer.write("            </produto>\n");
+                    writer.write("        <produtos>\n");
+                    for (Produto produto : restaurante.produtos) {
+                        writer.write("            <produto>\n");
+                        writer.write("                <numero>" + produto.numero + "</numero>\n");
+                        writer.write("                <nome>" + produto.nome + "</nome>\n");
+                        writer.write("                <valor>" + produto.valor + "</valor>\n");
+                        writer.write("                <categoria>" + produto.categoria + "</categoria>\n");
+                        writer.write("            </produto>\n");
+                    }
+                    writer.write("        </produtos>\n");
+
+                    writer.write("    </restaurante>\n");
                 }
-                writer.write("        </produtos>\n");
 
-                writer.write("    </restaurante>\n");
-            }
-
-            writer.write("</restaurantes>\n");
+                writer.write("</restaurantes>\n");
+                }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,115 +177,125 @@ public class XMLUtils {
         }
     }
 
-    public static void salvarMercados(List<Mercado> mercados, String fileName) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writer.write("<mercados>\n");
-
-            for (Mercado mercado : mercados) {
-                writer.write("    <mercado>\n");
-                writer.write("        <id>" + mercado.id + "</id>\n");
-                writer.write("        <dono>" + mercado.idDono + "</dono>\n");
-                writer.write("        <nome>" + mercado.nome + "</nome>\n");
-                writer.write("        <endereco>" + mercado.endereco + "</endereco>\n");
-                writer.write("        <abre>" + mercado.abre + "</abre>\n");
-                writer.write("        <fecha>" + mercado.fecha + "</fecha>\n");
-                writer.write("        <tipoMercado>" + mercado.tipoMercado + "</tipoMercado>\n");
-
-                writer.write("    </mercado>\n");
-            }
-
-            writer.write("</mercados>\n");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public static List<User> lerUsuarios(String fileName) {
-        List<User> users = new ArrayList<>();
+        List<User> usuarios = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
-            User user = null;
+            User usuario = null;
+
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
                 if (line.startsWith("<cliente>")) {
-                    user = new Cliente(null, null, null, null);
+                    usuario = new Cliente("", null, null, null);
                 } else if (line.startsWith("<dono>")) {
-                    user = new Dono(null, null, null, null, null);
+                    usuario = new Dono("", null, null, null, null);
+                } else if (line.startsWith("<entregador>")) {
+                    usuario = new Entregador("", null, null, null, null, null);
                 } else if (line.startsWith("<id>")) {
-                    user.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                    usuario.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
                 } else if (line.startsWith("<nome>")) {
-                    user.nome = line.replaceAll("<.*?>", "");
+                    usuario.nome = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<email>")) {
-                    user.email = line.replaceAll("<.*?>", "");
+                    usuario.email = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<senha>")) {
-                    user.senha = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<endereco>")) {
-                    if (user instanceof Cliente) {
-                        ((Cliente) user).endereco = line.replaceAll("<.*?>", "");
-                    } else if (user instanceof Dono) {
-                        ((Dono) user).endereco = line.replaceAll("<.*?>", "");
+                    usuario.senha = line.replaceAll("<.*?>", "");
+                } else if (usuario instanceof Cliente && line.startsWith("<endereco>")) {
+                    ((Cliente) usuario).endereco = line.replaceAll("<.*?>", "");
+                } else if (usuario instanceof Dono && line.startsWith("<cpf>")) {
+                    ((Dono) usuario).cpf = line.replaceAll("<.*?>", "");
+                } else if (usuario instanceof Dono && line.startsWith("<endereco>")) {
+                    ((Dono) usuario).endereco = line.replaceAll("<.*?>", "");
+                } else if (usuario instanceof Entregador && line.startsWith("<veiculo>")) {
+                    ((Entregador) usuario).veiculo = line.replaceAll("<.*?>", "");
+                } else if (usuario instanceof Entregador && line.startsWith("<placa>")) {
+                    ((Entregador) usuario).placa = line.replaceAll("<.*?>", "");
+                } else if (usuario instanceof Entregador && line.startsWith("<empresas>")) {
+                    List<Integer> empresas = new ArrayList<>();
+                    while (!(line = reader.readLine().trim()).startsWith("</empresas>")) {
+                        int empresaId = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                        empresas.add(empresaId);
                     }
-                } else if (line.startsWith("<cpf>")) {
-                    if (user instanceof Dono) {
-                        ((Dono) user).cpf = line.replaceAll("<.*?>", "");
-                    }
-                } else if (line.startsWith("</cliente>") || line.startsWith("</dono>")) {
-                    users.add(user);
+                    ((Entregador) usuario).empresas = empresas.stream().mapToInt(i -> i).toArray();
+                } else if (usuario instanceof Entregador && line.startsWith("<ocupado>")) {
+                    ((Entregador) usuario).ocupado = Boolean.parseBoolean(line.replaceAll("<.*?>", ""));
+                } else if (line.startsWith("</cliente>") || line.startsWith("</dono>") || line.startsWith("</entregador>")) {
+                    usuarios.add(usuario);  // Adiciona o usuário à lista
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return users;
+        return usuarios;
     }
 
-    public static List<Restaurante> lerRestaurantes(String fileName) {
-        List<Restaurante> restaurantes = new ArrayList<>();
+    public static List<Enterprise> lerEmpresas(String fileName) {
+        List<Enterprise> empresas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
-            Restaurante restaurante = null;
-            Produto produto = null;
+            Enterprise empresa = null;
+
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
-                if (line.startsWith("<restaurante>")) {
-                    restaurante = new Restaurante(null, null, null, 0);
-                    restaurante.produtos = new ArrayList<>(); // Inicializar a lista de produtos
+                if (line.startsWith("<mercado>")) {
+                    empresa = new Mercado(0, null, null, null, null, null);
+                } else if (line.startsWith("<farmacia>")) {
+                    empresa = new Farmacia(0, null, null, null, null);
+                } else if (line.startsWith("<restaurante>")) {
+                    empresa = new Restaurante(null, null, null, 0);
                 } else if (line.startsWith("<id>")) {
-                    restaurante.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<nome>") && produto == null) {  // Verifica se � nome do restaurante
-                    restaurante.nome = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<endereco>")) {
-                    restaurante.endereco = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<tipoCozinha>")) {
-                    restaurante.tipoCozinha = line.replaceAll("<.*?>", "");
+                    empresa.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
                 } else if (line.startsWith("<idDono>")) {
-                    restaurante.idDono = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<produto>")) {
-                    produto = new Produto(null, 0, null);
-                } else if (line.startsWith("<numero>")) {
-                    produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<nome>") && produto != null) {  // Verifica se � nome do produto
-                    produto.nome = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<valor>")) {
-                    produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<categoria>")) {
-                    produto.categoria = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("</produto>")) {
-                    restaurante.produtos.add(produto);
-                    produto = null;  // Reseta o produto ap�s adicion�-lo
-                } else if (line.startsWith("</restaurante>")) {
-                    restaurantes.add(restaurante);
+                    empresa.idDono = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (line.startsWith("<nome>")) {
+                    empresa.nome = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("<endereco>")) {
+                    empresa.endereco = line.replaceAll("<.*?>", "");
+                } else if (empresa instanceof Mercado && line.startsWith("<abre>")) {
+                    ((Mercado) empresa).abre = line.replaceAll("<.*?>", "");
+                } else if (empresa instanceof Mercado && line.startsWith("<fecha>")) {
+                    ((Mercado) empresa).fecha = line.replaceAll("<.*?>", "");
+                } else if (empresa instanceof Mercado && line.startsWith("<tipoMercado>")) {
+                    ((Mercado) empresa).tipoMercado = line.replaceAll("<.*?>", "");
+                } else if (empresa instanceof Farmacia && line.startsWith("<aberto24horas>")) {
+                    ((Farmacia) empresa).aberto24horas = Boolean.parseBoolean(line.replaceAll("<.*?>", ""));
+                } else if (empresa instanceof Farmacia && line.startsWith("<numeroFuncionarios>")) {
+                    ((Farmacia) empresa).numeroFuncionarios = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (line.startsWith("<produtos>")) {
+                    List<Produto> produtos = new ArrayList<>();
+                    while (!(line = reader.readLine().trim()).startsWith("</produtos>")) {
+                        if (line.startsWith("<produto>")) {
+                            Produto produto = new Produto("", 0, "");
+                            while (!(line = reader.readLine().trim()).startsWith("</produto>")) {
+                                if (line.startsWith("<numero>")) {
+                                    produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                                } else if (line.startsWith("<nome>")) {
+                                    produto.nome = line.replaceAll("<.*?>", "");
+                                } else if (line.startsWith("<valor>")) {
+                                    produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
+                                } else if (line.startsWith("<categoria>")) {
+                                    produto.categoria = line.replaceAll("<.*?>", "");
+                                }
+                            }
+                            produtos.add(produto);
+                        }
+                    }
+                    if (empresa instanceof Mercado) {
+                        ((Mercado) empresa).produtos = produtos;
+                    } else if (empresa instanceof Farmacia) {
+                        ((Farmacia) empresa).produtos = produtos;
+                    } else if (empresa instanceof Restaurante) {
+                        ((Restaurante) empresa).produtos = produtos;
+                    }
+                } else if (line.startsWith("</mercado>") || line.startsWith("</farmacia>") || line.startsWith("</restaurante>")) {
+                    empresas.add(empresa);  // Adiciona a empresa à lista
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return restaurantes;
+        return empresas;
     }
 
     public static List<Pedido> lerPedidos(String fileName) {
@@ -227,7 +303,7 @@ public class XMLUtils {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             Pedido pedido = null;
-            Produto produto = null;
+
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
@@ -235,24 +311,32 @@ public class XMLUtils {
                     pedido = new Pedido(0, 0);
                 } else if (line.startsWith("<id>")) {
                     pedido.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<estado>")) {
-                    pedido.estado = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<idCliente>")) {
                     pedido.cliente = Integer.parseInt(line.replaceAll("<.*?>", ""));
                 } else if (line.startsWith("<idRestaurante>")) {
                     pedido.empresa = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<produto>")) {
-                    produto = new Produto(null, 0, null);
-                } else if (line.startsWith("<numero>")) {
-                    produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<nome>")) {
-                    produto.nome = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<valor>")) {
-                    produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<categoria>")) {
-                    produto.categoria = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("</produto>")) {
-                    pedido.produtos.add(produto);
+                } else if (line.startsWith("<estado>")) {
+                    pedido.estado = line.replaceAll("<.*?>", "");
+                } else if (line.startsWith("<produtos>")) {
+                    ArrayList<Produto> produtos = new ArrayList<>();
+                    while (!(line = reader.readLine().trim()).startsWith("</produtos>")) {
+                        if (line.startsWith("<produto>")) {
+                            Produto produto = new Produto(null, 0, null);
+                            while (!(line = reader.readLine().trim()).startsWith("</produto>")) {
+                                if (line.startsWith("<numero>")) {
+                                    produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                                } else if (line.startsWith("<nome>")) {
+                                    produto.nome = line.replaceAll("<.*?>", "");
+                                } else if (line.startsWith("<valor>")) {
+                                    produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
+                                } else if (line.startsWith("<categoria>")) {
+                                    produto.categoria = line.replaceAll("<.*?>", "");
+                                }
+                            }
+                            produtos.add(produto);
+                        }
+                    }
+                    pedido.produtos = produtos;
                 } else if (line.startsWith("</pedido>")) {
                     pedidos.add(pedido);
                 }
@@ -263,49 +347,4 @@ public class XMLUtils {
         return pedidos;
     }
 
-    public static List<Mercado> lerMercados(String fileName) {
-        List<Mercado> mercados = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            Mercado mercado = null;
-            Produto produto = null;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-
-                if (line.startsWith("<mercado>")) {
-                    mercado = new Mercado(0, null, null, null, null, null);
-                } else if (line.startsWith("<id>")) {
-                    mercado.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<nome>")) {
-                    mercado.nome = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<endereco>")) {
-                    mercado.endereco = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<abre>")) {
-                    mercado.abre = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<fecha>")) {
-                    mercado.fecha = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<tipoMercado>")) {
-                    mercado.tipoMercado = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<produto>")) {
-                    produto = new Produto(null, 0, null);
-                } else if (line.startsWith("<numero>")) {
-                    produto.numero = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<nome>") && produto != null) {  // Verifica se � nome do produto
-                    produto.nome = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("<valor>")) {
-                    produto.valor = Float.parseFloat(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<categoria>")) {
-                    produto.categoria = line.replaceAll("<.*?>", "");
-                } else if (line.startsWith("</produto>")) {
-                    mercado.produtos.add(produto);
-                    produto = null;  // Reseta o produto ap�s adicion�-lo
-                }  else if (line.startsWith("</mercado>")) {
-                    mercados.add(mercado);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return mercados;
-    }
 }
