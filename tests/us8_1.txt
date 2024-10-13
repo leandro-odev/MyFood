@@ -64,72 +64,67 @@ criarUsuario nome="Joana" email="joana@ufal.com.br" senha="123senha" endereco="R
 id4=login email="joana@ufal.com.br" senha="123senha"
 
 # criando as empresas para os testes.
-empresa1=criarEmpresa tipoEmpresa="restaurante" dono=${id2} nome="Pastelaria" endereco="Rua Segura N 987" tipoCozinha="brasileira"
-empresa2=criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado" endereco="Rua Segura N 123" abre="07:30" fecha="21:00" tipoMercado="supermercado"
-empresa3=criarEmpresa tipoEmpresa="farmacia" dono=${id2} nome="Farmacia" endereco="Rua Segura N 123" aberto24Horas=true numeroFuncionarios=2
+eid1=criarEmpresa tipoEmpresa="restaurante"  dono=${id2} nome="Pastelaria" endereco="Rua Segura N 987" tipoCozinha="brasileira"
+eid2=criarEmpresa tipoEmpresa="mercado" dono=${id2} nome="Mercado" endereco="Rua Segura N 123" abre="07:30" fecha="21:00" tipoMercado="supermercado"
+eid3=criarEmpresa tipoEmpresa="farmacia" dono=${id2} nome="Farmacia" endereco="Rua Segura N 123" aberto24Horas=true numeroFuncionarios=2
 
 # criando os produtos.
-p1=criarProduto empresa=${empresa1} nome="Pastel" valor=1.40 categoria="alimento"
-p2=criarProduto empresa=${empresa1} nome="Refrigerante" valor=3.00 categoria="bebida"
+p1=criarProduto empresa=${eid1} nome="Pastel" valor=1.40  categoria="alimento"
+p2=criarProduto empresa=${eid1} nome="Refrigerante" valor=3.00  categoria="bebida"
 
-p3=criarProduto empresa=${empresa2} nome="Refrigerante" valor=2.40 categoria="bebida"
-p4=criarProduto empresa=${empresa2} nome="Sabão" valor=1.25  categoria="limpeza"
-
-p5=criarProduto empresa=${empresa3} nome="Paracetamol" valor=2.40 categoria="medicamento"
-p6=criarProduto empresa=${empresa3} nome="Agua Oxigenada" valor=5.00 categoria="higiene"
+p3=criarProduto empresa=${eid2} nome="Refrigerante" valor=2.40  categoria="bebida"
+p4=criarProduto empresa=${eid2} nome="Sabão" valor=1.25  categoria="limpeza"
+p5=criarProduto empresa=${eid3} nome="Paracetamol" valor=2.40  categoria="medicamento"
+p6=criarProduto empresa=${eid3} nome="Agua Oxigenada" valor=5.00  categoria="higiene"
 
 ###################
 # testes de todas as combinações importantes para o comando liberarPedido.
 ###################
 
+pe1=criarPedido cliente=${id1} empresa=${eid1}
 
-# pedido 1 testes:
-pe1=criarPedido cliente=${id1} empresa=${empresa1}
 adicionarProduto numero=${pe1} produto=${p1}
 adicionarProduto numero=${pe1} produto=${p2}
 
-expect "aberto" getPedidos pedido=${pe1} atributo="estado"
+expect "aberto"  getPedidos pedido=${pe1} atributo="estado"
 expect "{[Pastel, Refrigerante]}" getPedidos pedido=${pe1} atributo="produtos"
 
 fecharPedido numero=${pe1}
-expect "preparando" getPedidos pedido=${pe1} atributo="estado"
+expect "preparando"  getPedidos pedido=${pe1} atributo="estado"
 
+# liberando pedido.
 liberarPedido numero=${pe1}
 expect "pronto" getPedidos pedido=${pe1} atributo="estado"
 
 expectError "Pedido ja liberado" liberarPedido numero=${pe1}
 
-# pedido 2 testes:
-pe2=criarPedido cliente=${id1} empresa=${empresa2}
+pe=criarPedido cliente=${id1} empresa=${eid2}
+
 adicionarProduto numero=${pe} produto=${p3}
 adicionarProduto numero=${pe} produto=${p4}
 
 # Caso o estado não seja pronto.
 expectError "Nao e possivel liberar um produto que nao esta sendo preparado" liberarPedido numero=${pe}
 
-fecharPedido numero=${pe2}
-liberarPedido numero=${pe2}
-
 ###################
 # testes de todas as combinações importantes para o comando obterPedido.
 ###################
 
-expectError "Usuario nao e um entregador." obterPedido entregador=${id1}
-expectError "Entregador nao esta em nenhuma empresa." obterPedido entregador=${id3}
+expectError "Usuario nao e um entregador" obterPedido entregador=${id1}
+expectError "Entregador nao estar em nenhuma empresa." obterPedido entregador=${id3}
 
-# O mesmo pedido aparece para todos os entregadores que estão vinculados a empresa que tem o pedido pronto
-cadastrarEntregador empresa=${empresa1} entregador=${id3}
+# O mesmo pedido aparece para todos os entregadores que estão vinculados a empresa que tem o pedido pronto, 
+cadastrarEntregador empresa=${eid1} entregador=${id3}
 
 expect ${pe1} obterPedido entregador=${id3}
 
-cadastrarEntregador empresa=${empresa1} entregador=${id4}
-
+cadastrarEntregador empresa=${eid1} entregador=${id4}
 expect ${pe1} obterPedido entregador=${id4}
 
-
 # Um novo pedido fica para depois, pedidos mais velhos inicialmente tem preferencia.
-pe3=criarPedido cliente=${id1} empresa=${empresa1}
+pe2=criarPedido cliente=${id1} empresa=${eid1}
 adicionarProduto numero=${pe2} produto=${p1}
+adicionarProduto numero=${pe2} produto=${p2}
 
 fecharPedido numero=${pe2}
 liberarPedido numero=${pe2}
@@ -138,23 +133,22 @@ expect ${pe1} obterPedido entregador=${id3}
 expect ${pe1} obterPedido entregador=${id4}
 
 # Pedido de farmacia tem prioridade, primero são listados todos os de farmacias para depois outros.
-pe4=criarPedido cliente=${id1} empresa=${empresa3}
-adicionarProduto numero=${pe4} produto=${p5}
-adicionarProduto numero=${pe4} produto=${p6}
-
-fecharPedido numero=${pe4}
-
-expect ${pe1} obterPedido entregador=${id3}
-expect ${pe1} obterPedido entregador=${id4}
-
-liberarPedido numero=${pe4}
+pe3=criarPedido cliente=${id1} empresa=${eid3}
+adicionarProduto numero=${pe3} produto=${p5}
+adicionarProduto numero=${pe3} produto=${p6}
+fecharPedido numero=${pe3}
 
 expect ${pe1} obterPedido entregador=${id3}
 expect ${pe1} obterPedido entregador=${id4}
 
-cadastrarEntregador empresa=${empresa3} entregador=${id3}
+liberarPedido numero=${pe3}
 
-expect ${pe4} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id4}
+
+cadastrarEntregador empresa=${eid3} entregador=${id3}
+
+expect ${pe3} obterPedido entregador=${id3}
 expect ${pe1} obterPedido entregador=${id4}
 
 ###################
@@ -164,24 +158,27 @@ expect ${pe1} obterPedido entregador=${id4}
 expectError "Nao e um entregador valido" criarEntrega pedido=${pe1} entregador=${id1} destino="Rua Segura N 987"
 expectError "Nao e um entregador valido" criarEntrega pedido=${pe1} entregador=${id2} destino="Rua Segura N 987"
 
-pe5=criarPedido cliente=${id1} empresa=${empresa3}
-adicionarProduto numero=${pe5} produto=${p5}
+pe4=criarPedido cliente=${id1} empresa=${eid3}
+adicionarProduto numero=${pe4} produto=${p5}
 
-expectError "Pedido nao esta pronto para entrega" criarEntrega pedido=${pe5} entregador=${id3} destino="Rua Segura N 987"
+expectError "Pedido nao esta pronto para entrega" criarEntrega pedido=${pe4} entregador=${id1} destino="Rua Segura N 987"
 
-fecharPedido numero=${pe5}
-liberarPedido numero=${pe5}
+epe1=obterPedido entregador=${id3}
+en1=criarEntrega pedido=${epe1} entregador=${id3} destino=
 
-en1=criarEntrega pedido=${pe5} entregador=${id3} destino=
+expect "entregando"  getPedidos pedido=${pe3} atributo="estado"
 
-expect "entregando" getPedidos pedido=${pe3} atributo="estado"
-
-expect ${pe5} obterPedido entregador=${id3}
+expect ${pe1} obterPedido entregador=${id3}
 expect ${pe1} obterPedido entregador=${id4}
 
-expectError "Entregador ainda em entrega" criarEntrega pedido=${pe4} entregador=${id3} destino=
+epe2=obterPedido entregador=${id3}
+expectError "Entregador ainda em entrega" criarEntrega pedido=${epe2} entregador=${id3} destino=
 
-en2=criarEntrega pedido=${pe1} entregador=${id4} destino="Rua Exemplo N 85"
+en2=criarEntrega pedido=${epe2} entregador=${id4} destino="Rua Exemplo N 85"
+expect "entregando"  getPedidos pedido=${pe1} atributo="estado"
+
+expect ${pe2} obterPedido entregador=${id3}
+expect ${pe2} obterPedido entregador=${id4}
 
 ###################
 # testes de todas as combinações importantes para o comando getEntrega.
@@ -191,19 +188,19 @@ expectError "Atributo invalido" getEntrega id=${en1} atributo=
 expectError "Atributo invalido" getEntrega id=${en1} atributo=""
 expectError "Atributo nao existe" getEntrega id=${en1} atributo="local"
 
-expect "Carlos" getEntrega id=${en1} atributo="cliente"
-expect "Farmacia" getEntrega id=${en1} atributo="empresa"
-expect ${pe5} getEntrega id=${en1} atributo="pedido"
+expect "Carlos"  getEntrega id=${en1} atributo="cliente"
+expect "Farmacia"  getEntrega id=${en1} atributo="empresa"
+expect ${pe3}  getEntrega id=${en1} atributo="pedido"
 expect "Rodrigo"  getEntrega id=${en1} atributo="entregador"
 expect "Rua Exemplo N 123"  getEntrega id=${en1} atributo="destino"
-expect "{[Paracetamol]}"  getEntrega id=${en1} atributo="produtos"
+expect "{[Paracetamol, Agua Oxigenada]}"  getEntrega id=${en1} atributo="produtos"
 
-expect "Carlos" getEntrega id=${en2} atributo="cliente"
-expect "Pastelaria" getEntrega id=${en2} atributo="empresa"
-expect ${pe1} getEntrega id=${en2} atributo="pedido"
-expect "Joana" getEntrega id=${en2} atributo="entregador"
+expect "Carlos"  getEntrega id=${en2} atributo="cliente"
+expect "Pastelaria"  getEntrega id=${en2} atributo="empresa"
+expect ${pe1}  getEntrega id=${en2} atributo="pedido"
+expect "Joana"  getEntrega id=${en2} atributo="entregador"
 expect "Rua Exemplo N 85"  getEntrega id=${en2} atributo="destino"
-expect "{[Pastel, Refrigerante]}" getEntrega id=${en2} atributo="produtos"
+expect "{[Pastel, Refrigerante]}"  getEntrega id=${en2} atributo="produtos"
 
 
 ###################

@@ -1,7 +1,5 @@
 package br.ufal.ic.p2.jackut.Users;
 
-import java.sql.Struct;
-
 public class User {
     private static int contador = 0;
     public int id;

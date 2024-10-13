@@ -230,19 +230,11 @@ public class Sistema {
             throw new Error("Indice invalido");
         }
 
-        List<Restaurante> restaurantesComMesmoNome = empresas.stream().filter(r -> r.nome.equals(nome)).toList();
+        List<Enterprise> empresasComMesmoNome = empresas.stream().filter(r -> r.nome.equals(nome)).toList();
 
-        if (indice < restaurantesComMesmoNome.size() && restaurantesComMesmoNome.size() != 0) {
-            return restaurantesComMesmoNome.get(indice).id;
-        } else if (restaurantesComMesmoNome.size() != 0 && indice >= restaurantesComMesmoNome.size()) {
-            throw new Error("Indice maior que o esperado");
-        }
-
-        List<Mercado> mercadosComMesmoNome = mercados.stream().filter(m -> m.nome.equals(nome) && m.idDono == idDono).toList();
-
-        if (indice >= 0 && indice < mercadosComMesmoNome.size() && mercadosComMesmoNome.size() != 0) {
-            return mercadosComMesmoNome.get(indice).id;
-        } else if (mercadosComMesmoNome.size() != 0 && indice >= mercadosComMesmoNome.size()) {
+        if (indice < empresasComMesmoNome.size() && empresasComMesmoNome.size() != 0) {
+            return empresasComMesmoNome.get(indice).id;
+        } else if (empresasComMesmoNome.size() != 0 && indice >= empresasComMesmoNome.size()) {
             throw new Error("Indice maior que o esperado");
         }
 
@@ -254,13 +246,14 @@ public class Sistema {
         Optional<Enterprise> empresaOpt = empresas.stream().filter(r -> r.id == empresa).findFirst();
         if (empresaOpt.isPresent()) {
             Enterprise emp = empresaOpt.get();
-            return getAtributoRestaurante(restaurante, atributo);
-        }
 
-        Optional<Mercado> mercadoOpt = mercados.stream().filter(m -> m.id == empresa).findFirst();
-        if (mercadoOpt.isPresent()) {
-            Mercado mercado = mercadoOpt.get();
-            return getAtributoMercado(mercado, atributo);
+            if (emp.isWhatType().equals("Restaurante")){
+                Restaurante restaurante = (Restaurante) emp;
+                return getAtributoRestaurante(restaurante, atributo);
+            } else if(emp.isWhatType().equals("Mercado")) {
+                Mercado mercado = (Mercado) emp;
+                return getAtributoMercado(mercado, atributo);
+            }
         }
 
         throw new EnterpriseNotRegistered();
@@ -319,34 +312,39 @@ public class Sistema {
     public int criarProduto(int empresa, String nome, float valor, String categoria) throws ProductNameAtEnterprise, InvalidName, InvalidPrice, WrongCategory, EnterpriseNotRegistered {
         if (nome == null || nome.equals("")) {
             throw new InvalidName();
-        } else if (valor < 0) {
+        }
+        else if (valor < 0) {
             throw new InvalidPrice();
-        } else if (categoria == null || categoria.equals("")) {
+        }
+        else if (categoria == null || categoria.equals("")) {
             throw new WrongCategory();
         }
 
-        Optional<Restaurante> restauranteOpt = restaurantes.stream().filter(r -> r.id == empresa).findFirst();
-        Optional<Mercado> mercadoOpt = mercados.stream().filter(m -> m.id == empresa).findFirst();
+        Optional<Enterprise> empresaOpt = empresas.stream().filter(r -> r.id == empresa).findFirst();
 
-        if (restauranteOpt.isPresent()) {
-            Restaurante r = restauranteOpt.get();
-            if(r.produtos.stream().anyMatch(p -> p.nome.equals(nome))) {
-                throw new ProductNameAtEnterprise();
+        if (empresaOpt.isPresent()) {
+            Enterprise emp = empresaOpt.get();
+
+            if (emp.isWhatType().equals("Restaurante")) {
+                Restaurante r = (Restaurante) emp;
+                if (r.produtos.stream().anyMatch(p -> p.nome.equals(nome))) {
+                    throw new ProductNameAtEnterprise();
+                }
+                Produto p = new Produto(nome, valor, categoria);
+                r.produtos.add(p);
+                return p.numero;
+            } else if (emp.isWhatType().equals("Mercado")) {
+                Mercado m = (Mercado) emp;
+                if (m.produtos.stream().anyMatch(p -> p.nome.equals(nome))) {
+                    throw new ProductNameAtEnterprise();
+                }
+                Produto p = new Produto(nome, valor, categoria);
+                m.produtos.add(p);
+                return p.numero;
             }
-            Produto p = new Produto(nome, valor, categoria);
-            r.produtos.add(p);
-            return p.numero;
-        } else if (mercadoOpt.isPresent()) {
-            Mercado m = mercadoOpt.get();
-            if(m.produtos.stream().anyMatch(p -> p.nome.equals(nome))) {
-                throw new ProductNameAtEnterprise();
-            }
-            Produto p = new Produto(nome, valor, categoria);
-            m.produtos.add(p);
-            return p.numero;
-        } else {
-            throw new EnterpriseNotRegistered();
         }
+        throw new EnterpriseNotRegistered();
+
     }
 
     public void editarProduto(int produto, String nome, float valor, String categoria) throws InvalidName, InvalidPrice, WrongCategory, ProductNotRegistered {
@@ -374,7 +372,7 @@ public class Sistema {
         throw new Error("Produto não encontrado");
     }
 
-    public String getProduto(String nome, int empresa, String atributo) throws ProductNotFound, AtributeDontExist {
+    public String getProduto(String nome, int empresa, String atributo) throws ProductNotFound, AtributeDontExist, RestauranteNotFound {
         Restaurante restaurante = getRestaurante(empresa);
         for (Produto p : restaurante.produtos) {
             if (p.nome.equals(nome)) {
@@ -400,7 +398,7 @@ public class Sistema {
         throw new ProductNotFound();
     }
 
-    public String listarProdutos(int empresa) throws EnterpriseNotFound {
+    public String listarProdutos(int empresa) throws EnterpriseNotFound, RestauranteNotFound {
 
         if (empresas.stream().noneMatch(r -> r.id == empresa)) {
             throw new EnterpriseNotFound();
@@ -444,7 +442,7 @@ public class Sistema {
         }
     }
 
-    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed {
+    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed, RestauranteNotFound {
 
         if (pedidos.stream().noneMatch(p -> p.numero == numero)) {
             throw new NoOpenedOrder();
@@ -453,13 +451,13 @@ public class Sistema {
         }
 
         Pedido p = getPedido(numero);
-        Restaurante r = getRestaurante(p.empresa);
+        Enterprise ent = empresas.stream().filter(r -> r.id == p.empresa).findFirst().orElseThrow(RestauranteNotFound::new);
 
-        if (!r.produtos.stream().anyMatch(rest -> rest.numero == produto)) {
+        if (!ent.produtos.stream().anyMatch(rest -> rest.numero == produto)) {
             throw new ProductDoesntBelongEnterprise();
         }
 
-        for (Produto prod : r.produtos) {
+        for (Produto prod : ent.produtos) {
             if (prod.numero == produto) {
                 p.produtos.add(prod);
                 break;
@@ -577,16 +575,16 @@ public class Sistema {
                 throw new Error("Tipo de mercado invalido");
             }
 
-            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono)) {
+            if (empresas.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono)) {
                 throw new NameAlreadyExist();
             }
 
-            if (mercados.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono)) {
+            if (empresas.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono)) {
                 throw new NameAndAddresAlreadyExist();
             }
 
             Mercado novoMercado = new Mercado(dono, nome, endereco, abre, fecha, tipoMercado);
-            mercados.add(novoMercado);
+            empresas.add(novoMercado);
             return novoMercado.id;
         } else {
             throw new Error("Empresa não é um mercado");
@@ -598,9 +596,22 @@ public class Sistema {
             throw new EnterpriseNotRegistered();
         }
 
-        Mercado m = mercados.stream().filter(n -> n.id == mercado).findFirst().get();
-        m.abre = abre;
-        m.fecha = fecha;
+        if (abre == null || fecha == null || abre.isEmpty() || fecha.isEmpty()) {
+            throw new Error("Horario invalido");
+        } else if (!isValidTime(abre) || !isValidTime(fecha)) {
+            throw new Error("Formato de hora invalido");
+        } else if (isInvalidOpeningHour(abre, fecha)) {
+            throw new Error("Horario invalido");
+        }
+
+        Enterprise empresa = empresas.stream().filter(n -> n.id == mercado).findFirst().get();
+        if (empresa.isWhatType().equals("Mercado")) {
+            Mercado m = (Mercado) empresa;
+            m.abre = abre;
+            m.fecha = fecha;
+        } else {
+            throw new Error("Nao e um mercado valido");
+        }
     }
 
     // Farmácia
@@ -659,7 +670,11 @@ public class Sistema {
         if (abreHoras > fechaHoras || (abreHoras == fechaHoras && abreMinutos >= fechaMinutos)) {
             return true;
         }
-
         return false;
+    }
+
+
+    private String getEmpresa(int id) {
+        return empresas.stream().filter(e -> e.id == id).map(e -> e.nome).findFirst().orElse("Empresa não encontrada");
     }
 }

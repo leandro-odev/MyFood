@@ -83,11 +83,11 @@ public class Facade {
         sistema.editarProduto(produto, nome, valor, categoria);
     }
 
-    public String getProduto(String nome, int empresa, String atributo) throws ProductNotFound, AtributeDontExist {
+    public String getProduto(String nome, int empresa, String atributo) throws ProductNotFound, AtributeDontExist, RestauranteNotFound {
         return sistema.getProduto(nome, empresa, atributo);
     }
 
-    public String listarProdutos(int empresa) throws EnterpriseNotFound {
+    public String listarProdutos(int empresa) throws EnterpriseNotFound, RestauranteNotFound {
         return sistema.listarProdutos(empresa);
     }
 
@@ -99,7 +99,7 @@ public class Facade {
         return sistema.getNumeroPedido(cliente, empresa, indice);
     }
 
-    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed {
+    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed, RestauranteNotFound {
         sistema.adicionarProduto(numero, produto);
     }
 

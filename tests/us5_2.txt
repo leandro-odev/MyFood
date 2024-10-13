@@ -40,4 +40,4 @@ expect "4.00" getPedidos pedido=${pe2} atributo="valor"
 
 
 expect "05:25" getAtributoEmpresa empresa=${eid4} atributo="abre"
-expect "22:00" getAtributoEmpresa empresa=${eid4} atributo="fecha"esa empresa=${eid4} atributo="fecha"
+expect "22:00" getAtributoEmpresa empresa=${eid4} atributo="fecha"

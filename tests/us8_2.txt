@@ -1,4 +1,4 @@
-# User Story 8 - Sistema de entregas - verificacao de persistencia
+# User Story 7 - Sistema de entregas - verificacao de persistencia
 
 id1=login email="carlos@ufal.com.br" senha="123senha"
 id2=login email="lucas@ufal.com.br" senha="123senha"
@@ -10,9 +10,9 @@ eid2=getIdEmpresa idDono=${id2} nome="Mercado" indice=0
 eid3=getIdEmpresa idDono=${id2} nome="Farmacia" indice=0
 
 pe1=getNumeroPedido cliente=${id1} empresa=${eid1} indice=0
-pe2=getNumeroPedido cliente=${id1} empresa=${eid2} indice=0
+pe2=getNumeroPedido cliente=${id1} empresa=${eid1} indice=1
 pe3=getNumeroPedido cliente=${id1} empresa=${eid3} indice=0
-
+pe4=getNumeroPedido cliente=${id1} empresa=${eid3} indice=1
 
 expect "Carlos"  getEntrega id=${en1} atributo="cliente"
 expect "Farmacia"  getEntrega id=${en1} atributo="empresa"
@@ -32,6 +32,7 @@ expect "{[Pastel, Refrigerante]}"  getEntrega id=${en2} atributo="produtos"
 expect "entregando" getPedidos pedido=${pe1} atributo="estado"
 expect "entregando" getPedidos pedido=${pe2} atributo="estado"
 expect "entregue" getPedidos pedido=${pe3} atributo="estado"
+expect "preparando"  getPedidos pedido=${pe4} atributo="estado"
 
 expectError "Nao existe pedido para entrega" obterPedido entregador=${id3}
 expectError "Nao existe pedido para entrega" obterPedido entregador=${id4}

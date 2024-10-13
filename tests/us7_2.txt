@@ -11,8 +11,8 @@ eid3=getIdEmpresa idDono=${id2} nome="Farmacia" indice=0
 expect "Rodrigo" getAtributoUsuario id=${id1} atributo="nome"
 expect "rodrigo@ufal.com.br" getAtributoUsuario id=${id1} atributo="email"
 expect "Rua Exemplo N 123" getAtributoUsuario id=${id1} atributo="endereco"
-expect "moto" getAtributoUsuario id=${id1} atributo="veiculo"
-expect "BRA 1234" getAtributoUsuario id=${id1} atributo="placa"
+expect "moto" getAtributoUsuario id=${id1} atributo="veiculo" 
+expect "BRA 1234" getAtributoUsuario id=${id1} atributo="placa" 
 
 expect "{[rodrigo@ufal.com.br, rodrigo2@ufal.com.br]}" getEntregadores empresa=${eid1}
 expect "{[rodrigo@ufal.com.br]}" getEntregadores empresa=${eid2}
