@@ -130,11 +130,11 @@ public class Facade {
 
     // Farmácia
 
-//    public int criarEmpresa(String tipoEmpresa, int dono, String nome, boolean aberto24Horas, int numeroFuncionarios) throws NameAlreadyExist, UserCantCreate {
-//        return sistema.criarEmpresa(tipoEmpresa, dono, nome, aberto24Horas, numeroFuncionarios);
-//    }
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, Boolean aberto24Horas, int numeroFuncionarios) throws NameAndAddresAlreadyExist, NameAlreadyExist, UserCantCreate, InvalidName {
+        return sistema.criarEmpresa(tipoEmpresa, dono, nome, endereco, aberto24Horas, numeroFuncionarios);
+    }
 
-    // Entregador
+        // Entregador
 
     public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist {
         sistema.criarUsuario(nome, email, senha, endereco, veiculo, placa);

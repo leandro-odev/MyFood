@@ -242,22 +242,26 @@ public class Sistema {
         throw new EnterpriseNameNotRegistered();
     }
 
+
+    // Get Atributo Empresa
     public String getAtributoEmpresa (int empresa, String atributo) throws InvalidAttribute, EnterpriseNotRegistered {
 
         Optional<Enterprise> empresaOpt = empresas.stream().filter(r -> r.id == empresa).findFirst();
         if (empresaOpt.isPresent()) {
             Enterprise emp = empresaOpt.get();
-
             if (emp.isWhatType().equals("Restaurante")){
                 Restaurante restaurante = (Restaurante) emp;
                 return getAtributoRestaurante(restaurante, atributo);
             } else if(emp.isWhatType().equals("Mercado")) {
                 Mercado mercado = (Mercado) emp;
                 return getAtributoMercado(mercado, atributo);
+            } else if(emp.isWhatType().equals("Farmacia")) {
+                Farmacia farmacia = (Farmacia) emp;
+                return getAtributoFarmacia(farmacia, atributo);
             }
         }
-
         throw new EnterpriseNotRegistered();
+
     }
 
     private String getAtributoRestaurante(Restaurante restaurante, String atributo) throws InvalidAttribute {
@@ -310,6 +314,24 @@ public class Sistema {
             throw new InvalidAttribute();
     }
 
+    private String getAtributoFarmacia(Farmacia farmacia, String atributo) throws InvalidAttribute {
+        if (atributo == null || atributo.isEmpty()) {
+            throw new InvalidAttribute();
+        }
+
+        return switch (atributo.toLowerCase()) {
+            case "id" -> farmacia.id + "";
+            case "nome" -> farmacia.nome;
+            case "endereco" -> farmacia.endereco;
+            case "aberto24horas" -> farmacia.aberto24horas + "";
+            case "numerofuncionarios" -> farmacia.numeroFuncionarios + "";
+            case "dono" -> users.stream().filter(r -> r.id == farmacia.idDono).map(r -> r.nome).findFirst().orElse("Dono não encontrado");
+            default -> throw new InvalidAttribute();
+        };
+    }
+
+
+
     public int criarProduto(int empresa, String nome, float valor, String categoria) throws ProductNameAtEnterprise, InvalidName, InvalidPrice, WrongCategory, EnterpriseNotRegistered {
         if (nome == null || nome.equals("")) {
             throw new InvalidName();
@@ -341,6 +363,14 @@ public class Sistema {
                 }
                 Produto p = new Produto(nome, valor, categoria);
                 m.produtos.add(p);
+                return p.numero;
+            } else if (emp.isWhatType().equals("Farmacia")) {
+                Farmacia f = (Farmacia) emp;
+                if (f.produtos.stream().anyMatch(p -> p.nome.equals(nome))) {
+                    throw new ProductNameAtEnterprise();
+                }
+                Produto p = new Produto(nome, valor, categoria);
+                f.produtos.add(p);
                 return p.numero;
             }
         }
