@@ -1,6 +1,7 @@
 package br.ufal.ic.p2.jackut;
 
 import br.ufal.ic.p2.jackut.Enterprises.Enterprise;
+import br.ufal.ic.p2.jackut.Enterprises.Farmacia;
 import br.ufal.ic.p2.jackut.Enterprises.Mercado;
 import br.ufal.ic.p2.jackut.Enterprises.Restaurante;
 import br.ufal.ic.p2.jackut.Exceptions.*;
@@ -615,7 +616,38 @@ public class Sistema {
     }
 
     // Farmácia
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, Boolean aberto24Horas, int numeroFuncionarios) throws NameAndAddresAlreadyExist, NameAlreadyExist, UserCantCreate, InvalidName {
+        if (tipoEmpresa == null || tipoEmpresa.isEmpty()) {
+            throw new Error("Tipo de empresa invalido");
+        }
 
+        if (endereco == null || endereco.isEmpty()) {
+            throw new Error("Endereco da empresa invalido");
+        }
+        if (tipoEmpresa.equals("farmacia")) {
+            if (users.stream().noneMatch(u -> u.id == dono && (u.isWhatType().equals("Dono")))) {
+                throw new UserCantCreate();
+            }
+
+            if (nome == null || nome.isEmpty()) {
+                throw new InvalidName();
+            }
+
+            if (empresas.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono)) {
+                throw new NameAlreadyExist();
+            }
+
+            if (empresas.stream().anyMatch(r -> r.nome.equals(nome) && r.endereco.equals(endereco) && r.idDono == dono)) {
+                throw new NameAndAddresAlreadyExist();
+            }
+
+            Farmacia novaFarmacia = new Farmacia(dono, nome, endereco, aberto24Horas, numeroFuncionarios);
+            empresas.add(novaFarmacia);
+            return novaFarmacia.id;
+        } else {
+            throw new Error("Empresa não é uma farmacia");
+        }
+    }
 
     // Entregador
     public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist {
