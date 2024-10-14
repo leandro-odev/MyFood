@@ -21,7 +21,7 @@ public class XMLUtils {
             writer.write("<users>\n");
 
             for (User user : users) {
-                if (user instanceof Cliente) {
+                if (user.isWhatType().equals("Cliente")) {
                     Cliente cliente = (Cliente) user;
                     writer.write("    <cliente>\n");
                     writer.write("        <id>" + cliente.id + "</id>\n");
@@ -30,7 +30,7 @@ public class XMLUtils {
                     writer.write("        <senha>" + cliente.senha + "</senha>\n");
                     writer.write("        <endereco>" + cliente.endereco + "</endereco>\n");
                     writer.write("    </cliente>\n");
-                } else if (user instanceof Dono) {
+                } else if (user.isWhatType().equals("Dono")) {
                     Dono dono = (Dono) user;
                     writer.write("    <dono>\n");
                     writer.write("        <id>" + dono.id + "</id>\n");
@@ -40,7 +40,7 @@ public class XMLUtils {
                     writer.write("        <cpf>" + dono.cpf + "</cpf>\n");
                     writer.write("        <endereco>" + dono.endereco + "</endereco>\n");
                     writer.write("    </dono>\n");
-                } else if (user instanceof Entregador) {
+                } else if (user.isWhatType().equals("Entregador")) {
                     Entregador entregador = (Entregador) user;
                     writer.write("    <entregador>\n");
                     writer.write("        <id>" + entregador.id + "</id>\n");
@@ -73,7 +73,7 @@ public class XMLUtils {
             writer.write("<empresas>\n");
 
             for (Enterprise empresa : empresas) {
-                if (empresa instanceof Mercado) {
+                if (empresa.isWhatType().equals("Mercado")) {
                     Mercado mercado = (Mercado) empresa;
                     writer.write("    <mercado>\n");
                     writer.write("        <id>" + mercado.id + "</id>\n");
@@ -90,11 +90,16 @@ public class XMLUtils {
                         writer.write("            </produto>\n");
                     }
                     writer.write("        </produtos>\n");
+                    writer.write("        <entregadores>\n");
+                    for (int entregador : mercado.entregadores) {
+                        writer.write("            <entregador>" + entregador + "</entregador>\n");
+                    }
+                    writer.write("        </entregadores>\n");
                     writer.write("        <abre>" + mercado.abre + "</abre>\n");
                     writer.write("        <fecha>" + mercado.fecha + "</fecha>\n");
                     writer.write("        <tipoMercado>" + mercado.tipoMercado + "</tipoMercado>\n");
                     writer.write("    </mercado>\n");
-                } else if (empresa instanceof Farmacia) {
+                } else if (empresa.isWhatType().equals("Farmacia")) {
                     Farmacia farmacia = (Farmacia) empresa;
                     writer.write("    <farmacia>\n");
                     writer.write("        <id>" + farmacia.id + "</id>\n");
@@ -110,11 +115,16 @@ public class XMLUtils {
                         writer.write("                <categoria>" + produto.categoria + "</categoria>\n");
                         writer.write("            </produto>\n");
                     }
+                    writer.write("        <entregadores>\n");
+                    for (int entregador : farmacia.entregadores) {
+                        writer.write("            <entregador>" + entregador + "</entregador>\n");
+                    }
+                    writer.write("        </entregadores>\n");
                     writer.write("        </produtos>\n");
                     writer.write("        <aberto24horas>" + farmacia.aberto24horas + "</aberto24horas>\n");
                     writer.write("        <numeroFuncionarios>" + farmacia.numeroFuncionarios + "</numeroFuncionarios>\n");
                     writer.write("    </farmacia>\n");
-                } else if (empresa instanceof Restaurante) {
+                } else if (empresa.isWhatType().equals("Restaurante")) {
                     Restaurante restaurante = (Restaurante) empresa;
                     writer.write("    <restaurante>\n");
                     writer.write("        <id>" + restaurante.id + "</id>\n");
@@ -122,7 +132,6 @@ public class XMLUtils {
                     writer.write("        <endereco>" + restaurante.endereco + "</endereco>\n");
                     writer.write("        <tipoCozinha>" + restaurante.tipoCozinha + "</tipoCozinha>\n");
                     writer.write("        <idDono>" + restaurante.idDono + "</idDono>\n");
-
                     writer.write("        <produtos>\n");
                     for (Produto produto : restaurante.produtos) {
                         writer.write("            <produto>\n");
@@ -133,6 +142,11 @@ public class XMLUtils {
                         writer.write("            </produto>\n");
                     }
                     writer.write("        </produtos>\n");
+                    writer.write("        <entregadores>\n");
+                    for (int entregador : restaurante.entregadores) {
+                        writer.write("            <entregador>" + entregador + "</entregador>\n");
+                    }
+                    writer.write("        </entregadores>\n");
 
                     writer.write("    </restaurante>\n");
                 }
@@ -263,7 +277,7 @@ public class XMLUtils {
                     ((Farmacia) empresa).aberto24horas = Boolean.parseBoolean(line.replaceAll("<.*?>", ""));
                 } else if (empresa instanceof Farmacia && line.startsWith("<numeroFuncionarios>")) {
                     ((Farmacia) empresa).numeroFuncionarios = Integer.parseInt(line.replaceAll("<.*?>", ""));
-                } else if (line.startsWith("<produtos>")) {
+                } else if (empresa != null && line.startsWith("<produtos>")) {
                     List<Produto> produtos = new ArrayList<>();
                     while (!(line = reader.readLine().trim()).startsWith("</produtos>")) {
                         if (line.startsWith("<produto>")) {
@@ -282,13 +296,14 @@ public class XMLUtils {
                             produtos.add(produto);
                         }
                     }
-                    if (empresa instanceof Mercado) {
-                        ((Mercado) empresa).produtos = produtos;
-                    } else if (empresa instanceof Farmacia) {
-                        ((Farmacia) empresa).produtos = produtos;
-                    } else if (empresa instanceof Restaurante) {
-                        ((Restaurante) empresa).produtos = produtos;
+                    empresa.produtos = produtos;
+                } else if (empresa != null && line.startsWith("<entregadores>")) {
+                    List<Integer> entregadores = new ArrayList<>();
+                    while (!(line = reader.readLine().trim()).startsWith("</entregadores>")) {
+                        int entregadorId = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                        entregadores.add(entregadorId);
                     }
+                    empresa.entregadores = entregadores;
                 } else if (line.startsWith("</mercado>") || line.startsWith("</farmacia>") || line.startsWith("</restaurante>")) {
                     empresas.add(empresa);
                 }

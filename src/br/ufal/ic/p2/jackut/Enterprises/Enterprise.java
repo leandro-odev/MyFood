@@ -13,6 +13,7 @@ public class Enterprise {
     public String nome;
     public String endereco;
     public List<Produto> produtos;
+    public List<Integer> entregadores;
 
     public Enterprise(int idDono, String nome, String endereco) {
         this.id = contador++;
@@ -20,6 +21,7 @@ public class Enterprise {
         this.nome = nome;
         this.endereco = endereco;
         this.produtos = new ArrayList<Produto>();
+        this.entregadores = new ArrayList<Integer>();
     }
 
     public String isWhatType() {

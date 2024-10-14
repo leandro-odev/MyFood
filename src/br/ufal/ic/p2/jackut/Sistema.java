@@ -694,6 +694,10 @@ public class Sistema {
         users.add(newUser);
     }
 
+    public void cadastrarEntregador(Integer empresa, Integer entregador) {
+
+    }
+
     public List<Entregador> getEntregadores(int empresa) {
         return users.stream().anyMatch(u -> u.id == empresa && (u.isWhatType() == "Dono")) ? users.stream().filter(u -> u instanceof Entregador).map(u -> (Entregador) u).toList() : new ArrayList<>();
     }

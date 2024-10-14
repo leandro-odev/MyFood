@@ -3,7 +3,7 @@
     <pedido>
         <id>5</id>
         <idCliente>3</idCliente>
-        <idRestaurante>6</idRestaurante>
+        <idRestaurante>5</idRestaurante>
         <estado>aberto</estado>
         <produtos>
             <produto>
@@ -23,7 +23,7 @@
     <pedido>
         <id>4</id>
         <idCliente>3</idCliente>
-        <idRestaurante>5</idRestaurante>
+        <idRestaurante>4</idRestaurante>
         <estado>preparando</estado>
         <produtos>
             <produto>
@@ -49,7 +49,7 @@
     <pedido>
         <id>6</id>
         <idCliente>3</idCliente>
-        <idRestaurante>5</idRestaurante>
+        <idRestaurante>4</idRestaurante>
         <estado>aberto</estado>
         <produtos>
         </produtos>
