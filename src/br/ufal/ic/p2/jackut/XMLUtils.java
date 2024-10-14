@@ -215,24 +215,22 @@ public class XMLUtils {
                     usuario.email = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<senha>")) {
                     usuario.senha = line.replaceAll("<.*?>", "");
-                } else if (usuario instanceof Cliente && line.startsWith("<endereco>")) {
-                    ((Cliente) usuario).endereco = line.replaceAll("<.*?>", "");
-                } else if (usuario instanceof Dono && line.startsWith("<cpf>")) {
+                } else if (usuario != null && line.startsWith("<endereco>")) {
+                    usuario.endereco = line.replaceAll("<.*?>", "");
+                } else if (usuario != null && usuario.isWhatType().equals("Dono") && line.startsWith("<cpf>")) {
                     ((Dono) usuario).cpf = line.replaceAll("<.*?>", "");
-                } else if (usuario instanceof Dono && line.startsWith("<endereco>")) {
-                    ((Dono) usuario).endereco = line.replaceAll("<.*?>", "");
-                } else if (usuario instanceof Entregador && line.startsWith("<veiculo>")) {
+                } else if (usuario != null && usuario.isWhatType().equals("Entregador") && line.startsWith("<veiculo>")) {
                     ((Entregador) usuario).veiculo = line.replaceAll("<.*?>", "");
-                } else if (usuario instanceof Entregador && line.startsWith("<placa>")) {
+                } else if (usuario != null && usuario.isWhatType().equals("Entregador") && line.startsWith("<placa>")) {
                     ((Entregador) usuario).placa = line.replaceAll("<.*?>", "");
-                } else if (usuario instanceof Entregador && line.startsWith("<empresas>")) {
+                } else if (usuario != null && usuario.isWhatType().equals("Entregador") && line.startsWith("<empresas>")) {
                     List<Integer> empresas = new ArrayList<>();
                     while (!(line = reader.readLine().trim()).startsWith("</empresas>")) {
                         int empresaId = Integer.parseInt(line.replaceAll("<.*?>", ""));
                         empresas.add(empresaId);
                     }
                     ((Entregador) usuario).empresas = empresas.stream().mapToInt(i -> i).boxed().collect(Collectors.toCollection(ArrayList::new));
-                } else if (usuario instanceof Entregador && line.startsWith("<ocupado>")) {
+                } else if (usuario != null && usuario.isWhatType().equals("Entregador") && line.startsWith("<ocupado>")) {
                     ((Entregador) usuario).ocupado = Boolean.parseBoolean(line.replaceAll("<.*?>", ""));
                 } else if (line.startsWith("</cliente>") || line.startsWith("</dono>") || line.startsWith("</entregador>")) {
                     usuarios.add(usuario);  // Adiciona o usuário à lista
@@ -267,15 +265,15 @@ public class XMLUtils {
                     empresa.nome = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<endereco>")) {
                     empresa.endereco = line.replaceAll("<.*?>", "");
-                } else if (empresa instanceof Mercado && line.startsWith("<abre>")) {
+                } else if (empresa != null && empresa.isWhatType().equals("Mercado") && line.startsWith("<abre>")) {
                     ((Mercado) empresa).abre = line.replaceAll("<.*?>", "");
-                } else if (empresa instanceof Mercado && line.startsWith("<fecha>")) {
+                } else if (empresa != null && empresa.isWhatType().equals("Mercado") && line.startsWith("<fecha>")) {
                     ((Mercado) empresa).fecha = line.replaceAll("<.*?>", "");
-                } else if (empresa instanceof Mercado && line.startsWith("<tipoMercado>")) {
+                } else if (empresa != null && empresa.isWhatType().equals("Mercado") && line.startsWith("<tipoMercado>")) {
                     ((Mercado) empresa).tipoMercado = line.replaceAll("<.*?>", "");
-                } else if (empresa instanceof Farmacia && line.startsWith("<aberto24horas>")) {
+                } else if (empresa != null && empresa.isWhatType().equals("Farmacia") && line.startsWith("<aberto24horas>")) {
                     ((Farmacia) empresa).aberto24horas = Boolean.parseBoolean(line.replaceAll("<.*?>", ""));
-                } else if (empresa instanceof Farmacia && line.startsWith("<numeroFuncionarios>")) {
+                } else if (empresa != null && empresa.isWhatType().equals("Farmacia") && line.startsWith("<numeroFuncionarios>")) {
                     ((Farmacia) empresa).numeroFuncionarios = Integer.parseInt(line.replaceAll("<.*?>", ""));
                 } else if (empresa != null && line.startsWith("<produtos>")) {
                     List<Produto> produtos = new ArrayList<>();

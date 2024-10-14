@@ -1,5 +1,6 @@
 package br.ufal.ic.p2.jackut;
 
+import br.ufal.ic.p2.jackut.Enterprises.Enterprise;
 import br.ufal.ic.p2.jackut.Enterprises.Restaurante;
 import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
@@ -12,12 +13,11 @@ import br.ufal.ic.p2.jackut.Exceptions.Products.*;
 import br.ufal.ic.p2.jackut.Users.Entregador;
 import br.ufal.ic.p2.jackut.Users.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Facade {
-
-
     private Sistema sistema = Sistema.getInstance();
 
     public void encerrarSistema() {
@@ -32,8 +32,8 @@ public class Facade {
         return sistema.getUser(id);
     }
 
-    public Restaurante getRestaurante(int id) throws RestauranteNotFound {
-        return sistema.getRestaurante(id);
+    public Enterprise getEmpresa(int id) throws RestauranteNotFound {
+        return sistema.getEmpresa(id);
     }
 
     public Pedido getPedido(int id) {
@@ -136,12 +136,20 @@ public class Facade {
 
         // Entregador
 
-    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist, InvalidVehicle, InvalidPlaque {
         sistema.criarUsuario(nome, email, senha, endereco, veiculo, placa);
     }
 
-    public List<Entregador> getEntregadores(int empresa) {
-        return sistema.getEntregadores(empresa);
+    public void cadastrarEntregador(Integer empresaId, Integer entregadorId) throws UserNotRegistered, RestauranteNotFound, UserNotDelivery {
+        sistema.cadastrarEntregador(empresaId, entregadorId);
     }
 
-}
+    public String getEntregadores(Integer empresaId) throws RestauranteNotFound {
+        return sistema.getEntregadores(empresaId);
+    }
+
+    public String getEmpresas(Integer entregadorId) throws UserNotRegistered, UserNotDelivery {
+        return sistema.getEmpresas(entregadorId);
+    }
+
+    }

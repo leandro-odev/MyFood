@@ -80,14 +80,9 @@ public class Sistema {
         }
     }
 
-    public Restaurante getRestaurante(int id) throws RestauranteNotFound {
+    public Enterprise getEmpresa(int id) throws RestauranteNotFound {
         try {
-            Enterprise empresa = empresas.stream().filter(r -> r.id == id).findFirst().get();
-            if (empresa instanceof Restaurante) {
-                return (Restaurante) empresa;
-            } else {
-                throw new RestauranteNotFound();
-            }
+            return empresas.stream().filter(r -> r.id == id).findFirst().get();
         } catch (Error e) {
             throw new RestauranteNotFound();
         }
@@ -106,10 +101,24 @@ public class Sistema {
         if (user == null) {
             throw new UserNotRegistered();
         }
-        if ((user.isWhatType() == "Dono") && atributo.equals("cpf")) {
+        if ((user.isWhatType().equals("Dono")) && atributo.equals("cpf")) {
             return ((Dono) user).cpf;
         }
-        return switch (atributo) {
+        if (user.isWhatType().equals("Entregador")) {
+            Entregador entregador = (Entregador) user;
+            return switch (atributo.toLowerCase()) {
+                case "placa" -> entregador.placa;
+                case "veiculo" -> entregador.veiculo;
+                case "nome" -> entregador.nome;
+                case "email" -> entregador.email;
+                case "senha" -> entregador.senha;
+                case "endereco" -> entregador.endereco;
+                case "id", "numero" -> entregador.id + "";
+
+                default -> throw new UserNotRegistered();
+            };
+        }
+        return switch (atributo.toLowerCase()) {
             case "nome" -> user.nome;
             case "email" -> user.email;
             case "senha" -> user.senha;
@@ -403,9 +412,9 @@ public class Sistema {
         throw new Error("Produto não encontrado");
     }
 
-    public String getProduto(String nome, int empresa, String atributo) throws ProductNotFound, AtributeDontExist, RestauranteNotFound {
-        Restaurante restaurante = getRestaurante(empresa);
-        for (Produto p : restaurante.produtos) {
+    public String getProduto(String nome, int empresaId, String atributo) throws ProductNotFound, AtributeDontExist, RestauranteNotFound {
+        Enterprise empresa = getEmpresa(empresaId);
+        for (Produto p : empresa.produtos) {
             if (p.nome.equals(nome)) {
                 switch (atributo.toLowerCase()) {
                     case "id", "produto":
@@ -421,7 +430,7 @@ public class Sistema {
                     case "categoria":
                         return p.categoria;
                     case "empresa":
-                        return restaurante.nome;
+                        return empresa.nome;
                 }
                 throw new AtributeDontExist();
             }
@@ -429,13 +438,13 @@ public class Sistema {
         throw new ProductNotFound();
     }
 
-    public String listarProdutos(int empresa) throws EnterpriseNotFound, RestauranteNotFound {
+    public String listarProdutos(int empresaId) throws EnterpriseNotFound, RestauranteNotFound {
 
-        if (empresas.stream().noneMatch(r -> r.id == empresa)) {
+        if (empresas.stream().noneMatch(r -> r.id == empresaId)) {
             throw new EnterpriseNotFound();
         }
 
-        Restaurante r = getRestaurante(empresa);
+        Enterprise r = getEmpresa(empresaId);
         StringBuilder stringProdutos = new StringBuilder("{[");;
         // Se não achar a empresa, retorna uma string vazia
 
@@ -680,27 +689,71 @@ public class Sistema {
     }
 
     // Entregador
-    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist, InvalidPlaque, InvalidVehicle {
         verifyData(nome, email, senha, endereco);
+
+        if (veiculo == null || veiculo.isEmpty()) {
+            throw new InvalidVehicle();
+        }
+
+        if (placa == null || placa.isEmpty()) {
+            throw new InvalidPlaque();
+        }
 
         if (users.stream().anyMatch(u -> u.email.equals(email))) {
             throw new EmailAlreadyExist();
         }
 
-        if (users.stream().anyMatch(u ->((Entregador) u).placa.equals(placa))) {
-            throw new PlacaAlreadyExist();
-        }
         User newUser = new Entregador(nome, email, senha, endereco, veiculo, placa);
         users.add(newUser);
     }
 
-    public void cadastrarEntregador(Integer empresa, Integer entregador) {
+    public void cadastrarEntregador(Integer empresaId, Integer entregadorId) throws UserNotRegistered, RestauranteNotFound, UserNotDelivery {
+        Enterprise empresa = getEmpresa(empresaId);
+        User entregador = getUser(entregadorId);
 
+        if (entregador.isWhatType().equals("Entregador")) {
+            empresas.stream().filter(e -> e.id == empresaId).findFirst().get().entregadores.add(entregadorId);
+            ((Entregador) users.stream().filter(u -> u.id == entregadorId).findFirst().get()).empresas.add(empresaId);
+        } else {
+            throw new UserNotDelivery();
+        }
     }
 
-    public List<Entregador> getEntregadores(int empresa) {
-        return users.stream().anyMatch(u -> u.id == empresa && (u.isWhatType() == "Dono")) ? users.stream().filter(u -> u instanceof Entregador).map(u -> (Entregador) u).toList() : new ArrayList<>();
+    public String getEntregadores(Integer empresaId) throws RestauranteNotFound {
+        ArrayList<String> emails = new ArrayList<String>();
+        Enterprise empresa = getEmpresa(empresaId);
+        for (Integer e: empresa.entregadores) {
+            for (User u: users) {
+                if (u.id == e) {
+                    emails.add(u.email);
+                }
+            }
+        }
+        return "{" + emails.toString() + "}";
     }
+
+    public String getEmpresas(Integer entregadorId) throws UserNotRegistered, UserNotDelivery {
+        ArrayList<ArrayList<String>> dados = new ArrayList<ArrayList<String>>();
+        User entregador = getUser(entregadorId);
+
+        if (entregador.isWhatType().equals("Entregador")) {
+            for (Integer e : ((Entregador) entregador).empresas) {
+                Enterprise emp = empresas.stream().filter(empresa -> empresa.id == e).findFirst().get();
+                ArrayList<String> dadosUser = new ArrayList<>();
+                dadosUser.add(emp.nome);
+                dadosUser.add(emp.endereco);
+                dados.add(dadosUser);
+            }
+            return "{" + dados.toString() + "}";
+        } else {
+            throw new UserNotDelivery();
+        }
+    }
+
+//    public List<Entregador> getEntregadores(int empresa) {
+//        return users.stream().anyMatch(u -> u.id == empresa && (u.isWhatType() == "Dono")) ? users.stream().filter(u -> u instanceof Entregador).map(u -> (Entregador) u).toList() : new ArrayList<>();
+//    }
 
 
     public static boolean isValidTime(String time) {
@@ -737,10 +790,5 @@ public class Sistema {
             return true;
         }
         return false;
-    }
-
-
-    private String getEmpresa(int id) {
-        return empresas.stream().filter(e -> e.id == id).map(e -> e.nome).findFirst().orElse("Empresa não encontrada");
     }
 }

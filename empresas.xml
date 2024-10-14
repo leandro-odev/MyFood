@@ -1,78 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <empresas>
-    <farmacia>
+    <restaurante>
+        <id>3</id>
+        <nome>Pastelaria</nome>
+        <endereco>Rua Segura N 987</endereco>
+        <tipoCozinha>brasileira</tipoCozinha>
+        <idDono>4</idDono>
+        <produtos>
+        </produtos>
+        <entregadores>
+            <entregador>3</entregador>
+            <entregador>5</entregador>
+        </entregadores>
+    </restaurante>
+</restaurantes>
+    <mercado>
         <id>4</id>
         <idDono>4</idDono>
-        <nome>Farmacia 24 horas do Carlos</nome>
+        <nome>Mercado</nome>
         <endereco>Rua Segura N 123</endereco>
         <produtos>
-            <produto>
-                <numero>9</numero>
-                <nome>Paracetamol</nome>
-                <valor>2.4</valor>
-                <categoria>medicamento</categoria>
-            </produto>
-            <produto>
-                <numero>10</numero>
-                <nome>Agua Oxigenada</nome>
-                <valor>5.0</valor>
-                <categoria>higiene</categoria>
-            </produto>
-            <produto>
-                <numero>11</numero>
-                <nome>Band-Aid</nome>
-                <valor>1.5</valor>
-                <categoria>curativos</categoria>
-            </produto>
-        <entregadores>
-        </entregadores>
         </produtos>
-        <aberto24horas>true</aberto24horas>
-        <numeroFuncionarios>2</numeroFuncionarios>
-    </farmacia>
+        <entregadores>
+            <entregador>3</entregador>
+        </entregadores>
+        <abre>07:30</abre>
+        <fecha>21:00</fecha>
+        <tipoMercado>supermercado</tipoMercado>
+    </mercado>
 </restaurantes>
     <farmacia>
         <id>5</id>
         <idDono>4</idDono>
-        <nome>Farmacia do Carlos</nome>
+        <nome>Farmacia</nome>
         <endereco>Rua Segura N 123</endereco>
-        <produtos>
-            <produto>
-                <numero>12</numero>
-                <nome>Soro Fisiologico</nome>
-                <valor>2.0</valor>
-                <categoria>higiene</categoria>
-            </produto>
-        <entregadores>
-        </entregadores>
-        </produtos>
-        <aberto24horas>false</aberto24horas>
-        <numeroFuncionarios>2</numeroFuncionarios>
-    </farmacia>
-</restaurantes>
-    <farmacia>
-        <id>6</id>
-        <idDono>4</idDono>
-        <nome>Farmacia 24 horas do Carlos</nome>
-        <endereco>Rua Otima N 852</endereco>
         <produtos>
         <entregadores>
         </entregadores>
         </produtos>
         <aberto24horas>true</aberto24horas>
-        <numeroFuncionarios>2</numeroFuncionarios>
-    </farmacia>
-</restaurantes>
-    <farmacia>
-        <id>7</id>
-        <idDono>5</idDono>
-        <nome>Farmacia do Roberto</nome>
-        <endereco>Rua Segura N 123</endereco>
-        <produtos>
-        <entregadores>
-        </entregadores>
-        </produtos>
-        <aberto24horas>false</aberto24horas>
         <numeroFuncionarios>2</numeroFuncionarios>
     </farmacia>
 </restaurantes>
