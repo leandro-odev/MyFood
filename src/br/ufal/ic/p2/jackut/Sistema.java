@@ -591,8 +591,7 @@ public class Sistema {
     }
 
     //Mercado
-    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
-
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate, InvalidTimeFormat, InvalidTime {
         if (tipoEmpresa == null || tipoEmpresa.isEmpty()) {
             throw new Error("Tipo de empresa invalido");
         }
@@ -602,18 +601,7 @@ public class Sistema {
         }
 
         if (tipoEmpresa.equals("mercado")) {
-
-            if (abre == null || fecha == null || abre.isEmpty() || fecha.isEmpty()) {
-                throw new Error("Horario invalido"); // Se uma das horas estiver vazia, deve ser considerado "Horario invalido"
-            }
-
-            if (!isValidTime(abre) || !isValidTime(fecha)) {
-                throw new Error("Formato de hora invalido");
-            }
-
-            if (isInvalidOpeningHour(abre, fecha)) {
-                throw new Error("Horario invalido");
-            }
+            clock(abre, fecha);
 
             if (users.stream().noneMatch(u -> u.id == dono && (u.isWhatType() == "Dono"))) {
                 throw new UserCantCreate();
@@ -643,18 +631,12 @@ public class Sistema {
         }
     }
 
-    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered {
+    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered, InvalidTimeFormat, InvalidTime {
         if (empresas.stream().noneMatch(m -> m.id == mercado)) {
             throw new EnterpriseNotRegistered();
         }
 
-        if (abre == null || fecha == null || abre.isEmpty() || fecha.isEmpty()) {
-            throw new Error("Horario invalido");
-        } else if (!isValidTime(abre) || !isValidTime(fecha)) {
-            throw new Error("Formato de hora invalido");
-        } else if (isInvalidOpeningHour(abre, fecha)) {
-            throw new Error("Horario invalido");
-        }
+        clock(abre, fecha);
 
         Enterprise empresa = empresas.stream().filter(n -> n.id == mercado).findFirst().get();
         if (empresa.isWhatType().equals("Mercado")) {
@@ -763,45 +745,40 @@ public class Sistema {
         }
     }
 
-//    public List<Entregador> getEntregadores(int empresa) {
-//        return users.stream().anyMatch(u -> u.id == empresa && (u.isWhatType() == "Dono")) ? users.stream().filter(u -> u instanceof Entregador).map(u -> (Entregador) u).toList() : new ArrayList<>();
-//    }
-
-
-    public static boolean isValidTime(String time) {
-        if (time.length() != 5 || time.charAt(2) != ':') {
-            return false;
+    public static void clock(String abre, String fecha) throws InvalidTime, InvalidTimeFormat {
+        if (abre == null || fecha == null) {
+            throw new InvalidTime();
         }
 
-        try {
-            String[] parts = time.split(":");
-            int horas = Integer.parseInt(parts[0]);
-            int minutos = Integer.parseInt(parts[1]);
+        if (abre.isEmpty() || fecha.isEmpty()) {
+            throw new InvalidTimeFormat();
+        }
 
-            if (horas < 0 || horas > 23 || minutos < 0 || minutos > 59) {
-                return false;
+        if (abre.length() != 5 || fecha.length() != 5) {
+            throw new InvalidTimeFormat();
+        }
+
+        String[] abreSplit = abre.split(":");
+        int abreHoras = Integer.parseInt(abreSplit[0]);
+        int abreMinutos = Integer.parseInt(abreSplit[1]);
+
+        String[] fechaSplit = fecha.split(":");
+        int fechaHoras = Integer.parseInt(fechaSplit[0]);
+        int fechaMinutos = Integer.parseInt(fechaSplit[1]);
+
+        if (abreHoras < 0 || abreHoras > 23 || abreMinutos < 0 || abreMinutos > 59 || fechaHoras < 0 || fechaHoras > 23 || fechaMinutos < 0 || fechaMinutos > 59) {
+            throw new InvalidTime();
+        }
+
+        if (abreHoras == fechaHoras) {
+            if (abreMinutos < fechaMinutos) {
+                throw new InvalidTime();
             }
-        } catch (NumberFormatException e) {
-            return false;
         }
 
-        return true;
-    }
-
-    public static boolean isInvalidOpeningHour(String abre, String fecha) {
-
-        String[] abreParts = abre.split(":");
-        String[] fechaParts = fecha.split(":");
-
-        int abreHoras = Integer.parseInt(abreParts[0]);
-        int abreMinutos = Integer.parseInt(abreParts[1]);
-        int fechaHoras = Integer.parseInt(fechaParts[0]);
-        int fechaMinutos = Integer.parseInt(fechaParts[1]);
-
-        if (abreHoras > fechaHoras || (abreHoras == fechaHoras && abreMinutos >= fechaMinutos)) {
-            return true;
+        if (fechaHoras < abreHoras) {
+            throw new InvalidTime();
         }
-        return false;
     }
 
     public void liberarPedido(Integer numero) throws PedidoNotFound, RequestAlreadyDone, RequestNotPreparing {
@@ -826,7 +803,6 @@ public class Sistema {
         if (!entregador.isWhatType().equals("Entregador")) {
             throw new UserNotDelivery();
         }
-//        Entregador ent = (Entregador) entregador;
 
         ArrayList<Integer> empresasEnt = ((Entregador) entregador).empresas;
         if (empresasEnt.isEmpty()) {

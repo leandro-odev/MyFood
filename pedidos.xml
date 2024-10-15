@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pedidos>
     <pedido>
-        <id>5</id>
-        <idCliente>2</idCliente>
-        <idRestaurante>3</idRestaurante>
+        <id>7</id>
+        <idCliente>4</idCliente>
+        <idRestaurante>4</idRestaurante>
         <estado>aberto</estado>
         <produtos>
             <produto>
-                <numero>12</numero>
+                <numero>18</numero>
                 <nome>Caneta</nome>
                 <valor>2.0</valor>
                 <categoria>escolar</categoria>
             </produto>
             <produto>
-                <numero>12</numero>
+                <numero>18</numero>
                 <nome>Caneta</nome>
                 <valor>2.0</valor>
                 <categoria>escolar</categoria>
@@ -21,25 +21,25 @@
         </produtos>
     </pedido>
     <pedido>
-        <id>4</id>
-        <idCliente>2</idCliente>
-        <idRestaurante>2</idRestaurante>
+        <id>6</id>
+        <idCliente>4</idCliente>
+        <idRestaurante>3</idRestaurante>
         <estado>preparando</estado>
         <produtos>
             <produto>
-                <numero>9</numero>
+                <numero>15</numero>
                 <nome>Refrigerante</nome>
                 <valor>2.4</valor>
                 <categoria>bebida</categoria>
             </produto>
             <produto>
-                <numero>10</numero>
+                <numero>16</numero>
                 <nome>Sabao</nome>
                 <valor>1.25</valor>
                 <categoria>limpeza</categoria>
             </produto>
             <produto>
-                <numero>11</numero>
+                <numero>17</numero>
                 <nome>1kg Batatas</nome>
                 <valor>5.75</valor>
                 <categoria>verdura</categoria>
@@ -47,9 +47,9 @@
         </produtos>
     </pedido>
     <pedido>
-        <id>6</id>
-        <idCliente>2</idCliente>
-        <idRestaurante>2</idRestaurante>
+        <id>8</id>
+        <idCliente>4</idCliente>
+        <idRestaurante>3</idRestaurante>
         <estado>aberto</estado>
         <produtos>
         </produtos>

@@ -120,11 +120,11 @@ public class Facade {
     }
 
     // Mercado
-    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate {
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate, InvalidTimeFormat, InvalidTime {
         return sistema.criarEmpresa(tipoEmpresa, dono, nome, endereco, abre, fecha, tipoMercado);
     }
 
-    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered {
+    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered, InvalidTimeFormat, InvalidTime {
         sistema.alterarFuncionamento(mercado, abre, fecha);
     }
 
