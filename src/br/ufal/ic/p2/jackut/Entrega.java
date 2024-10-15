@@ -12,13 +12,13 @@ public class Entrega {
     public String destino;
     public ArrayList<String> produtos;
 
-    public Entrega(String cliente, String empresa, Integer pedido, Integer entregador, String destino) {
+    public Entrega(String cliente, String empresa, Integer pedido, Integer entregador, String destino, ArrayList<String> produtos) {
         this.id = contador++;
         this.cliente = cliente;
         this.empresa = empresa;
         this.pedido = pedido;
         this.entregador = entregador;
         this.destino = destino;
-        this.produtos = new ArrayList<>();
+        this.produtos = produtos;
     }
 }

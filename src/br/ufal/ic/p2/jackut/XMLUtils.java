@@ -295,7 +295,9 @@ public class XMLUtils {
                     empresa.nome = line.replaceAll("<.*?>", "");
                 } else if (line.startsWith("<endereco>")) {
                     empresa.endereco = line.replaceAll("<.*?>", "");
-                } else if (empresa != null && empresa.isWhatType().equals("Mercado") && line.startsWith("<abre>")) {
+                } else if (empresa != null && empresa.isWhatType().equals("Restaurante") && line.startsWith("<tipoCozinha>")) {
+                    ((Restaurante) empresa).tipoCozinha = line.replaceAll("<.*?>", "");
+                }  else if (empresa != null && empresa.isWhatType().equals("Mercado") && line.startsWith("<abre>")) {
                     ((Mercado) empresa).abre = line.replaceAll("<.*?>", "");
                 } else if (empresa != null && empresa.isWhatType().equals("Mercado") && line.startsWith("<fecha>")) {
                     ((Mercado) empresa).fecha = line.replaceAll("<.*?>", "");
@@ -401,7 +403,7 @@ public class XMLUtils {
                 line = line.trim();
 
                 if (line.startsWith("<entrega>")) {
-                    entrega = new Entrega(null, null, null, null, null);
+                    entrega = new Entrega(null, null, null, null, null, null);
                 } else if (entrega != null && line.startsWith("<id>")) {
                     entrega.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
                 } else if (entrega != null && line.startsWith("<cliente>")) {

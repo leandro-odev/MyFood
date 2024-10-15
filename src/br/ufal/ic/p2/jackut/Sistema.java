@@ -804,10 +804,14 @@ public class Sistema {
         return false;
     }
 
-    public void liberarPedido(Integer numero) throws PedidoNotFound {
+    public void liberarPedido(Integer numero) throws PedidoNotFound, RequestAlreadyDone, RequestNotPreparing {
         Pedido pedido = getPedido(numero);
         if (pedido == null) {
             throw new PedidoNotFound();
+        } else if (pedido.estado.equals("pronto")) {
+            throw new RequestAlreadyDone();
+        } else if (!pedido.estado.equals("preparando")) {
+            throw new RequestNotPreparing();
         } else {
             try {
                 pedidos.stream().filter(p -> p.numero == pedido.numero).findFirst().get().estado = "pronto";
@@ -817,12 +821,17 @@ public class Sistema {
         }
     }
 
-    public Integer obterPedido(Integer entregadorId) throws PedidoNotFound, UserNotRegistered, UserNotDelivery {
+    public Integer obterPedido(Integer entregadorId) throws PedidoNotFound, UserNotRegistered, UserNotDelivery, NoEnterprises {
         User entregador = getUser(entregadorId);
         if (!entregador.isWhatType().equals("Entregador")) {
             throw new UserNotDelivery();
         }
+//        Entregador ent = (Entregador) entregador;
+
         ArrayList<Integer> empresasEnt = ((Entregador) entregador).empresas;
+        if (empresasEnt.isEmpty()) {
+            throw new NoEnterprises();
+        }
         Pedido deFarmacia = pedidos.stream()
                 .filter(p -> empresas.stream()
                         .anyMatch(e -> e.id == p.empresa && e.isWhatType().equals("Farmacia")))
@@ -844,15 +853,22 @@ public class Sistema {
         }
     }
 
-    public Integer criarEntrega(Integer pedidoId, Integer entregadorId, String destino) throws PedidoNotFound, PedidoAlreadySent, UserNotRegistered, UserNotDelivery, RestauranteNotFound, BusyDelivery {
+    public Integer criarEntrega(Integer pedidoId, Integer entregadorId, String destino) throws PedidoNotFound, PedidoAlreadySent, UserNotRegistered, UserNotDelivery, RestauranteNotFound, BusyDelivery, InvalidDelivery, PedidoNotReady {
         Pedido pedido = getPedido(pedidoId);
         if (pedido.estado.equals("liberando")) {
             throw new PedidoAlreadySent();
         }
+        if (!pedido.estado.equals("pronto")) {
+            throw new PedidoNotReady();
+        }
+
+        if (destino == null || destino.trim().isEmpty()) {
+            destino = users.stream().filter(u -> u.id == pedido.cliente).findFirst().get().endereco;
+        }
 
         User entregador = getUser(entregadorId);
         if (!entregador.isWhatType().equals("Entregador")) {
-            throw new UserNotDelivery();
+            throw new InvalidDelivery();
         }
 
         Entregador ent = (Entregador) entregador;
@@ -872,31 +888,46 @@ public class Sistema {
                         entregad.ocupado = true;
                     }
                 });
-        Entrega entrega = new Entrega(cliente.nome, empresa.nome, pedido.numero, entregadorId, destino);
+        ArrayList<String> produtos = new ArrayList<>();
+        for (Produto p: pedido.produtos) {
+            produtos.add(p.nome);
+        }
+        Entrega entrega = new Entrega(cliente.nome, empresa.nome, pedido.numero, entregadorId, destino, produtos);
         entregas.add(entrega);
         return entrega.id;
     }
 
-    public String getEntrega(Integer id, String atributo) throws AtributeDontExist, EntregaNotFound {
+    public String getEntrega(Integer id, String atributo) throws EntregaNotFound, InvalidAttribute, AttributeNotFound {
+        if (atributo == null) {
+            throw new InvalidAttribute();
+        } else if (atributo.isEmpty()) {
+            throw new InvalidAttribute();
+        }
         Entrega entrega = entregas.stream().filter(e -> e.id == id).findFirst().orElse(null);
         if (entrega != null) {
             return switch (atributo) {
               case "id" -> "" + entrega.id;
               case "cliente" -> entrega.cliente;
               case "empresa" -> entrega.empresa;
-              case "entregador" -> "" + entrega.entregador;
+              case "entregador" -> users.stream().filter(u -> u.id == entrega.entregador).findFirst().get().nome;
               case "destino" -> entrega.destino;
               case "pedido" -> "" + entrega.pedido;
+              case "produtos" -> "{" + entrega.produtos.toString() + "}";
 
-              default -> throw new AtributeDontExist();
+              default -> throw new AttributeNotFound();
             };
         } else {
             throw new EntregaNotFound();
         }
     }
 
-    public Integer getIdEntrega(Integer pedidoId) {
-        return entregas.stream().filter(e -> Objects.equals(e.pedido, pedidoId)).findFirst().get().id;
+    public Integer getIdEntrega(Integer pedidoId) throws EntregaIdNotFound {
+        try {
+            Integer entId = entregas.stream().filter(e -> Objects.equals(e.pedido, pedidoId)).findFirst().get().id;
+            return entId;
+        } catch (Exception e) {
+            throw new EntregaIdNotFound();
+        }
     }
 
     public void entregar(Integer entregaId) throws EntregaNotFound {

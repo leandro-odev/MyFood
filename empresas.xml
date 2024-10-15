@@ -1,48 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <empresas>
-    <restaurante>
-        <id>3</id>
-        <nome>Pastelaria</nome>
-        <endereco>Rua Segura N 987</endereco>
-        <tipoCozinha>brasileira</tipoCozinha>
-        <idDono>5</idDono>
-        <produtos>
-            <produto>
-                <numero>15</numero>
-                <nome>Pastel</nome>
-                <valor>1.4</valor>
-                <categoria>alimento</categoria>
-            </produto>
-            <produto>
-                <numero>16</numero>
-                <nome>Refrigerante</nome>
-                <valor>3.0</valor>
-                <categoria>bebida</categoria>
-            </produto>
-        </produtos>
-        <entregadores>
-            <entregador>6</entregador>
-            <entregador>7</entregador>
-        </entregadores>
-    </restaurante>
-</restaurantes>
     <mercado>
-        <id>4</id>
-        <idDono>5</idDono>
-        <nome>Mercado</nome>
+        <id>2</id>
+        <idDono>3</idDono>
+        <nome>Mercado do Carlos</nome>
         <endereco>Rua Segura N 123</endereco>
         <produtos>
             <produto>
-                <numero>17</numero>
+                <numero>9</numero>
                 <nome>Refrigerante</nome>
                 <valor>2.4</valor>
                 <categoria>bebida</categoria>
             </produto>
             <produto>
-                <numero>18</numero>
-                <nome>Sabão</nome>
+                <numero>10</numero>
+                <nome>Sabao</nome>
                 <valor>1.25</valor>
                 <categoria>limpeza</categoria>
+            </produto>
+            <produto>
+                <numero>11</numero>
+                <nome>1kg Batatas</nome>
+                <valor>5.75</valor>
+                <categoria>verdura</categoria>
             </produto>
         </produtos>
         <entregadores>
@@ -52,29 +32,63 @@
         <tipoMercado>supermercado</tipoMercado>
     </mercado>
 </restaurantes>
-    <farmacia>
-        <id>5</id>
-        <idDono>5</idDono>
-        <nome>Farmacia</nome>
+    <mercado>
+        <id>3</id>
+        <idDono>3</idDono>
+        <nome>Conveniencias do Carlos</nome>
         <endereco>Rua Segura N 123</endereco>
         <produtos>
             <produto>
-                <numero>19</numero>
-                <nome>Paracetamol</nome>
-                <valor>2.4</valor>
-                <categoria>medicamento</categoria>
+                <numero>12</numero>
+                <nome>Caneta</nome>
+                <valor>2.0</valor>
+                <categoria>escolar</categoria>
             </produto>
-            <produto>
-                <numero>20</numero>
-                <nome>Agua Oxigenada</nome>
-                <valor>5.0</valor>
-                <categoria>higiene</categoria>
-            </produto>
-        <entregadores>
-            <entregador>6</entregador>
-        </entregadores>
         </produtos>
-        <aberto24horas>true</aberto24horas>
-        <numeroFuncionarios>2</numeroFuncionarios>
-    </farmacia>
+        <entregadores>
+        </entregadores>
+        <abre>06:30</abre>
+        <fecha>23:59</fecha>
+        <tipoMercado>minimercado</tipoMercado>
+    </mercado>
+</restaurantes>
+    <mercado>
+        <id>4</id>
+        <idDono>3</idDono>
+        <nome>Mercado do Carlos</nome>
+        <endereco>Rua Otima N 852</endereco>
+        <produtos>
+        </produtos>
+        <entregadores>
+        </entregadores>
+        <abre>07:30</abre>
+        <fecha>21:00</fecha>
+        <tipoMercado>atacadista</tipoMercado>
+    </mercado>
+</restaurantes>
+    <mercado>
+        <id>5</id>
+        <idDono>4</idDono>
+        <nome>Mercado do Roberto</nome>
+        <endereco>Rua Segura N 123</endereco>
+        <produtos>
+        </produtos>
+        <entregadores>
+        </entregadores>
+        <abre>05:25</abre>
+        <fecha>22:00</fecha>
+        <tipoMercado>supermercado</tipoMercado>
+    </mercado>
+</restaurantes>
+    <restaurante>
+        <id>6</id>
+        <nome>Pastelaria do Carlos</nome>
+        <endereco>Rua Segura N 987</endereco>
+        <tipoCozinha>brasileira</tipoCozinha>
+        <idDono>3</idDono>
+        <produtos>
+        </produtos>
+        <entregadores>
+        </entregadores>
+    </restaurante>
 </restaurantes>

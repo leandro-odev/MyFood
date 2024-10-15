@@ -152,23 +152,23 @@ public class Facade {
         return sistema.getEmpresas(entregadorId);
     }
 
-    public void liberarPedido(Integer numero) throws PedidoNotFound {
+    public void liberarPedido(Integer numero) throws PedidoNotFound, RequestAlreadyDone, RequestNotPreparing {
         sistema.liberarPedido(numero);
     }
 
-    public Integer obterPedido(Integer entregadorId) throws PedidoNotFound, UserNotRegistered, UserNotDelivery {
+    public Integer obterPedido(Integer entregadorId) throws PedidoNotFound, UserNotRegistered, NoEnterprises, UserNotDelivery {
         return sistema.obterPedido(entregadorId);
     }
 
-    public Integer criarEntrega(Integer pedidoId, Integer entregadorId, String destino) throws PedidoNotFound, PedidoAlreadySent, UserNotRegistered, UserNotDelivery, RestauranteNotFound, BusyDelivery {
+    public Integer criarEntrega(Integer pedidoId, Integer entregadorId, String destino) throws PedidoNotFound, PedidoAlreadySent, UserNotRegistered, UserNotDelivery, RestauranteNotFound, BusyDelivery, InvalidDelivery, PedidoNotReady {
         return sistema.criarEntrega(pedidoId, entregadorId, destino);
     }
 
-    public String getEntrega(Integer id, String atributo) throws AtributeDontExist, EntregaNotFound {
+    public String getEntrega(Integer id, String atributo) throws EntregaNotFound, InvalidAttribute, AttributeNotFound {
         return sistema.getEntrega(id, atributo);
     }
 
-    public Integer getIdEntrega(Integer pedidoId) {
+    public Integer getIdEntrega(Integer pedidoId) throws EntregaIdNotFound {
         return sistema.getIdEntrega(pedidoId);
     }
 
