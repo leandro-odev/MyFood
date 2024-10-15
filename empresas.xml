@@ -5,24 +5,47 @@
         <nome>Pastelaria</nome>
         <endereco>Rua Segura N 987</endereco>
         <tipoCozinha>brasileira</tipoCozinha>
-        <idDono>4</idDono>
+        <idDono>5</idDono>
         <produtos>
+            <produto>
+                <numero>15</numero>
+                <nome>Pastel</nome>
+                <valor>1.4</valor>
+                <categoria>alimento</categoria>
+            </produto>
+            <produto>
+                <numero>16</numero>
+                <nome>Refrigerante</nome>
+                <valor>3.0</valor>
+                <categoria>bebida</categoria>
+            </produto>
         </produtos>
         <entregadores>
-            <entregador>3</entregador>
-            <entregador>5</entregador>
+            <entregador>6</entregador>
+            <entregador>7</entregador>
         </entregadores>
     </restaurante>
 </restaurantes>
     <mercado>
         <id>4</id>
-        <idDono>4</idDono>
+        <idDono>5</idDono>
         <nome>Mercado</nome>
         <endereco>Rua Segura N 123</endereco>
         <produtos>
+            <produto>
+                <numero>17</numero>
+                <nome>Refrigerante</nome>
+                <valor>2.4</valor>
+                <categoria>bebida</categoria>
+            </produto>
+            <produto>
+                <numero>18</numero>
+                <nome>Sabão</nome>
+                <valor>1.25</valor>
+                <categoria>limpeza</categoria>
+            </produto>
         </produtos>
         <entregadores>
-            <entregador>3</entregador>
         </entregadores>
         <abre>07:30</abre>
         <fecha>21:00</fecha>
@@ -31,11 +54,24 @@
 </restaurantes>
     <farmacia>
         <id>5</id>
-        <idDono>4</idDono>
+        <idDono>5</idDono>
         <nome>Farmacia</nome>
         <endereco>Rua Segura N 123</endereco>
         <produtos>
+            <produto>
+                <numero>19</numero>
+                <nome>Paracetamol</nome>
+                <valor>2.4</valor>
+                <categoria>medicamento</categoria>
+            </produto>
+            <produto>
+                <numero>20</numero>
+                <nome>Agua Oxigenada</nome>
+                <valor>5.0</valor>
+                <categoria>higiene</categoria>
+            </produto>
         <entregadores>
+            <entregador>6</entregador>
         </entregadores>
         </produtos>
         <aberto24horas>true</aberto24horas>

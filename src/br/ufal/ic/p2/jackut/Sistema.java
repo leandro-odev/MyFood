@@ -22,11 +22,13 @@ public class Sistema {
     List<User> users;
     List<Enterprise> empresas;
     List<Pedido> pedidos;
+    List<Entrega> entregas;
 
     private Sistema() {
         File usersFile = new File("users.xml");
         File empresasFile = new File("empresas.xml");
         File pedidosFile = new File("pedidos.xml");
+        File entregasFile = new File("entregas.xml");
 
         if (usersFile.exists()) {
             users = XMLUtils.lerUsuarios("users.xml");
@@ -45,6 +47,12 @@ public class Sistema {
         } else {
             pedidos = new ArrayList<>();
         }
+
+        if (entregasFile.exists()) {
+            entregas = XMLUtils.lerEntregas("entregas.xml");
+        } else {
+            entregas = new ArrayList<>();
+        }
     }
 
     static Sistema getInstance() {
@@ -58,18 +66,22 @@ public class Sistema {
         XMLUtils.salvarUsuarios(users, "users.xml");
         XMLUtils.salvarPedidos(pedidos, "pedidos.xml");
         XMLUtils.salvarEmpresas(empresas, "empresas.xml");
+        XMLUtils.salvarEntregas(entregas, "entregas.xml");
     }
 
     public void zerarSistema() {
         File usersFile = new File("users.xml");
         File empresasFile = new File("empresas.xml");
         File pedidosFile = new File("pedidos.xml");
+        File entregasFile = new File("entregas.xml");
         users.clear();
         empresas.clear();
         pedidos.clear();
+        entregas.clear();
         usersFile.delete();
         empresasFile.delete();
         pedidosFile.delete();
+        entregasFile.delete();
     }
 
     public User getUser(int id) throws UserNotRegistered {
@@ -88,11 +100,11 @@ public class Sistema {
         }
     }
 
-    public Pedido getPedido(int id) {
+    public Pedido getPedido(int id) throws PedidoNotFound {
         try {
             return pedidos.stream().filter(p -> p.numero == id).findFirst().get();
         } catch (Error e) {
-            throw new Error("Não foi possivel encontrar pedido");
+            throw new PedidoNotFound();
         }
     }
 
@@ -482,7 +494,7 @@ public class Sistema {
         }
     }
 
-    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed, RestauranteNotFound {
+    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed, RestauranteNotFound, PedidoNotFound {
 
         if (pedidos.stream().noneMatch(p -> p.numero == numero)) {
             throw new NoOpenedOrder();
@@ -505,7 +517,7 @@ public class Sistema {
         }
     }
 
-    public String getPedidos(int numero, String atributo) throws InvalidAttribute, AtributeDontExist, OrderNotFound {
+    public String getPedidos(int numero, String atributo) throws InvalidAttribute, AtributeDontExist, OrderNotFound, PedidoNotFound {
         if (atributo == null || atributo.isEmpty()) {
             throw new InvalidAttribute();
         } else if (pedidos.stream().noneMatch(p -> p.numero == numero)) {
@@ -555,12 +567,12 @@ public class Sistema {
         System.out.println(pedido);
     }
 
-    public void removerPedido(int numero) {
+    public void removerPedido(int numero) throws PedidoNotFound {
         Pedido p = getPedido(numero);
         pedidos.remove(p);
     }
 
-    public void removerProduto(int pedido, String produto) throws OrderNotFound, InvalidProduct, ProductNotFound, CannotRemoveProductOrderClosed {
+    public void removerProduto(int pedido, String produto) throws OrderNotFound, InvalidProduct, ProductNotFound, CannotRemoveProductOrderClosed, PedidoNotFound {
         if (pedidos.stream().anyMatch(p -> p.numero == pedido && p.estado.equals("preparando"))) {
             throw new CannotRemoveProductOrderClosed();
         } else if(produto == null || produto.isEmpty()) {
@@ -790,5 +802,118 @@ public class Sistema {
             return true;
         }
         return false;
+    }
+
+    public void liberarPedido(Integer numero) throws PedidoNotFound {
+        Pedido pedido = getPedido(numero);
+        if (pedido == null) {
+            throw new PedidoNotFound();
+        } else {
+            try {
+                pedidos.stream().filter(p -> p.numero == pedido.numero).findFirst().get().estado = "pronto";
+            } catch (Exception e) {
+                throw new PedidoNotFound();
+            }
+        }
+    }
+
+    public Integer obterPedido(Integer entregadorId) throws PedidoNotFound, UserNotRegistered, UserNotDelivery {
+        User entregador = getUser(entregadorId);
+        if (!entregador.isWhatType().equals("Entregador")) {
+            throw new UserNotDelivery();
+        }
+        ArrayList<Integer> empresasEnt = ((Entregador) entregador).empresas;
+        Pedido deFarmacia = pedidos.stream()
+                .filter(p -> empresas.stream()
+                        .anyMatch(e -> e.id == p.empresa && e.isWhatType().equals("Farmacia")))
+                .filter(p -> empresasEnt.contains(p.empresa))
+                .filter(p -> p.estado.equals("pronto"))
+                .findFirst()
+                .orElse(null);
+
+        if (deFarmacia != null) {
+            return deFarmacia.numero;
+        }
+
+        Pedido normal = pedidos.stream().filter(p -> empresasEnt.contains(p.empresa) && p.estado.equals("pronto")).findFirst().orElse(null);
+
+        if (normal != null) {
+            return normal.numero;
+        } else {
+            throw new PedidoNotFound();
+        }
+    }
+
+    public Integer criarEntrega(Integer pedidoId, Integer entregadorId, String destino) throws PedidoNotFound, PedidoAlreadySent, UserNotRegistered, UserNotDelivery, RestauranteNotFound, BusyDelivery {
+        Pedido pedido = getPedido(pedidoId);
+        if (pedido.estado.equals("liberando")) {
+            throw new PedidoAlreadySent();
+        }
+
+        User entregador = getUser(entregadorId);
+        if (!entregador.isWhatType().equals("Entregador")) {
+            throw new UserNotDelivery();
+        }
+
+        Entregador ent = (Entregador) entregador;
+        if (ent.ocupado) {
+            throw new BusyDelivery();
+        }
+
+        User cliente = getUser(pedido.cliente);
+        Enterprise empresa = getEmpresa(pedido.empresa);
+        pedidos.stream().filter(p -> p.numero == pedidoId).findFirst().get().estado = "entregando";
+        users.stream()
+                .filter(u -> u.id == entregadorId)
+                .findFirst()
+                .ifPresent(u -> {
+                    if (u.isWhatType().equals("Entregador")) {
+                        Entregador entregad = (Entregador) u;
+                        entregad.ocupado = true;
+                    }
+                });
+        Entrega entrega = new Entrega(cliente.nome, empresa.nome, pedido.numero, entregadorId, destino);
+        entregas.add(entrega);
+        return entrega.id;
+    }
+
+    public String getEntrega(Integer id, String atributo) throws AtributeDontExist, EntregaNotFound {
+        Entrega entrega = entregas.stream().filter(e -> e.id == id).findFirst().orElse(null);
+        if (entrega != null) {
+            return switch (atributo) {
+              case "id" -> "" + entrega.id;
+              case "cliente" -> entrega.cliente;
+              case "empresa" -> entrega.empresa;
+              case "entregador" -> "" + entrega.entregador;
+              case "destino" -> entrega.destino;
+              case "pedido" -> "" + entrega.pedido;
+
+              default -> throw new AtributeDontExist();
+            };
+        } else {
+            throw new EntregaNotFound();
+        }
+    }
+
+    public Integer getIdEntrega(Integer pedidoId) {
+        return entregas.stream().filter(e -> Objects.equals(e.pedido, pedidoId)).findFirst().get().id;
+    }
+
+    public void entregar(Integer entregaId) throws EntregaNotFound {
+        Entrega entrega = entregas.stream().filter(e -> e.id == entregaId).findFirst().orElse(null);
+        if (entrega == null) {
+            throw new EntregaNotFound();
+        }
+
+        pedidos.stream().filter(p -> p.numero == entrega.pedido).findFirst().get().estado = "entregue";
+        users.stream()
+                .filter(u -> u.id == entrega.entregador)
+                .findFirst()
+                .ifPresent(u -> {
+                    if (u.isWhatType().equals("Entregador")) {
+                        Entregador entregad = (Entregador) u;
+                        entregad.ocupado = false;
+                    }
+                });
     }
 }

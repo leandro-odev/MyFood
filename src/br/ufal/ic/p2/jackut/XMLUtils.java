@@ -192,6 +192,36 @@ public class XMLUtils {
         }
     }
 
+    public static void salvarEntregas(List<Entrega> entregas, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            writer.write("<entregas>\n");
+
+            for (Entrega entrega : entregas) {
+                writer.write("    <entrega>\n");
+                writer.write("        <id>" + entrega.id + "</id>\n");
+                writer.write("        <cliente>" + entrega.cliente + "</cliente>\n");
+                writer.write("        <empresa>" + entrega.empresa + "</empresa>\n");
+                writer.write("        <pedido>" + entrega.pedido + "</pedido>\n");
+                writer.write("        <entregador>" + entrega.entregador + "</entregador>\n");
+                writer.write("        <destino>" + entrega.destino + "</destino>\n");
+
+                writer.write("        <produtos>\n");
+                for (String produto : entrega.produtos) {
+                    writer.write("            <produto>" + produto + "</produto>\n");
+                }
+                writer.write("        </produtos>\n");
+
+                writer.write("    </entrega>\n");
+            }
+
+            writer.write("</entregas>\n");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<User> lerUsuarios(String fileName) {
         List<User> usuarios = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -360,5 +390,47 @@ public class XMLUtils {
         }
         return pedidos;
     }
+
+    public static List<Entrega> lerEntregas(String fileName) {
+        List<Entrega> entregas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            Entrega entrega = null;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+
+                if (line.startsWith("<entrega>")) {
+                    entrega = new Entrega(null, null, null, null, null);
+                } else if (entrega != null && line.startsWith("<id>")) {
+                    entrega.id = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (entrega != null && line.startsWith("<cliente>")) {
+                    entrega.cliente = line.replaceAll("<.*?>", "");
+                } else if (entrega != null && line.startsWith("<empresa>")) {
+                    entrega.empresa = line.replaceAll("<.*?>", "");
+                } else if (entrega != null && line.startsWith("<pedido>")) {
+                    entrega.pedido = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (entrega != null && line.startsWith("<entregador>")) {
+                    entrega.entregador = Integer.parseInt(line.replaceAll("<.*?>", ""));
+                } else if (entrega != null && line.startsWith("<destino>")) {
+                    entrega.destino = line.replaceAll("<.*?>", "");
+                } else if (entrega != null && line.startsWith("<produtos>")) {
+                    ArrayList<String> produtos = new ArrayList<>();
+                    while (!(line = reader.readLine().trim()).startsWith("</produtos>")) {
+                        if (line.startsWith("<produto>")) {
+                            produtos.add(line.replaceAll("<.*?>", ""));
+                        }
+                    }
+                    entrega.produtos = produtos;
+                } else if (entrega != null && line.startsWith("</entrega>")) {
+                    entregas.add(entrega);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return entregas;
+    }
+
 
 }

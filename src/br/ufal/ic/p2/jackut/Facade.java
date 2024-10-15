@@ -36,7 +36,7 @@ public class Facade {
         return sistema.getEmpresa(id);
     }
 
-    public Pedido getPedido(int id) {
+    public Pedido getPedido(int id) throws PedidoNotFound {
         return sistema.getPedido(id);
     }
 
@@ -99,11 +99,11 @@ public class Facade {
         return sistema.getNumeroPedido(cliente, empresa, indice);
     }
 
-    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed, RestauranteNotFound {
+    public void adicionarProduto(int numero, int produto) throws NoOpenedOrder, ProductDoesntBelongEnterprise, CannotAddProductOrderClosed, RestauranteNotFound, PedidoNotFound {
         sistema.adicionarProduto(numero, produto);
     }
 
-    public String getPedidos(int numero, String atributo) throws InvalidAttribute, AtributeDontExist, OrderNotFound {
+    public String getPedidos(int numero, String atributo) throws InvalidAttribute, AtributeDontExist, OrderNotFound, PedidoNotFound {
         return sistema.getPedidos(numero, atributo);
     }
 
@@ -111,11 +111,11 @@ public class Facade {
         sistema.fecharPedido(numero);
     }
 
-    public void removerPedido(int numero) {
+    public void removerPedido(int numero) throws PedidoNotFound {
         sistema.removerPedido(numero);
     }
 
-    public void removerProduto(int pedido, String produto) throws OrderNotFound, InvalidProduct, ProductNotFound, CannotRemoveProductOrderClosed {
+    public void removerProduto(int pedido, String produto) throws OrderNotFound, InvalidProduct, ProductNotFound, CannotRemoveProductOrderClosed, PedidoNotFound {
         sistema.removerProduto(pedido, produto);
     }
 
@@ -152,4 +152,28 @@ public class Facade {
         return sistema.getEmpresas(entregadorId);
     }
 
+    public void liberarPedido(Integer numero) throws PedidoNotFound {
+        sistema.liberarPedido(numero);
     }
+
+    public Integer obterPedido(Integer entregadorId) throws PedidoNotFound, UserNotRegistered, UserNotDelivery {
+        return sistema.obterPedido(entregadorId);
+    }
+
+    public Integer criarEntrega(Integer pedidoId, Integer entregadorId, String destino) throws PedidoNotFound, PedidoAlreadySent, UserNotRegistered, UserNotDelivery, RestauranteNotFound, BusyDelivery {
+        return sistema.criarEntrega(pedidoId, entregadorId, destino);
+    }
+
+    public String getEntrega(Integer id, String atributo) throws AtributeDontExist, EntregaNotFound {
+        return sistema.getEntrega(id, atributo);
+    }
+
+    public Integer getIdEntrega(Integer pedidoId) {
+        return sistema.getIdEntrega(pedidoId);
+    }
+
+    public void entregar(Integer entregaId) throws EntregaNotFound {
+        sistema.entregar(entregaId);
+    }
+
+}

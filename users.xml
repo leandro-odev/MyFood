@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <users>
+    <cliente>
+        <id>4</id>
+        <nome>Carlos</nome>
+        <email>carlos@ufal.com.br</email>
+        <senha>123senha</senha>
+        <endereco>Rua Exemplo N 123</endereco>
+    </cliente>
+    <dono>
+        <id>5</id>
+        <nome>Lucas</nome>
+        <email>lucas@ufal.com.br</email>
+        <senha>123senha</senha>
+        <cpf>544.732.410-68</cpf>
+        <endereco>Rua Exemplo N 321</endereco>
+    </dono>
     <entregador>
-        <id>3</id>
+        <id>6</id>
         <nome>Rodrigo</nome>
         <email>rodrigo@ufal.com.br</email>
         <senha>123senha</senha>
@@ -10,29 +25,21 @@
         <placa>BRA 1234</placa>
         <empresas>
             <empresa>3</empresa>
-            <empresa>4</empresa>
+            <empresa>5</empresa>
         </empresas>
-        <ocupado>false</ocupado>
+        <ocupado>true</ocupado>
     </entregador>
-    <dono>
-        <id>4</id>
-        <nome>CarlosDono</nome>
-        <email>carlos@ufal.com.br</email>
-        <senha>123senha</senha>
-        <cpf>544.732.410-68</cpf>
-        <endereco>Rua Exemplo N 321</endereco>
-    </dono>
     <entregador>
-        <id>5</id>
-        <nome>Rodrigo</nome>
-        <email>rodrigo2@ufal.com.br</email>
+        <id>7</id>
+        <nome>Joana</nome>
+        <email>joana@ufal.com.br</email>
         <senha>123senha</senha>
-        <endereco>Rua Exemplo N 321</endereco>
-        <veiculo>moto</veiculo>
-        <placa>BRA 1234</placa>
+        <endereco>Rua Exemplo N 123</endereco>
+        <veiculo>carro</veiculo>
+        <placa>BRA 8574</placa>
         <empresas>
             <empresa>3</empresa>
         </empresas>
-        <ocupado>false</ocupado>
+        <ocupado>true</ocupado>
     </entregador>
 </users>
