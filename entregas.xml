@@ -1,3 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entregas>
+    <entrega>
+        <id>0</id>
+        <cliente>Carlos</cliente>
+        <empresa>Farmacia</empresa>
+        <pedido>4</pedido>
+        <entregador>5</entregador>
+        <destino>Rua Exemplo N 123</destino>
+        <produtos>
+            <produto>Paracetamol</produto>
+            <produto>Agua Oxigenada</produto>
+        </produtos>
+    </entrega>
+    <entrega>
+        <id>1</id>
+        <cliente>Carlos</cliente>
+        <empresa>Pastelaria</empresa>
+        <pedido>1</pedido>
+        <entregador>6</entregador>
+        <destino>Rua Exemplo N 85</destino>
+        <produtos>
+            <produto>Pastel</produto>
+            <produto>Refrigerante</produto>
+        </produtos>
+    </entrega>
+    <entrega>
+        <id>2</id>
+        <cliente>Carlos</cliente>
+        <empresa>Pastelaria</empresa>
+        <pedido>3</pedido>
+        <entregador>5</entregador>
+        <destino>Rua Exemplo N 123</destino>
+        <produtos>
+            <produto>Pastel</produto>
+            <produto>Refrigerante</produto>
+        </produtos>
+    </entrega>
 </entregas>

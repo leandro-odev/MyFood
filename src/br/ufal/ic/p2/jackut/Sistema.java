@@ -142,20 +142,20 @@ public class Sistema {
     }
 
     //Verificar dados do Cliente
-    private void verifyData(String nome, String email, String senha, String endereco) throws InvalidName {
+    private void verifyData(String nome, String email, String senha, String endereco) throws InvalidName, InvalidEmail, InvalidPassword, InvalidAddress {
         if (nome == null || nome.isEmpty()) {
             throw new InvalidName();
         } else if (email == null || email.isEmpty() || !email.contains("@")) {
-            throw new Error("Email invalido");
+            throw new InvalidEmail();
         } else if (senha == null || senha.isEmpty()) {
-            throw new Error("Senha invalido");
+            throw new InvalidPassword();
         } else if (endereco == null || endereco.isEmpty()) {
-            throw new Error("Endereco invalido");
+            throw new InvalidAddress();
         }
     }
 
     //Verificar dados do Dono
-    private void verifyData(String nome, String email, String senha, String endereco, String cpf) throws InvalidName {
+    private void verifyData(String nome, String email, String senha, String endereco, String cpf) throws InvalidName, InvalidEmail, InvalidAddress, InvalidPassword {
         verifyData(nome, email, senha, endereco);
         if (cpf == null || cpf.contains("/") || cpf.length() != 14) {
             throw new Error("CPF invalido");
@@ -163,7 +163,7 @@ public class Sistema {
     }
 
     //Cliente
-    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist, InvalidName {
+    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist, InvalidName, InvalidEmail, InvalidAddress, InvalidPassword {
         verifyData(nome, email, senha, endereco);
 
         if (users.stream().anyMatch(u -> u.email.equals(email))) {
@@ -174,7 +174,7 @@ public class Sistema {
     }
 
     //Dono
-    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist, InvalidName {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist, InvalidName, InvalidEmail, InvalidAddress, InvalidPassword {
         verifyData(nome, email, senha, endereco, cpf);
 
         if (users.stream().anyMatch(u -> u.email.equals(email))) {
@@ -184,9 +184,9 @@ public class Sistema {
         users.add(newUser);
     }
 
-    public int login(String email, String senha) {
+    public int login(String email, String senha) throws InvalidLoginData {
         if (email == null || email.isEmpty() || !email.contains("@") ||senha == null || senha.isEmpty() || senha.length() < 4) {
-            throw new Error("Login ou senha invalidos");
+            throw new InvalidLoginData();
         }
         return users.stream().filter(u -> u.email.equals(email) && u.senha.equals(senha)).findFirst().get().id;
     }
@@ -245,11 +245,11 @@ public class Sistema {
         }
     }
 
-    public int getIdEmpresa (int idDono, String nome, int indice) throws EnterpriseNameNotRegistered, InvalidName {
+    public int getIdEmpresa (int idDono, String nome, int indice) throws EnterpriseNameNotRegistered, InvalidName, InvalidIndex, BigIndex {
         if (nome == null || nome.isEmpty()) {
             throw new InvalidName();
         } else if (indice < 0 || indice >= users.size()) {
-            throw new Error("Indice invalido");
+            throw new InvalidIndex();
         }
 
         List<Enterprise> empresasComMesmoNome = empresas.stream().filter(r -> r.nome.equals(nome)).toList();
@@ -257,7 +257,7 @@ public class Sistema {
         if (indice < empresasComMesmoNome.size() && empresasComMesmoNome.size() != 0) {
             return empresasComMesmoNome.get(indice).id;
         } else if (empresasComMesmoNome.size() != 0 && indice >= empresasComMesmoNome.size()) {
-            throw new Error("Indice maior que o esperado");
+            throw new BigIndex();
         }
 
         throw new EnterpriseNameNotRegistered();
@@ -399,7 +399,7 @@ public class Sistema {
 
     }
 
-    public void editarProduto(int produto, String nome, float valor, String categoria) throws InvalidName, InvalidPrice, WrongCategory, ProductNotRegistered {
+    public void editarProduto(int produto, String nome, float valor, String categoria) throws InvalidName, InvalidPrice, WrongCategory, ProductNotRegistered, RequestNotFound2 {
 
         if (nome == null || nome.equals("")) {
             throw new InvalidName();
@@ -421,7 +421,7 @@ public class Sistema {
                 }
             }
         }
-        throw new Error("Produto não encontrado");
+        throw new RequestNotFound2();
     }
 
     public String getProduto(String nome, int empresaId, String atributo) throws ProductNotFound, AtributeDontExist, RestauranteNotFound {
@@ -485,12 +485,12 @@ public class Sistema {
         return p.numero;
     }
 
-    public int getNumeroPedido(int cliente, int empresa, int indice) {
+    public int getNumeroPedido(int cliente, int empresa, int indice) throws RequestNotFound {
         try {
             List<Pedido> pedidosCliente = pedidos.stream().filter(p -> p.empresa == empresa && p.cliente == cliente).toList();
             return pedidosCliente.get(indice).numero;
         } catch (Error e) {
-            throw new Error("Pedido nao encontrado");
+            throw new RequestNotFound();
         }
     }
 
@@ -556,7 +556,6 @@ public class Sistema {
             default:
                 throw new AtributeDontExist();
         }
-//        throw new AtributeDontExist();
     }
 
     public void fecharPedido(int numero) throws OrderNotFound {
@@ -591,13 +590,13 @@ public class Sistema {
     }
 
     //Mercado
-    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate, InvalidTimeFormat, InvalidTime {
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate, InvalidTimeFormat, InvalidTime, EnterpriseNotAMarket, InvalidMarketType, InvalidName, InvalidEnterpriseAddress, InvalidEnterpriseType {
         if (tipoEmpresa == null || tipoEmpresa.isEmpty()) {
-            throw new Error("Tipo de empresa invalido");
+            throw new InvalidEnterpriseType();
         }
 
         if (endereco == null || endereco.isEmpty()) {
-            throw new Error("Endereco da empresa invalido");
+            throw new InvalidEnterpriseAddress();
         }
 
         if (tipoEmpresa.equals("mercado")) {
@@ -608,11 +607,11 @@ public class Sistema {
             }
 
             if (nome == null || nome.isEmpty()) {
-                throw new Error("Nome invalido");
+                throw new InvalidName();
             }
 
             if (tipoMercado == null || tipoMercado.isEmpty()) {
-                throw new Error("Tipo de mercado invalido");
+                throw new InvalidMarketType();
             }
 
             if (empresas.stream().anyMatch(r -> r.nome.equals(nome) && r.idDono != dono)) {
@@ -627,11 +626,11 @@ public class Sistema {
             empresas.add(novoMercado);
             return novoMercado.id;
         } else {
-            throw new Error("Empresa não é um mercado");
+            throw new EnterpriseNotAMarket();
         }
     }
 
-    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered, InvalidTimeFormat, InvalidTime {
+    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered, InvalidTimeFormat, InvalidTime, InvalidMarket {
         if (empresas.stream().noneMatch(m -> m.id == mercado)) {
             throw new EnterpriseNotRegistered();
         }
@@ -644,18 +643,18 @@ public class Sistema {
             m.abre = abre;
             m.fecha = fecha;
         } else {
-            throw new Error("Nao e um mercado valido");
+            throw new InvalidMarket();
         }
     }
 
     // Farmácia
-    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, Boolean aberto24Horas, int numeroFuncionarios) throws NameAndAddresAlreadyExist, NameAlreadyExist, UserCantCreate, InvalidName {
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, Boolean aberto24Horas, int numeroFuncionarios) throws NameAndAddresAlreadyExist, NameAlreadyExist, UserCantCreate, InvalidName, InvalidEnterpriseType, InvalidEnterpriseAddress {
         if (tipoEmpresa == null || tipoEmpresa.isEmpty()) {
-            throw new Error("Tipo de empresa invalido");
+            throw new InvalidEnterpriseType();
         }
 
         if (endereco == null || endereco.isEmpty()) {
-            throw new Error("Endereco da empresa invalido");
+            throw new InvalidEnterpriseAddress();
         }
         if (tipoEmpresa.equals("farmacia")) {
             if (users.stream().noneMatch(u -> u.id == dono && (u.isWhatType().equals("Dono")))) {
@@ -683,7 +682,7 @@ public class Sistema {
     }
 
     // Entregador
-    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist, InvalidPlaque, InvalidVehicle {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist, InvalidPlaque, InvalidVehicle, InvalidEmail, InvalidAddress, InvalidPassword {
         verifyData(nome, email, senha, endereco);
 
         if (veiculo == null || veiculo.isEmpty()) {

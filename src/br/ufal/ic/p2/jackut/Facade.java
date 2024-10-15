@@ -1,20 +1,12 @@
 package br.ufal.ic.p2.jackut;
 
 import br.ufal.ic.p2.jackut.Enterprises.Enterprise;
-import br.ufal.ic.p2.jackut.Enterprises.Restaurante;
 import br.ufal.ic.p2.jackut.Exceptions.*;
 import br.ufal.ic.p2.jackut.Exceptions.Enterprise.*;
-import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidAttribute;
-import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidName;
-import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidPrice;
-import br.ufal.ic.p2.jackut.Exceptions.Invalid.InvalidProduct;
+import br.ufal.ic.p2.jackut.Exceptions.Invalid.*;
 import br.ufal.ic.p2.jackut.Exceptions.Orders.*;
 import br.ufal.ic.p2.jackut.Exceptions.Products.*;
-import br.ufal.ic.p2.jackut.Users.Entregador;
 import br.ufal.ic.p2.jackut.Users.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Facade {
@@ -44,17 +36,17 @@ public class Facade {
         return sistema.getAtributoUsuario(id, atributo);
     }
 
-    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist, InvalidName {
+    public void criarUsuario(String nome, String email, String senha, String endereco) throws EmailAlreadyExist, InvalidName, InvalidEmail, InvalidAddress, InvalidPassword {
         sistema.criarUsuario(nome, email, senha, endereco);
     }
 
-    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist, InvalidName {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String cpf) throws EmailAlreadyExist, InvalidName, InvalidEmail, InvalidAddress, InvalidPassword {
         sistema.criarUsuario(nome, email, senha, endereco, cpf);
     }
 
     // Other methods from Sistema class
 
-    public int login(String email, String senha) {
+    public int login(String email, String senha) throws InvalidLoginData {
         return sistema.login(email, senha);
     }
 
@@ -67,7 +59,7 @@ public class Facade {
         return sistema.getEmpresasDoUsuario(idDono);
     }
 
-    public int getIdEmpresa(int idDono, String nome, int indice) throws EnterpriseNameNotRegistered, InvalidName {
+    public int getIdEmpresa(int idDono, String nome, int indice) throws EnterpriseNameNotRegistered, InvalidName, InvalidIndex, BigIndex {
         return sistema.getIdEmpresa(idDono, nome, indice);
     }
 
@@ -79,7 +71,7 @@ public class Facade {
         return sistema.criarProduto(empresa, nome, valor, categoria);
     }
 
-    public void editarProduto(int produto, String nome, float valor, String categoria) throws InvalidName, InvalidPrice, WrongCategory, ProductNotRegistered {
+    public void editarProduto(int produto, String nome, float valor, String categoria) throws InvalidName, InvalidPrice, WrongCategory, ProductNotRegistered, RequestNotFound2 {
         sistema.editarProduto(produto, nome, valor, categoria);
     }
 
@@ -95,7 +87,7 @@ public class Facade {
         return sistema.criarPedido(cliente, empresa);
     }
 
-    public int getNumeroPedido(int cliente, int empresa, int indice) {
+    public int getNumeroPedido(int cliente, int empresa, int indice) throws RequestNotFound {
         return sistema.getNumeroPedido(cliente, empresa, indice);
     }
 
@@ -120,23 +112,23 @@ public class Facade {
     }
 
     // Mercado
-    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate, InvalidTimeFormat, InvalidTime {
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, String abre, String fecha, String tipoMercado) throws NameAlreadyExist, AddresAlreadyExist, NameAndAddresAlreadyExist, UserCantCreate, InvalidTimeFormat, InvalidTime, EnterpriseNotAMarket, InvalidMarketType, InvalidEnterpriseAddress, InvalidName, InvalidEnterpriseType {
         return sistema.criarEmpresa(tipoEmpresa, dono, nome, endereco, abre, fecha, tipoMercado);
     }
 
-    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered, InvalidTimeFormat, InvalidTime {
+    public void alterarFuncionamento(int mercado, String abre, String fecha) throws EnterpriseNotRegistered, InvalidTimeFormat, InvalidTime, InvalidMarket {
         sistema.alterarFuncionamento(mercado, abre, fecha);
     }
 
     // Farmácia
 
-    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, Boolean aberto24Horas, int numeroFuncionarios) throws NameAndAddresAlreadyExist, NameAlreadyExist, UserCantCreate, InvalidName {
+    public int criarEmpresa(String tipoEmpresa, int dono, String nome, String endereco, Boolean aberto24Horas, int numeroFuncionarios) throws NameAndAddresAlreadyExist, NameAlreadyExist, UserCantCreate, InvalidName, InvalidEnterpriseAddress, InvalidEnterpriseType {
         return sistema.criarEmpresa(tipoEmpresa, dono, nome, endereco, aberto24Horas, numeroFuncionarios);
     }
 
         // Entregador
 
-    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist, InvalidVehicle, InvalidPlaque {
+    public void criarUsuario(String nome, String email, String senha, String endereco, String veiculo, String placa) throws EmailAlreadyExist, InvalidName, PlacaAlreadyExist, InvalidVehicle, InvalidPlaque, InvalidEmail, InvalidAddress, InvalidPassword {
         sistema.criarUsuario(nome, email, senha, endereco, veiculo, placa);
     }
 

@@ -1,57 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pedidos>
     <pedido>
-        <id>7</id>
-        <idCliente>4</idCliente>
-        <idRestaurante>4</idRestaurante>
-        <estado>aberto</estado>
+        <id>1</id>
+        <idCliente>3</idCliente>
+        <idRestaurante>3</idRestaurante>
+        <estado>entregando</estado>
         <produtos>
             <produto>
-                <numero>18</numero>
-                <nome>Caneta</nome>
-                <valor>2.0</valor>
-                <categoria>escolar</categoria>
+                <numero>0</numero>
+                <nome>Pastel</nome>
+                <valor>1.4</valor>
+                <categoria>alimento</categoria>
             </produto>
             <produto>
-                <numero>18</numero>
-                <nome>Caneta</nome>
-                <valor>2.0</valor>
-                <categoria>escolar</categoria>
+                <numero>1</numero>
+                <nome>Refrigerante</nome>
+                <valor>3.0</valor>
+                <categoria>bebida</categoria>
             </produto>
         </produtos>
     </pedido>
     <pedido>
-        <id>6</id>
-        <idCliente>4</idCliente>
-        <idRestaurante>3</idRestaurante>
-        <estado>preparando</estado>
+        <id>2</id>
+        <idCliente>3</idCliente>
+        <idRestaurante>4</idRestaurante>
+        <estado>aberto</estado>
         <produtos>
             <produto>
-                <numero>15</numero>
+                <numero>2</numero>
                 <nome>Refrigerante</nome>
                 <valor>2.4</valor>
                 <categoria>bebida</categoria>
             </produto>
             <produto>
-                <numero>16</numero>
-                <nome>Sabao</nome>
+                <numero>3</numero>
+                <nome>Sabão</nome>
                 <valor>1.25</valor>
                 <categoria>limpeza</categoria>
-            </produto>
-            <produto>
-                <numero>17</numero>
-                <nome>1kg Batatas</nome>
-                <valor>5.75</valor>
-                <categoria>verdura</categoria>
             </produto>
         </produtos>
     </pedido>
     <pedido>
-        <id>8</id>
-        <idCliente>4</idCliente>
+        <id>3</id>
+        <idCliente>3</idCliente>
         <idRestaurante>3</idRestaurante>
+        <estado>entregando</estado>
+        <produtos>
+            <produto>
+                <numero>0</numero>
+                <nome>Pastel</nome>
+                <valor>1.4</valor>
+                <categoria>alimento</categoria>
+            </produto>
+            <produto>
+                <numero>1</numero>
+                <nome>Refrigerante</nome>
+                <valor>3.0</valor>
+                <categoria>bebida</categoria>
+            </produto>
+        </produtos>
+    </pedido>
+    <pedido>
+        <id>4</id>
+        <idCliente>3</idCliente>
+        <idRestaurante>5</idRestaurante>
+        <estado>entregue</estado>
+        <produtos>
+            <produto>
+                <numero>4</numero>
+                <nome>Paracetamol</nome>
+                <valor>2.4</valor>
+                <categoria>medicamento</categoria>
+            </produto>
+            <produto>
+                <numero>5</numero>
+                <nome>Agua Oxigenada</nome>
+                <valor>5.0</valor>
+                <categoria>higiene</categoria>
+            </produto>
+        </produtos>
+    </pedido>
+    <pedido>
+        <id>5</id>
+        <idCliente>3</idCliente>
+        <idRestaurante>5</idRestaurante>
         <estado>aberto</estado>
         <produtos>
+            <produto>
+                <numero>4</numero>
+                <nome>Paracetamol</nome>
+                <valor>2.4</valor>
+                <categoria>medicamento</categoria>
+            </produto>
         </produtos>
     </pedido>
 </pedidos>

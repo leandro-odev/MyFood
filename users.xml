@@ -1,26 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <users>
     <cliente>
+        <id>3</id>
+        <nome>Carlos</nome>
+        <email>carlos@ufal.com.br</email>
+        <senha>123senha</senha>
+        <endereco>Rua Exemplo N 123</endereco>
+    </cliente>
+    <dono>
         <id>4</id>
         <nome>Lucas</nome>
         <email>lucas@ufal.com.br</email>
         <senha>123senha</senha>
+        <cpf>544.732.410-68</cpf>
         <endereco>Rua Exemplo N 321</endereco>
-    </cliente>
-    <dono>
+    </dono>
+    <entregador>
         <id>5</id>
-        <nome>CarlosDono</nome>
-        <email>carlos@ufal.com.br</email>
+        <nome>Rodrigo</nome>
+        <email>rodrigo@ufal.com.br</email>
         <senha>123senha</senha>
-        <cpf>544.732.410-68</cpf>
-        <endereco>Rua Exemplo N 321</endereco>
-    </dono>
-    <dono>
+        <endereco>Rua Exemplo N 123</endereco>
+        <veiculo>moto</veiculo>
+        <placa>BRA 1234</placa>
+        <empresas>
+            <empresa>3</empresa>
+            <empresa>5</empresa>
+        </empresas>
+        <ocupado>true</ocupado>
+    </entregador>
+    <entregador>
         <id>6</id>
-        <nome>RobertoDono</nome>
-        <email>roberto@ufal.com.br</email>
+        <nome>Joana</nome>
+        <email>joana@ufal.com.br</email>
         <senha>123senha</senha>
-        <cpf>544.732.410-68</cpf>
-        <endereco>Rua Exemplo N 321</endereco>
-    </dono>
+        <endereco>Rua Exemplo N 123</endereco>
+        <veiculo>carro</veiculo>
+        <placa>BRA 8574</placa>
+        <empresas>
+            <empresa>3</empresa>
+        </empresas>
+        <ocupado>true</ocupado>
+    </entregador>
 </users>
