@@ -7,12 +7,14 @@
 O sistema foi desenvolvido para gerenciar um conjunto de funcionalidades relacionadas a um sistema de pedidos, incluindo a gestão de usuários, empresas, produtos e pedidos. A principal finalidade é realizar testes de aceitação para verificar se a implementação atende aos requisitos especificados.
 
 **Tecnologias e Frameworks Utilizados:**
+
 - **XML**: Utilizado para armazenar dados sobre usuários, empresas, podendo serem restaurantes, mercado ou farmacia, pedidos e entregas.
 - **Bibliotecas utilizadas**: Utilizadas apenas as bibliotecas padrões do Java.
 
 ## 2. Principais Componentes e Suas Interações
 
 **Principais Componentes:**
+
 1. **Facade**: Classe que fornece uma interface simples para a lógica de gerenciamento, delegando as chamadas para o Sistema.
 2. **Sistema**: Implementa o padrão Singleton e contém todas as funcionalidades principais, como o gerenciamento de usuários, restaurantes, produtos e pedidos.
 3. **User**: Classe base para os usuários do sistema, com subclasses **Cliente**, **Dono** e **Entregador** .
@@ -24,6 +26,7 @@ O sistema foi desenvolvido para gerenciar um conjunto de funcionalidades relacio
 9. **Exceções**: Conjunto de classes que estendem `Exception` para tratar erros específicos.
 
 **Interações Entre Componentes:**
+
 - O **Sistema**, como Singleton, centraliza todas as operações relacionadas à gestão de usuários, restaurantes, produtos e pedidos.
 - A **Facade** atua como um intermediário, chamando os métodos do **Sistema** de forma organizada e simplificada. Por exemplo, ao criar um novo usuário, a **Facade** simplesmente chama `sistema.criarUsuario()`, delegando a responsabilidade ao Sistema.
 - **XMLUtils** é utilizado pelo **Sistema** para carregar e salvar dados em XML.
@@ -32,6 +35,7 @@ O sistema foi desenvolvido para gerenciar um conjunto de funcionalidades relacio
 ## 3. Padrões de Projeto Adotados
 
 ### 3.1. Singleton
+
 - **Descrição Geral**: Garante que apenas uma instância do **Sistema** exista durante a execução do programa, controlando seu ciclo de vida.
 - **Problema Resolvido**: Evita múltiplas instâncias da classe principal do sistema, garantindo consistência e eficiência nas operações.
 - **Identificação da Oportunidade**: Durante o desenvolvimento, foi observado que várias funcionalidades do sistema, como o gerenciamento de usuários, pedidos, entregas e empresas, precisavam ser acessadas globalmente e manter um estado centralizado. Usar múltiplas instâncias para controlar essas operações poderia resultar em inconsistências e complicar o gerenciamento de recursos. O padrão Singleton foi escolhido para garantir que a classe Sistema fosse instanciada apenas uma vez e usada de forma consistente por todo o sistema.
