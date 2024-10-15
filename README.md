@@ -4,36 +4,37 @@
 ## 1. Descrição Geral do Design Arquitetural do Sistema
 
 **Funcionalidade Principal:**
-O sistema foi desenvolvido para gerenciar um conjunto de funcionalidades relacionadas a um sistema de pedidos, incluindo a gestão de usuários, restaurantes, produtos e pedidos. A principal finalidade é realizar testes de aceitação para verificar se a implementação atende aos requisitos especificados.
+O sistema foi desenvolvido para gerenciar um conjunto de funcionalidades relacionadas a um sistema de pedidos, incluindo a gestão de usuários, empresas, produtos e pedidos. A principal finalidade é realizar testes de aceitação para verificar se a implementação atende aos requisitos especificados.
 
 **Tecnologias e Frameworks Utilizados:**
-- **XML**: Utilizado para armazenar dados sobre usuários, restaurantes e pedidos.
-- **Bibliotecas Padrão do Java**: Fornecem as funcionalidades essenciais necessárias para manipulação de arquivos e exceções.
+- **XML**: Utilizado para armazenar dados sobre usuários, empresas, podendo serem restaurantes, mercado ou farmacia, pedidos e entregas.
+- **Bibliotecas utilizadas**: Utilizadas apenas as bibliotecas padrões do Java.
 
 ## 2. Principais Componentes e Suas Interações
 
 **Principais Componentes:**
 1. **Facade**: Classe que fornece uma interface simples para a lógica de gerenciamento, delegando as chamadas para o Sistema.
 2. **Sistema**: Implementa o padrão Singleton e contém todas as funcionalidades principais, como o gerenciamento de usuários, restaurantes, produtos e pedidos.
-3. **User**: Classe base para os usuários do sistema, com subclasses **Cliente** e **Dono**.
-4. **Restaurante**: Representa um restaurante com produtos e informações associadas.
-5. **Pedido**: Representa um pedido feito por um cliente em um restaurante.
-6. **Produto**: Representa um produto disponível em um restaurante.
-7. **XMLUtils**: Classe utilitária para ler e salvar dados em arquivos XML.
-8. **Exceções**: Conjunto de classes que estendem `Exception` para tratar erros específicos.
+3. **User**: Classe base para os usuários do sistema, com subclasses **Cliente**, **Dono** e **Entregador** .
+4. **Enterprise**: Classe base para as empresas do sistema, com subclasses **Fármacia**, **Mercado** e **Restaurante**.
+5. **Entrega**: Representa uma entrega de um pedido, incluindo informações sobre o entregador e o status da entrega.
+6. **Pedido**: Representa um pedido feito por um cliente em um restaurante.
+7. **Produto**: Representa um produto disponível em um restaurante.
+8. **XMLUtils**: Classe utilitária para ler e salvar dados em arquivos XML.
+9. **Exceções**: Conjunto de classes que estendem `Exception` para tratar erros específicos.
 
 **Interações Entre Componentes:**
 - O **Sistema**, como Singleton, centraliza todas as operações relacionadas à gestão de usuários, restaurantes, produtos e pedidos.
 - A **Facade** atua como um intermediário, chamando os métodos do **Sistema** de forma organizada e simplificada. Por exemplo, ao criar um novo usuário, a **Facade** simplesmente chama `sistema.criarUsuario()`, delegando a responsabilidade ao Sistema.
 - **XMLUtils** é utilizado pelo **Sistema** para carregar e salvar dados em XML.
-- O **Sistema** manipula objetos de **User**, **Restaurante**, e **Pedido**, enquanto a **Facade** simplifica o acesso a essas funcionalidades para os clientes do sistema.
+- O **Sistema** manipula objetos de **User**, **Enterprise**, **Entrega** e **Pedido**, enquanto a **Facade** simplifica o acesso a essas funcionalidades para os clientes do sistema.
 
 ## 3. Padrões de Projeto Adotados
 
 ### 3.1. Singleton
 - **Descrição Geral**: Garante que apenas uma instância do **Sistema** exista durante a execução do programa, controlando seu ciclo de vida.
 - **Problema Resolvido**: Evita múltiplas instâncias da classe principal do sistema, garantindo consistência e eficiência nas operações.
-- **Identificação da Oportunidade**: Durante o desenvolvimento, foi observado que várias funcionalidades do sistema, como o gerenciamento de usuários, pedidos e restaurantes, precisavam ser acessadas globalmente e manter um estado centralizado. Usar múltiplas instâncias para controlar essas operações poderia resultar em inconsistências e complicar o gerenciamento de recursos. O padrão Singleton foi escolhido para garantir que a classe Sistema fosse instanciada apenas uma vez e usada de forma consistente por todo o sistema.
+- **Identificação da Oportunidade**: Durante o desenvolvimento, foi observado que várias funcionalidades do sistema, como o gerenciamento de usuários, pedidos, entregas e empresas, precisavam ser acessadas globalmente e manter um estado centralizado. Usar múltiplas instâncias para controlar essas operações poderia resultar em inconsistências e complicar o gerenciamento de recursos. O padrão Singleton foi escolhido para garantir que a classe Sistema fosse instanciada apenas uma vez e usada de forma consistente por todo o sistema.
 - **Aplicação no Projeto**: A classe **Sistema** implementa o padrão Singleton, centralizando todas as funcionalidades e sendo acessada por toda a aplicação por uma única instância.
 
 ### 3.2. Facade
