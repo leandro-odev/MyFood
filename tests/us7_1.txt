@@ -76,15 +76,15 @@ eid3=criarEmpresa tipoEmpresa="farmacia" dono=${id2} nome="Farmacia" endereco="R
 expectError "Conta com esse email ja existe" criarUsuario nome="Rodrigo2" email="rodrigo@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123"
 
 # É possível existir mais usuários com o mesmo nome e endereço, desde que o email seja diferente.
-criarUsuario nome="Rodrigo" email="rodrigo2@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321" veiculo="moto" placa="BRA 1234"
+criarUsuario nome="Rodrigo" email="rodrigo2@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 321" veiculo="moto" placa="BRA 4321"
 
 id3=login email="rodrigo2@ufal.com.br" senha="123senha"
 
 expect "Rodrigo" getAtributoUsuario id=${id1} atributo="nome"
 expect "rodrigo@ufal.com.br" getAtributoUsuario id=${id1} atributo="email"
 expect "Rua Exemplo N 123" getAtributoUsuario id=${id1} atributo="endereco"
-expect "moto" getAtributoUsuario id=${id1} atributo="veiculo" 
-expect "BRA 1234" getAtributoUsuario id=${id1} atributo="placa" 
+expect "moto" getAtributoUsuario id=${id1} atributo="veiculo"
+expect "BRA 1234" getAtributoUsuario id=${id1} atributo="placa"
 
 # Validando dados ao criar o usuário.
 expectError "Nome invalido" criarUsuario nome=  email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123" veiculo="moto" placa="BRA 4567"
@@ -104,6 +104,7 @@ expectError "Veiculo invalido" criarUsuario nome="Carlos" email="carlos@ufal.com
 
 expectError "Placa invalido" criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123" veiculo="moto" placa=
 expectError "Placa invalido" criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123" veiculo="moto" placa=""
+expectError "Placa invalido" criarUsuario nome="Carlos" email="carlos@ufal.com.br" senha="123senha" endereco="Rua Exemplo N 123" veiculo="moto" placa="BRA 4321"
 
 # Valida se o email esta no formato correto.
 expectError "Email invalido" criarUsuario nome="CarlosDono" email="carlos2" senha="123senha" endereco="Rua Exemplo N 321" veiculo="moto" placa="BRA 4567"

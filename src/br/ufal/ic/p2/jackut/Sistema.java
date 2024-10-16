@@ -689,7 +689,7 @@ public class Sistema {
             throw new InvalidVehicle();
         }
 
-        if (placa == null || placa.isEmpty()) {
+        if (placa == null || placa.isEmpty() || users.stream().anyMatch(u -> u.isWhatType().equals("Entregador") && ((Entregador) u).placa.equals(placa))) {
             throw new InvalidPlaque();
         }
 
